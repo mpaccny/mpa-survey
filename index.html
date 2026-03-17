@@ -317,7 +317,7 @@
 
       return (
         <div style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",padding:"24px"}}>
-          <div style={{background:"white",borderRadius:"16px",boxShadow:"0 4px 24px rgba(0,0,0,0.1)",width:"100%",maxWidth:"560px",overflow:"hidden"}}>
+          <div style={{background:"white",borderRadius:"16px",boxShadow:"0 4px 24px rgba(0,0,0,0.1)",width:"100%",maxWidth:"860px",overflow:"hidden"}}>
             {/* Header */}
             <div style={{background:"#9E3039",padding:"24px"}}>
               <div style={{display:"flex",alignItems:"center",gap:"12px",marginBottom:"12px",flexWrap:"wrap"}}>
@@ -355,7 +355,7 @@
             </div>
 
             {/* Form */}
-            <div style={{padding:"24px",maxHeight:"60vh",overflowY:"auto"}}>
+            <div style={{padding:"32px",maxHeight:"70vh",overflowY:"auto"}}>
               {step===0 && <ContactStep data={form.contact} onChange={update} />}
               {step===1 && <BackgroundStep data={form.background} onChange={update} />}
               {step===2 && <SelfAssessStep data={form.selfassess} onChange={update} />}
