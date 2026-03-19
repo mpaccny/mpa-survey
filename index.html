@@ -214,6 +214,9 @@
               <option value="">Select...</option>
               {["Internet Search","Google Search","CCNY Admissions Office","Word of Mouth","Powell School Open House","I am/was an undergraduate at City College","Referral","I am/was an undergraduate at another CUNY College (Not CCNY)","Other"].map(o => <option key={o}>{o}</option>)}
             </select>
+            {data.heardFrom === "Other" && (
+              <input className={inputClass} style={{marginTop:"8px"}} value={data.heardFromOther||""} onChange={e => onChange("heardFromOther", e.target.value)} placeholder="Please specify..." />
+            )}
           </div>
           <div>
             <label className={labelClass}>T-Shirt Size *</label>
