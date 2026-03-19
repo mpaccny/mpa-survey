@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +10,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet" />
   <style>
-    body { background: linear-gradient(135deg, #fdf2f2, #ffffff); min-height: 100vh; margin: 0; font-family: sans-serif; }
+    body { background: linear-gradient(135deg, #fdf2f2, #ffffff); min-height: 100vh; margin: 0; font-family: sans-serif; padding: 20px; box-sizing: border-box; }
   </style>
 </head>
 <body>
@@ -208,6 +209,13 @@
       return (
         <div style={{display:"flex",flexDirection:"column",gap:"20px"}}>
           <div>
+            <label className={labelClass}>How did you hear about the MPA Program? *</label>
+            <select className={inputClass} value={data.heardFrom||""} onChange={e => onChange("heardFrom", e.target.value)}>
+              <option value="">Select...</option>
+              {["Internet Search","Google Search","CCNY Admissions Office","Word of Mouth","Powell School Open House","I am/was an undergraduate at City College","Referral","I am/was an undergraduate at another CUNY College (Not CCNY)","Other"].map(o => <option key={o}>{o}</option>)}
+            </select>
+          </div>
+          <div>
             <label className={labelClass}>T-Shirt Size *</label>
             <div style={{display:"flex",flexWrap:"wrap",gap:"8px",marginTop:"8px"}}>
               {sizes.map(s => (
@@ -316,8 +324,8 @@
       }
 
       return (
-        <div style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",padding:"24px"}}>
-          <div style={{background:"white",borderRadius:"16px",boxShadow:"0 4px 24px rgba(0,0,0,0.1)",width:"100%",maxWidth:"860px",overflow:"hidden"}}>
+        <div style={{minHeight:"100vh",display:"flex",alignItems:"flex-start",justifyContent:"center",padding:"0"}}>
+          <div style={{background:"white",borderRadius:"16px",boxShadow:"0 4px 24px rgba(0,0,0,0.1)",width:"100%",maxWidth:"100%",overflow:"hidden"}}>
             {/* Header */}
             <div style={{background:"#9E3039",padding:"24px"}}>
               <div style={{display:"flex",alignItems:"center",gap:"12px",marginBottom:"12px",flexWrap:"wrap"}}>
@@ -355,7 +363,7 @@
             </div>
 
             {/* Form */}
-            <div style={{padding:"32px",maxHeight:"70vh",overflowY:"auto"}}>
+            <div style={{padding:"40px",maxHeight:"none",overflowY:"auto"}}>
               {step===0 && <ContactStep data={form.contact} onChange={update} />}
               {step===1 && <BackgroundStep data={form.background} onChange={update} />}
               {step===2 && <SelfAssessStep data={form.selfassess} onChange={update} />}
