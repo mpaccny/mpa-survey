@@ -27,14 +27,59 @@
     const steps = [
       { id: "intro", label: "Welcome" },
       { id: "contact", label: "Personal Details" },
+      { id: "emergency", label: "Emergency Info" },
       { id: "background", label: "Professional Background" },
       { id: "selfassess", label: "Self-Assessment" },
       { id: "goals", label: "Goals" },
-      { id: "logistics", label: "General Information" },
-      { id: "emergency", label: "Emergency Info" },
+      { id: "logistics", label: "Other Information" },
     ];
 
     const comfortOptions = ["1","2","3","4","5","6","7","8","9","10"];
+
+    function validateStep(key, data) {
+      const errors = {};
+      if (key === "contact") {
+        if (!data.firstName) errors.firstName = "Required";
+        if (!data.lastName) errors.lastName = "Required";
+        if (!data.email) errors.email = "Required";
+        if (!data.phone) errors.phone = "Required";
+        if (!data.pronouns) errors.pronouns = "Required";
+      }
+      if (key === "emergency") {
+        if (!data.ec1FirstName) errors.ec1FirstName = "Required";
+        if (!data.ec1LastName) errors.ec1LastName = "Required";
+        if (!data.ec1Relationship) errors.ec1Relationship = "Required";
+        if (!data.ec1Email) errors.ec1Email = "Required";
+        if (!data.ec1Phone) errors.ec1Phone = "Required";
+      }
+      if (key === "background") {
+        if (!data.issueArea) errors.issueArea = "Required";
+        if (!data.currentWork) errors.currentWork = "Required";
+        if (!data.yearsExp) errors.yearsExp = "Required";
+        if (!data.yearsManaging) errors.yearsManaging = "Required";
+        if (!data.bio) errors.bio = "Required";
+      }
+      if (key === "selfassess") {
+        if (!data.resume) errors.resume = "Required";
+        if (!data.communication) errors.communication = "Required";
+        if (!data.resources) errors.resources = "Required";
+        if (!data.data) errors.data = "Required";
+        if (!data.stakeholders) errors.stakeholders = "Required";
+        if (!data.leadership) errors.leadership = "Required";
+      }
+      if (key === "goals") {
+        if (!data.careerClarity) errors.careerClarity = "Required";
+        if (!data.postGrad) errors.postGrad = "Required";
+        if (!data.growthAreas) errors.growthAreas = "Required";
+      }
+      if (key === "logistics") {
+        if (!data.heardFrom) errors.heardFrom = "Required";
+        if (!data.tshirt) errors.tshirt = "Required";
+        if (!data.dietary || data.dietary.length === 0) errors.dietary = "Required";
+        if (!data.mediaRelease) errors.mediaRelease = "Required";
+      }
+      return errors;
+    }
 
     function RadioGroup({ name, options, value, onChange }) {
       return (
@@ -90,10 +135,42 @@
             <label className={labelClass}>What language(s) do you speak?</label>
             <input className={inputClass} value={data.languages} onChange={e => onChange("languages", e.target.value)} placeholder="e.g. English, Spanish, Mandarin" />
           </div>
+        </div>
+      );
+    }
+
+    function EmergencyStep({ data, onChange, errors }) {
+      return (
+        <div style={{display:"flex",flexDirection:"column",gap:"24px"}}>
           <div>
-            <label className={labelClass}>What do you like to do for fun when you're not working or studying? *</label>
-            <input className={inputClass} value={data.fun} onChange={e => onChange("fun", e.target.value)} placeholder="Hiking, cooking, reading..." />
-            {errors.fun && <p className={errorClass}>{errors.fun}</p>}
+            <h3 style={{fontSize:"14px",fontWeight:"700",color:"#1F2937",marginBottom:"4px"}}>Emergency Contact Information #1</h3>
+            <p style={{fontSize:"12px",color:"#6B7280",marginBottom:"12px"}}>Please provide the contact details of someone we may reach out to on your behalf if necessary. This individual will <em>not</em> be contacted regarding academic performance or progress in the MPA program.</p>
+            <div style={{display:"flex",flexDirection:"column",gap:"12px"}}>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"12px"}}>
+                <div><label className={labelClass}>First Name *</label><input className={inputClass} value={data?.ec1FirstName||""} onChange={e => onChange("ec1FirstName", e.target.value)} />{errors.ec1FirstName && <p className={errorClass}>{errors.ec1FirstName}</p>}</div>
+                <div><label className={labelClass}>Last Name *</label><input className={inputClass} value={data?.ec1LastName||""} onChange={e => onChange("ec1LastName", e.target.value)} />{errors.ec1LastName && <p className={errorClass}>{errors.ec1LastName}</p>}</div>
+              </div>
+              <div><label className={labelClass}>Relationship to Student *</label><input className={inputClass} value={data?.ec1Relationship||""} onChange={e => onChange("ec1Relationship", e.target.value)} placeholder="e.g. Parent, Spouse, Friend" />{errors.ec1Relationship && <p className={errorClass}>{errors.ec1Relationship}</p>}</div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"12px"}}>
+                <div><label className={labelClass}>Email Address *</label><input className={inputClass} type="email" value={data?.ec1Email||""} onChange={e => onChange("ec1Email", e.target.value)} />{errors.ec1Email && <p className={errorClass}>{errors.ec1Email}</p>}</div>
+                <div><label className={labelClass}>Phone Number *</label><input className={inputClass} type="tel" value={data?.ec1Phone||""} onChange={e => onChange("ec1Phone", e.target.value)} />{errors.ec1Phone && <p className={errorClass}>{errors.ec1Phone}</p>}</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h3 style={{fontSize:"14px",fontWeight:"700",color:"#1F2937",marginBottom:"4px"}}>Emergency Contact Information #2 <span style={{fontWeight:"400",color:"#9CA3AF"}}>(Optional)</span></h3>
+            <p style={{fontSize:"12px",color:"#6B7280",marginBottom:"12px"}}>Please provide the contact details of someone we may reach out to on your behalf if necessary. This individual will <em>not</em> be contacted regarding academic performance or progress in the MPA program.</p>
+            <div style={{display:"flex",flexDirection:"column",gap:"12px"}}>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"12px"}}>
+                <div><label className={labelClass}>First Name</label><input className={inputClass} value={data?.ec2FirstName||""} onChange={e => onChange("ec2FirstName", e.target.value)} /></div>
+                <div><label className={labelClass}>Last Name</label><input className={inputClass} value={data?.ec2LastName||""} onChange={e => onChange("ec2LastName", e.target.value)} /></div>
+              </div>
+              <div><label className={labelClass}>Relationship to Student</label><input className={inputClass} value={data?.ec2Relationship||""} onChange={e => onChange("ec2Relationship", e.target.value)} placeholder="e.g. Parent, Spouse, Friend" /></div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"12px"}}>
+                <div><label className={labelClass}>Email Address</label><input className={inputClass} type="email" value={data?.ec2Email||""} onChange={e => onChange("ec2Email", e.target.value)} /></div>
+                <div><label className={labelClass}>Phone Number</label><input className={inputClass} type="tel" value={data?.ec2Phone||""} onChange={e => onChange("ec2Phone", e.target.value)} /></div>
+              </div>
+            </div>
           </div>
         </div>
       );
@@ -139,7 +216,7 @@
       );
     }
 
-    function SelfAssessStep({ data, onChange }) {
+    function SelfAssessStep({ data, onChange, errors }) {
       const competencies = [
         { key: "resume", label: "Professional Identity — resume, pitching yourself, and overall professional identity" },
         { key: "communication", label: "Communication — sharing information, presenting ideas, and influencing audiences" },
@@ -162,6 +239,7 @@
                   </button>
                 ))}
               </div>
+              {errors && errors[c.key] && <p className={errorClass}>{errors[c.key]}</p>}
             </div>
           ))}
         </div>
@@ -219,8 +297,8 @@
       return (
         <div style={{display:"flex",flexDirection:"column",gap:"20px"}}>
           <div>
-            <label className={labelClass}>Upload a recent headshot *</label>
-            <div onClick={openWidget} style={{border:"2px dashed #D1D5DB",borderRadius:"8px",padding:"24px",textAlign:"center",cursor:"pointer",borderColor:data.headshotUrl?"#9E3039":"#D1D5DB"}}>
+            <label className={labelClass}>Upload a recent headshot</label>
+            <div onClick={openWidget} style={{border:"2px dashed",borderRadius:"8px",padding:"24px",textAlign:"center",cursor:"pointer",borderColor:data.headshotUrl?"#9E3039":"#D1D5DB"}}>
               {data.headshotUrl ? (
                 <div>
                   <img src={data.headshotUrl} alt="Headshot" style={{width:"80px",height:"80px",borderRadius:"50%",objectFit:"cover",margin:"0 auto 8px"}} />
@@ -236,6 +314,10 @@
             </div>
           </div>
           <div>
+            <label className={labelClass}>What do you like to do for fun when you're not working or studying?</label>
+            <input className={inputClass} value={data.fun||""} onChange={e => onChange("fun", e.target.value)} placeholder="Hiking, cooking, reading..." />
+          </div>
+          <div>
             <label className={labelClass}>How did you hear about the MPA Program? *</label>
             <select className={inputClass} value={data.heardFrom||""} onChange={e => onChange("heardFrom", e.target.value)}>
               <option value="">Select...</option>
@@ -244,6 +326,7 @@
             {data.heardFrom === "Other" && (
               <input className={inputClass} style={{marginTop:"8px"}} value={data.heardFromOther||""} onChange={e => onChange("heardFromOther", e.target.value)} placeholder="Please specify..." />
             )}
+            {errors.heardFrom && <p className={errorClass}>{errors.heardFrom}</p>}
           </div>
           <div>
             <label className={labelClass}>T-Shirt Size *</label>
@@ -255,6 +338,7 @@
                 </button>
               ))}
             </div>
+            {errors.tshirt && <p className={errorClass}>{errors.tshirt}</p>}
           </div>
           <div>
             <label className={labelClass}>Dietary Restrictions *</label>
@@ -269,49 +353,14 @@
             {(data.dietary||[]).includes("Other") && (
               <input className={inputClass} style={{marginTop:"8px"}} value={data.dietaryOther||""} onChange={e => onChange("dietaryOther", e.target.value)} placeholder="Please specify your dietary restriction..." />
             )}
+            {errors.dietary && <p className={errorClass}>{errors.dietary}</p>}
           </div>
           <div>
             <label className={labelClass}>Media Release *</label>
             <p style={{fontSize:"12px",color:"#9CA3AF",marginBottom:"8px"}}>The MPA Program may photograph and record students for use in program materials, the program website, and social media.</p>
             <RadioGroup name="media" options={["Yes, I agree","No, I don't agree"]} value={data.mediaRelease} onChange={v => onChange("mediaRelease", v)} />
             <p style={{fontSize:"12px",color:"#9CA3AF",marginTop:"8px"}}>You can update your preference at any time by contacting us at <a href="mailto:mpa@ccny.cuny.edu" style={{color:"#9E3039"}}>mpa@ccny.cuny.edu</a>.</p>
-          </div>
-        </div>
-      );
-    }
-
-    function EmergencyStep({ data, onChange }) {
-      return (
-        <div style={{display:"flex",flexDirection:"column",gap:"24px"}}>
-          <div>
-            <h3 style={{fontSize:"14px",fontWeight:"700",color:"#1F2937",marginBottom:"4px"}}>Emergency Contact Information #1</h3>
-            <p style={{fontSize:"12px",color:"#6B7280",marginBottom:"12px"}}>Please provide the contact details of someone we may reach out to on your behalf if necessary. This individual will <em>not</em> be contacted regarding academic performance or progress in the MPA program.</p>
-            <div style={{display:"flex",flexDirection:"column",gap:"12px"}}>
-              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"12px"}}>
-                <div><label className={labelClass}>First Name *</label><input className={inputClass} value={data?.ec1FirstName||""} onChange={e => onChange("ec1FirstName", e.target.value)} /></div>
-                <div><label className={labelClass}>Last Name *</label><input className={inputClass} value={data?.ec1LastName||""} onChange={e => onChange("ec1LastName", e.target.value)} /></div>
-              </div>
-              <div><label className={labelClass}>Relationship to Student *</label><input className={inputClass} value={data?.ec1Relationship||""} onChange={e => onChange("ec1Relationship", e.target.value)} placeholder="e.g. Parent, Spouse, Friend" /></div>
-              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"12px"}}>
-                <div><label className={labelClass}>Email Address *</label><input className={inputClass} type="email" value={data?.ec1Email||""} onChange={e => onChange("ec1Email", e.target.value)} /></div>
-                <div><label className={labelClass}>Phone Number *</label><input className={inputClass} type="tel" value={data?.ec1Phone||""} onChange={e => onChange("ec1Phone", e.target.value)} /></div>
-              </div>
-            </div>
-          </div>
-          <div>
-            <h3 style={{fontSize:"14px",fontWeight:"700",color:"#1F2937",marginBottom:"4px"}}>Emergency Contact Information #2 <span style={{fontWeight:"400",color:"#9CA3AF"}}>(Optional)</span></h3>
-            <p style={{fontSize:"12px",color:"#6B7280",marginBottom:"12px"}}>Please provide the contact details of someone we may reach out to on your behalf if necessary. This individual will <em>not</em> be contacted regarding academic performance or progress in the MPA program.</p>
-            <div style={{display:"flex",flexDirection:"column",gap:"12px"}}>
-              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"12px"}}>
-                <div><label className={labelClass}>First Name</label><input className={inputClass} value={data?.ec2FirstName||""} onChange={e => onChange("ec2FirstName", e.target.value)} /></div>
-                <div><label className={labelClass}>Last Name</label><input className={inputClass} value={data?.ec2LastName||""} onChange={e => onChange("ec2LastName", e.target.value)} /></div>
-              </div>
-              <div><label className={labelClass}>Relationship to Student</label><input className={inputClass} value={data?.ec2Relationship||""} onChange={e => onChange("ec2Relationship", e.target.value)} placeholder="e.g. Parent, Spouse, Friend" /></div>
-              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"12px"}}>
-                <div><label className={labelClass}>Email Address</label><input className={inputClass} type="email" value={data?.ec2Email||""} onChange={e => onChange("ec2Email", e.target.value)} /></div>
-                <div><label className={labelClass}>Phone Number</label><input className={inputClass} type="tel" value={data?.ec2Phone||""} onChange={e => onChange("ec2Phone", e.target.value)} /></div>
-              </div>
-            </div>
+            {errors.mediaRelease && <p className={errorClass}>{errors.mediaRelease}</p>}
           </div>
         </div>
       );
@@ -322,15 +371,15 @@
       const [submitted, setSubmitted] = useState(false);
       const [errors, setErrors] = useState({});
       const [form, setForm] = useState({
-        contact: { firstName:"",lastName:"",email:"",phone:"",pronouns:"",pronounsOther:"",languages:"",fun:"" },
+        contact: { firstName:"",lastName:"",email:"",phone:"",pronouns:"",pronounsOther:"",languages:"" },
+        emergency: { ec1FirstName:"",ec1LastName:"",ec1Relationship:"",ec1Email:"",ec1Phone:"",ec2FirstName:"",ec2LastName:"",ec2Relationship:"",ec2Email:"",ec2Phone:"" },
         background: { issueArea:"",currentWork:"",yearsExp:"",yearsManaging:"",bio:"" },
         selfassess: { resume:"",communication:"",resources:"",data:"",stakeholders:"",leadership:"" },
         goals: { careerClarity:"",postGrad:"",growthAreas:"" },
-        logistics: { headshotUrl:"",headshotName:"",tshirt:"",dietary:[],mediaRelease:"Yes, I agree",heardFrom:"",heardFromOther:"",dietaryOther:"" },
-        emergency: { ec1FirstName:"",ec1LastName:"",ec1Relationship:"",ec1Email:"",ec1Phone:"",ec2FirstName:"",ec2LastName:"",ec2Relationship:"",ec2Email:"",ec2Phone:"" },
+        logistics: { headshotUrl:"",headshotName:"",fun:"",tshirt:"",dietary:[],mediaRelease:"Yes, I agree",heardFrom:"",heardFromOther:"",dietaryOther:"" },
       });
 
-      const keys = ["intro","contact","background","selfassess","goals","logistics","emergency"];
+      const keys = ["intro","contact","emergency","background","selfassess","goals","logistics"];
       const currentKey = keys[step];
 
       const update = (field, value) => {
@@ -338,9 +387,16 @@
         setErrors(e => ({ ...e, [field]: undefined }));
       };
 
-      const handleNext = () => { setErrors({}); setStep(s => s + 1); };
+      const handleNext = () => {
+        const errs = validateStep(currentKey, form[currentKey]);
+        if (Object.keys(errs).length > 0) { setErrors(errs); return; }
+        setErrors({});
+        setStep(s => s + 1);
+      };
 
       const handleSubmit = async () => {
+        const errs = validateStep(currentKey, form[currentKey]);
+        if (Object.keys(errs).length > 0) { setErrors(errs); return; }
         const payload = {
           "First Name": form.contact.firstName,
           "Last Name": form.contact.lastName,
@@ -348,7 +404,16 @@
           "Which pronouns do you use?": form.contact.pronouns === "Other" ? form.contact.pronounsOther : form.contact.pronouns,
           "Preferred Email (please note, a Gmail address is strongly encouraged to access the MPA Hub and other functionalities)": form.contact.email,
           "What language(s) do you speak? Please list them here.": form.contact.languages,
-          "Fun": form.contact.fun,
+          "EC1 First Name": form.emergency.ec1FirstName,
+          "EC1 Last Name": form.emergency.ec1LastName,
+          "EC1 Relationship": form.emergency.ec1Relationship,
+          "EC1 Email": form.emergency.ec1Email,
+          "EC1 Phone": form.emergency.ec1Phone,
+          "EC2 First Name": form.emergency.ec2FirstName,
+          "EC2 Last Name": form.emergency.ec2LastName,
+          "EC2 Relationship": form.emergency.ec2Relationship,
+          "EC2 Email": form.emergency.ec2Email,
+          "EC2 Phone": form.emergency.ec2Phone,
           "What is the one issue area that you most identify with, feel passionate about, and/or know the most about?": form.background.issueArea,
           "What is your current work (role and organization)?": form.background.currentWork,
           "How many years of professional experience in public service/social change do you have?": form.background.yearsExp,
@@ -364,20 +429,11 @@
           "After graduation, where do you envision yourself working?": form.goals.postGrad,
           "What are the top three areas of professional growth you want to focus on while in the MPA Program?": form.goals.growthAreas,
           "Headshot URL": form.logistics.headshotUrl || "",
+          "Fun": form.logistics.fun,
           "How did you hear about the MPA Program?": form.logistics.heardFrom,
           "T-Shirt Size": form.logistics.tshirt,
           "Dietary Restrictions": form.logistics.dietary || [],
           "Media Release": form.logistics.mediaRelease,
-          "EC1 First Name": form.emergency.ec1FirstName,
-          "EC1 Last Name": form.emergency.ec1LastName,
-          "EC1 Relationship": form.emergency.ec1Relationship,
-          "EC1 Email": form.emergency.ec1Email,
-          "EC1 Phone": form.emergency.ec1Phone,
-          "EC2 First Name": form.emergency.ec2FirstName,
-          "EC2 Last Name": form.emergency.ec2LastName,
-          "EC2 Relationship": form.emergency.ec2Relationship,
-          "EC2 Email": form.emergency.ec2Email,
-          "EC2 Phone": form.emergency.ec2Phone,
         };
         try {
           await fetch(WEBHOOK_URL, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload) });
@@ -417,12 +473,12 @@
       return (
         <div style={{minHeight:"100vh",display:"flex",alignItems:"flex-start",justifyContent:"center",padding:"0"}}>
           <div style={{background:"white",width:"100%",maxWidth:"100%",overflow:"hidden"}}>
-            {/* Header */}
             <div style={{background:"#9E3039",padding:"24px"}}>
               <p style={{color:"white",fontWeight:"700",fontSize:"11px",letterSpacing:"0.05em",margin:"0 0 4px 0"}}>MASTER <em style={{fontWeight:300}}>of</em> PUBLIC ADMINISTRATION</p>
               <h1 style={{color:"white",fontSize:"22px",fontWeight:"700",margin:"0 0 4px 0"}}>Getting to Know You Survey</h1>
               <p style={{color:"#f5c6c8",fontSize:"12px",margin:"0"}}>Step {step+1} of {steps.length} — {steps[step].label}</p>
             </div>
+
             <div style={{padding:"8px 16px",background:"#fff5f5",borderBottom:"1px solid #fecaca"}}>
               <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"6px"}}>
                 <span style={{color:"#9E3039",fontSize:"12px",fontWeight:"500"}}>
@@ -441,7 +497,6 @@
               </div>
             </div>
 
-            {/* Tabs */}
             <div style={{display:"flex",borderBottom:"1px solid #F3F4F6"}}>
               {steps.map((s,i) => (
                 <button key={s.id} onClick={() => i < step && setStep(i)}
@@ -454,31 +509,29 @@
               ))}
             </div>
 
-            {/* Form */}
             <div style={{padding:"40px",maxWidth:"860px",margin:"0 auto"}}>
               {step===0 && (
                 <div style={{maxWidth:"680px",margin:"0 auto",display:"flex",flexDirection:"column",gap:"16px"}}>
                   <div style={{textAlign:"center",fontSize:"48px"}}>👋</div>
-                  <p style={{fontSize:"15px",color:"#374151",lineHeight:"1.7"}}>Welcome to the <strong>Master of Public Administration (MPA)</strong> at the Colin Powell School for Civic and Global Leadership! We are excited to have you on board.</p>
-                  <p style={{fontSize:"15px",color:"#374151",lineHeight:"1.7"}}>The following survey should take approximately <strong>20-30 minutes</strong> to complete. Knowing about your background, your field of work, your aspirations, and more will help us to better plan workshops, academic support, and other events to help you succeed in the program.</p>
+                  <p style={{fontSize:"15px",color:"#374151",lineHeight:"1.7"}}>Welcome to the <strong>Master of Public Administration (MPA)</strong>! We are excited to have you on board.</p>
+                  <p style={{fontSize:"15px",color:"#374151",lineHeight:"1.7"}}>The following survey should take approximately <strong>20-30 minutes</strong> to complete. This survey is designed to get to know you better so we can provide the support and resources needed to help you succeed in the MPA Program.</p>
                   <p style={{fontSize:"15px",color:"#374151",lineHeight:"1.7"}}>For any questions, reach out to us at: <a href="mailto:mpa@ccny.cuny.edu" style={{color:"#9E3039",fontWeight:"600"}}>mpa@ccny.cuny.edu</a></p>
                   <div style={{background:"#fff5f5",border:"1px solid #fecaca",borderRadius:"8px",padding:"12px 16px"}}>
                     <p style={{color:"#9E3039",fontSize:"13px",fontWeight:"600",margin:"0 0 4px 0"}}>⚠️ Please note:</p>
-                    <p style={{color:"#7f1d1d",fontSize:"13px",margin:"0"}}>Once you begin the survey, please make sure to complete it in one sitting. You will not be able to save your progress and return to your responses later.</p>
+                    <p style={{color:"#7f1d1d",fontSize:"13px",margin:"0"}}>Once you begin the survey, please make sure to complete it in one sitting.</p>
                   </div>
                   <p style={{fontSize:"15px",color:"#374151",fontWeight:"600"}}>Thank you!</p>
                 </div>
               )}
               {step===1 && <ContactStep data={form.contact} onChange={update} errors={errors} />}
-              {step===2 && <BackgroundStep data={form.background} onChange={update} errors={errors} />}
-              {step===3 && <SelfAssessStep data={form.selfassess} onChange={update} />}
-              {step===4 && <GoalsStep data={form.goals} onChange={update} errors={errors} />}
-              {step===5 && <LogisticsStep data={form.logistics} onChange={update} errors={errors}
+              {step===2 && <EmergencyStep data={form.emergency} onChange={update} errors={errors} />}
+              {step===3 && <BackgroundStep data={form.background} onChange={update} errors={errors} />}
+              {step===4 && <SelfAssessStep data={form.selfassess} onChange={update} errors={errors} />}
+              {step===5 && <GoalsStep data={form.goals} onChange={update} errors={errors} />}
+              {step===6 && <LogisticsStep data={form.logistics} onChange={update} errors={errors}
                 onHeadshotUpload={(url, name) => setForm(f => ({...f, logistics: {...f.logistics, headshotUrl: url, headshotName: name}}))} />}
-              {step===6 && <EmergencyStep data={form.emergency} onChange={update} />}
             </div>
 
-            {/* Footer logos */}
             <div style={{padding:"12px 24px",display:"flex",alignItems:"center",gap:"12px",flexWrap:"wrap",borderTop:"1px solid #F3F4F6",background:"#f9f9f9"}}>
               <div style={{color:"#9E3039"}}><div style={{fontWeight:"700",fontSize:"12px"}}>Colin Powell School</div><div style={{fontSize:"11px",color:"#6B7280"}}>for Civic and Global Leadership</div></div>
               <div style={{width:"1px",height:"24px",background:"#D1D5DB"}}></div>
@@ -487,7 +540,6 @@
               <div><div style={{color:"#9E3039",fontSize:"9px",fontStyle:"italic",lineHeight:"1",marginLeft:"8px"}}>the</div><div style={{color:"#9E3039",fontSize:"13px",fontWeight:"500",lineHeight:"1.2",fontFamily:"Georgia, serif"}}>Moynihan Center</div></div>
             </div>
 
-            {/* Navigation */}
             <div style={{padding:"16px 24px",display:"flex",justifyContent:"space-between",alignItems:"center",borderTop:"1px solid #F3F4F6"}}>
               <button onClick={() => setStep(s=>s-1)} disabled={step===0}
                 style={{fontSize:"14px",color:"#9CA3AF",background:"none",border:"none",cursor:step===0?"default":"pointer",opacity:step===0?0:1}}>
