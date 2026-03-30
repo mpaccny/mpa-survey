@@ -34,7 +34,9 @@
       { id: "logistics", label: "Other Information" },
     ];
 
-    const comfortOptions = ["1","2","3","4","5","6","7","8","9","10"];
+    const keys = ["intro","contact","emergency","background","selfassess","goals","logistics"];
+
+    const comfortOptions = ["1 - Not at all comfortable","2 - Slightly comfortable","3 - Moderately comfortable","4 - Very comfortable","5 - Extremely comfortable"];
 
     function validateStep(key, data) {
       const errors = {};
@@ -201,7 +203,7 @@
             <label className={labelClass}>Years of experience managing people *</label>
             <select className={inputClass} value={data.yearsManaging} onChange={e => onChange("yearsManaging", e.target.value)}>
               <option value="">Select</option>
-              {["0","< 3 years","3 to 6 years","> 10 years"].map(o => <option key={o}>{o}</option>)}
+              {["0","< 3 years","3 to 6 years","6 to 9 years","> 10 years"].map(o => <option key={o}>{o}</option>)}
             </select>
             {errors.yearsManaging && <p className={errorClass}>{errors.yearsManaging}</p>}
           </div>
@@ -216,7 +218,7 @@
       );
     }
 
-    function SelfAssessStep({ data, onChange, errors }) {
+    function SelfAssessStep({ data, onChange, errors = {} }) {
       const competencies = [
         { key: "resume", label: "Professional Identity — resume, pitching yourself, and overall professional identity" },
         { key: "communication", label: "Communication — sharing information, presenting ideas, and influencing audiences" },
@@ -227,19 +229,19 @@
       ];
       return (
         <div>
-          <p style={{fontSize:"14px",color:"#6B7280",marginBottom:"16px"}}>On a scale of 1 to 10, rate your current comfort level. 1 = very uncomfortable, 10 = very comfortable.</p>
+          <p style={{fontSize:"14px",color:"#6B7280",marginBottom:"16px"}}>Rate your current comfort level with each competency area.</p>
           {competencies.map(c => (
             <div key={c.key} style={{marginBottom:"16px"}}>
               <p style={{fontSize:"14px",color:"#374151",marginBottom:"8px"}}>{c.label} *</p>
-              <div style={{display:"flex",gap:"8px",flexWrap:"wrap"}}>
+              <div style={{display:"flex",flexDirection:"column",gap:"4px"}}>
                 {comfortOptions.map(n => (
-                  <button key={n} type="button" onClick={() => onChange(c.key, n)}
-                    style={{width:"36px",height:"36px",borderRadius:"50%",border:data[c.key]===n?"none":"1px solid #D1D5DB",background:data[c.key]===n?"#9E3039":"white",color:data[c.key]===n?"white":"#6B7280",cursor:"pointer",fontSize:"14px"}}>
+                  <label key={n} style={{display:"flex",alignItems:"center",gap:"8px",fontSize:"14px",cursor:"pointer"}}>
+                    <input type="radio" name={c.key} value={n} checked={data[c.key]===n} onChange={() => onChange(c.key, n)} style={{accentColor:"#9E3039"}} />
                     {n}
-                  </button>
+                  </label>
                 ))}
               </div>
-              {errors && errors[c.key] && <p className={errorClass}>{errors[c.key]}</p>}
+              {errors[c.key] && <p className={errorClass}>{errors[c.key]}</p>}
             </div>
           ))}
         </div>
@@ -247,16 +249,17 @@
     }
 
     function GoalsStep({ data, onChange, errors }) {
+      const clarityOptions = ["1 - Not at all clear","2 - Slightly clear","3 - Moderately clear","4 - Very clear","5 - Extremely clear"];
       return (
         <div style={{display:"flex",flexDirection:"column",gap:"16px"}}>
           <div>
-            <label className={labelClass}>How clear do you feel about your career path? * (1 = Very unclear, 5 = Very clear)</label>
-            <div style={{display:"flex",gap:"8px",marginTop:"8px"}}>
-              {["1","2","3","4","5"].map(n => (
-                <button key={n} type="button" onClick={() => onChange("careerClarity", n)}
-                  style={{width:"36px",height:"36px",borderRadius:"50%",border:data.careerClarity===n?"none":"1px solid #D1D5DB",background:data.careerClarity===n?"#9E3039":"white",color:data.careerClarity===n?"white":"#6B7280",cursor:"pointer",fontSize:"14px"}}>
+            <label className={labelClass}>How clear do you feel about your career path? *</label>
+            <div style={{display:"flex",flexDirection:"column",gap:"4px",marginTop:"8px"}}>
+              {clarityOptions.map(n => (
+                <label key={n} style={{display:"flex",alignItems:"center",gap:"8px",fontSize:"14px",cursor:"pointer"}}>
+                  <input type="radio" name="careerClarity" value={n} checked={data.careerClarity===n} onChange={() => onChange("careerClarity", n)} style={{accentColor:"#9E3039"}} />
                   {n}
-                </button>
+                </label>
               ))}
             </div>
             {errors.careerClarity && <p className={errorClass}>{errors.careerClarity}</p>}
@@ -298,6 +301,7 @@
         <div style={{display:"flex",flexDirection:"column",gap:"20px"}}>
           <div>
             <label className={labelClass}>Upload a recent headshot</label>
+            <p style={{fontSize:"12px",color:"#9CA3AF",marginBottom:"8px"}}>Please upload a JPG or PNG file, max 5MB. If your phone photo is too large, try emailing it to yourself first and saving the compressed version, or use a free tool like <a href="https://www.iloveimg.com/compress-image" target="_blank" style={{color:"#9E3039"}}>iLoveIMG</a> to reduce the file size before uploading.</p>
             <div onClick={openWidget} style={{border:"2px dashed",borderRadius:"8px",padding:"24px",textAlign:"center",cursor:"pointer",borderColor:data.headshotUrl?"#9E3039":"#D1D5DB"}}>
               {data.headshotUrl ? (
                 <div>
@@ -341,7 +345,7 @@
             {errors.tshirt && <p className={errorClass}>{errors.tshirt}</p>}
           </div>
           <div>
-            <label className={labelClass}>Dietary Restrictions *</label>
+            <label className={labelClass}>Dietary Restrictions / Preferences *</label>
             <div style={{display:"flex",flexWrap:"wrap",gap:"8px",marginTop:"8px"}}>
               {dietary.map(d => (
                 <button key={d} type="button" onClick={() => toggleDietary(d)}
@@ -379,7 +383,6 @@
         logistics: { headshotUrl:"",headshotName:"",fun:"",tshirt:"",dietary:[],mediaRelease:"Yes, I agree",heardFrom:"",heardFromOther:"",dietaryOther:"" },
       });
 
-      const keys = ["intro","contact","emergency","background","selfassess","goals","logistics"];
       const currentKey = keys[step];
 
       const update = (field, value) => {
@@ -388,14 +391,15 @@
       };
 
       const handleNext = () => {
-        const errs = validateStep(currentKey, form[currentKey]);
+        if (step === 0) { setStep(1); return; }
+        const errs = validateStep(currentKey, form[currentKey] || {});
         if (Object.keys(errs).length > 0) { setErrors(errs); return; }
         setErrors({});
         setStep(s => s + 1);
       };
 
       const handleSubmit = async () => {
-        const errs = validateStep(currentKey, form[currentKey]);
+        const errs = validateStep(currentKey, form[currentKey] || {});
         if (Object.keys(errs).length > 0) { setErrors(errs); return; }
         const payload = {
           "First Name": form.contact.firstName,
@@ -419,13 +423,13 @@
           "How many years of professional experience in public service/social change do you have?": form.background.yearsExp,
           "How many years of experience do you have with managing people?": form.background.yearsManaging,
           "Please submit a personal bio of 150-200 words written in the third person...": form.background.bio,
-          "How comfortable are you with your resume, your ability to pitch yourself, and your overall professional identity?": Number(form.selfassess.resume),
-          "How comfortable are you to effectively share information, present ideas, and influence audiences?": Number(form.selfassess.communication),
-          "How comfortable are you to manage an organizations resources to achieve priorities and objectives?": Number(form.selfassess.resources),
-          "How comfortable are you to organize, interpret, and evaluate data to transform information into actionable insights?": Number(form.selfassess.data),
-          "How comfortable are you to effectively manage interactions with a diverse array of stakeholders to support a collective goal?": Number(form.selfassess.stakeholders),
-          "How comfortable are you as an inclusive, adaptive, and culturally competent leader who can effectively align your values and actions?": Number(form.selfassess.leadership),
-          "How clear do you feel about your career path?": Number(form.goals.careerClarity),
+          "How comfortable are you with your resume, your ability to pitch yourself, and your overall professional identity?": Number(form.selfassess.resume.charAt(0)),
+          "How comfortable are you to effectively share information, present ideas, and influence audiences?": Number(form.selfassess.communication.charAt(0)),
+          "How comfortable are you to manage an organizations resources to achieve priorities and objectives?": Number(form.selfassess.resources.charAt(0)),
+          "How comfortable are you to organize, interpret, and evaluate data to transform information into actionable insights?": Number(form.selfassess.data.charAt(0)),
+          "How comfortable are you to effectively manage interactions with a diverse array of stakeholders to support a collective goal?": Number(form.selfassess.stakeholders.charAt(0)),
+          "How comfortable are you as an inclusive, adaptive, and culturally competent leader who can effectively align your values and actions?": Number(form.selfassess.leadership.charAt(0)),
+          "How clear do you feel about your career path?": Number(form.goals.careerClarity.charAt(0)),
           "After graduation, where do you envision yourself working?": form.goals.postGrad,
           "What are the top three areas of professional growth you want to focus on while in the MPA Program?": form.goals.growthAreas,
           "Headshot URL": form.logistics.headshotUrl || "",
@@ -457,12 +461,9 @@
                 <div style={{background:"#fff5f5",borderRadius:"8px",padding:"12px",marginBottom:"16px"}}>
                   <p style={{fontSize:"12px",color:"#9E3039",margin:0}}>For any questions reach out to us at <strong>mpa@ccny.cuny.edu</strong></p>
                 </div>
-                <div style={{display:"flex",alignItems:"center",gap:"12px",flexWrap:"wrap",paddingTop:"12px",borderTop:"1px solid #F3F4F6"}}>
-                  <div style={{color:"#9E3039"}}><div style={{fontWeight:"700",fontSize:"12px"}}>Colin Powell School</div><div style={{fontSize:"11px",color:"#6B7280"}}>for Civic and Global Leadership</div></div>
-                  <div style={{width:"1px",height:"24px",background:"#D1D5DB"}}></div>
-                  <div style={{fontSize:"11px",color:"#6B7280"}}><div>The City College</div><div>of New York</div></div>
-                  <div style={{width:"1px",height:"24px",background:"#D1D5DB"}}></div>
-                  <div><div style={{color:"#9E3039",fontSize:"9px",fontStyle:"italic",lineHeight:"1",marginLeft:"8px"}}>the</div><div style={{color:"#9E3039",fontSize:"13px",fontWeight:"500",lineHeight:"1.2",fontFamily:"Georgia, serif"}}>Moynihan Center</div></div>
+                <div style={{display:"flex",alignItems:"center",gap:"16px",flexWrap:"wrap",paddingTop:"12px",borderTop:"1px solid #F3F4F6"}}>
+                  <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774556594/Untitled_qvjdmr.png" alt="MPA at CCNY Logo" style={{height:"40px",objectFit:"contain"}} />
+                  <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774551962/The_MHC_Logo_xrqoy8.png" alt="The Moynihan Center Logo" style={{height:"40px",objectFit:"contain"}} />
                 </div>
               </div>
             </div>
@@ -532,7 +533,7 @@
                 onHeadshotUpload={(url, name) => setForm(f => ({...f, logistics: {...f.logistics, headshotUrl: url, headshotName: name}}))} />}
             </div>
 
-            <div style={{padding:"16px 24px",display:"flex",alignItems:"center",gap:"24px",borderTop:"1px solid #F3F4F6",background:"#f9f9f9"}}>
+            <div style={{padding:"16px 24px",display:"flex",alignItems:"center",gap:"16px",borderTop:"1px solid #F3F4F6",background:"#f9f9f9"}}>
               <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774556594/Untitled_qvjdmr.png" alt="MPA at CCNY Logo" style={{height:"48px",objectFit:"contain"}} />
               <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774551962/The_MHC_Logo_xrqoy8.png" alt="The Moynihan Center Logo" style={{height:"48px",objectFit:"contain"}} />
             </div>
