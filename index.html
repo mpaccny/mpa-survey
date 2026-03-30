@@ -10,7 +10,7 @@
   <script src="https://upload-widget.cloudinary.com/global/all.js"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet" />
   <style>
-    body { background: linear-gradient(135deg, #fdf2f2, #ffffff); min-height: 100vh; margin: 0; font-family: sans-serif; padding: 20px; box-sizing: border-box; }
+    body { background: linear-gradient(135deg, #fdf2f2, #ffffff); min-height: 100vh; margin: 0; font-family: sans-serif; box-sizing: border-box; }
   </style>
 </head>
 <body>
@@ -24,70 +24,62 @@
     const hintClass = "text-xs text-gray-400 mt-1";
     const errorClass = "text-xs text-red-500 mt-1";
 
-    const steps = [
-      { id: "intro", label: "Welcome" },
-      { id: "contact", label: "Personal Details" },
-      { id: "emergency", label: "Emergency Info" },
-      { id: "background", label: "Professional Background" },
-      { id: "selfassess", label: "Self-Assessment" },
-      { id: "goals", label: "Goals" },
-      { id: "logistics", label: "Other Information" },
-    ];
+    const STEPS = ["Welcome","Personal Details","Emergency Information","Professional Background","Self-Assessment","Goals","Other Information"];
 
-    const comfortOptions = ["1 - Not at all comfortable", "2 - Slightly comfortable", "3 - Moderately comfortable", "4 - Very comfortable", "5 - Extremely comfortable"];
+    const comfortOptions = ["1 - Not at all comfortable","2 - Slightly comfortable","3 - Moderately comfortable","4 - Very comfortable","5 - Extremely comfortable"];
 
-    function validateStep(key, data) {
-      const errors = {};
-      if (key === "contact") {
-        if (!data.firstName) errors.firstName = "Required";
-        if (!data.lastName) errors.lastName = "Required";
-        if (!data.email) errors.email = "Required";
-        if (!data.phone) errors.phone = "Required";
-        if (!data.pronouns) errors.pronouns = "Required";
+    function validate(stepIndex, form) {
+      const e = {};
+      if (stepIndex === 1) {
+        if (!form.contact.firstName) e.firstName = "Required";
+        if (!form.contact.lastName) e.lastName = "Required";
+        if (!form.contact.email) e.email = "Required";
+        if (!form.contact.phone) e.phone = "Required";
+        if (!form.contact.pronouns) e.pronouns = "Required";
       }
-      if (key === "emergency") {
-        if (!data.ec1FirstName) errors.ec1FirstName = "Required";
-        if (!data.ec1LastName) errors.ec1LastName = "Required";
-        if (!data.ec1Relationship) errors.ec1Relationship = "Required";
-        if (!data.ec1Email) errors.ec1Email = "Required";
-        if (!data.ec1Phone) errors.ec1Phone = "Required";
+      if (stepIndex === 2) {
+        if (!form.emergency.ec1FirstName) e.ec1FirstName = "Required";
+        if (!form.emergency.ec1LastName) e.ec1LastName = "Required";
+        if (!form.emergency.ec1Relationship) e.ec1Relationship = "Required";
+        if (!form.emergency.ec1Email) e.ec1Email = "Required";
+        if (!form.emergency.ec1Phone) e.ec1Phone = "Required";
       }
-      if (key === "background") {
-        if (!data.issueArea) errors.issueArea = "Required";
-        if (!data.currentWork) errors.currentWork = "Required";
-        if (!data.yearsExp) errors.yearsExp = "Required";
-        if (!data.yearsManaging) errors.yearsManaging = "Required";
-        if (!data.bio) errors.bio = "Required";
+      if (stepIndex === 3) {
+        if (!form.background.issueArea) e.issueArea = "Required";
+        if (!form.background.currentWork) e.currentWork = "Required";
+        if (!form.background.yearsExp) e.yearsExp = "Required";
+        if (!form.background.yearsManaging) e.yearsManaging = "Required";
+        if (!form.background.bio) e.bio = "Required";
       }
-      if (key === "selfassess") {
-        if (!data.resume) errors.resume = "Required";
-        if (!data.communication) errors.communication = "Required";
-        if (!data.resources) errors.resources = "Required";
-        if (!data.data) errors.data = "Required";
-        if (!data.stakeholders) errors.stakeholders = "Required";
-        if (!data.leadership) errors.leadership = "Required";
+      if (stepIndex === 4) {
+        if (!form.selfassess.resume) e.resume = "Required";
+        if (!form.selfassess.communication) e.communication = "Required";
+        if (!form.selfassess.resources) e.resources = "Required";
+        if (!form.selfassess.dataSkill) e.dataSkill = "Required";
+        if (!form.selfassess.stakeholders) e.stakeholders = "Required";
+        if (!form.selfassess.leadership) e.leadership = "Required";
       }
-      if (key === "goals") {
-        if (!data.careerClarity) errors.careerClarity = "Required";
-        if (!data.postGrad) errors.postGrad = "Required";
-        if (!data.growthAreas) errors.growthAreas = "Required";
+      if (stepIndex === 5) {
+        if (!form.goals.careerClarity) e.careerClarity = "Required";
+        if (!form.goals.postGrad) e.postGrad = "Required";
+        if (!form.goals.growthAreas) e.growthAreas = "Required";
       }
-      if (key === "logistics") {
-        if (!data.heardFrom) errors.heardFrom = "Required";
-        if (!data.tshirt) errors.tshirt = "Required";
-        if (!data.dietary || data.dietary.length === 0) errors.dietary = "Required";
-        if (!data.mediaRelease) errors.mediaRelease = "Required";
+      if (stepIndex === 6) {
+        if (!form.logistics.heardFrom) e.heardFrom = "Required";
+        if (!form.logistics.tshirt) e.tshirt = "Required";
+        if (!form.logistics.dietary || form.logistics.dietary.length === 0) e.dietary = "Required";
+        if (!form.logistics.mediaRelease) e.mediaRelease = "Required";
       }
-      return errors;
+      return e;
     }
 
     function RadioGroup({ name, options, value, onChange }) {
       return (
-        <div style={{display:"flex",flexDirection:"column",gap:"4px",marginTop:"4px"}}>
-          {options.map(opt => (
-            <label key={opt} style={{display:"flex",alignItems:"center",gap:"8px",fontSize:"14px",cursor:"pointer"}}>
-              <input type="radio" name={name} value={opt} checked={value === opt} onChange={() => onChange(opt)} style={{accentColor:"#9E3039"}} />
-              {opt}
+        <div style={{display:"flex",flexDirection:"column",gap:"6px",marginTop:"6px"}}>
+          {options.map(o => (
+            <label key={o} style={{display:"flex",alignItems:"center",gap:"8px",fontSize:"14px",cursor:"pointer"}}>
+              <input type="radio" name={name} value={o} checked={value===o} onChange={()=>onChange(o)} style={{accentColor:"#9E3039"}} />
+              {o}
             </label>
           ))}
         </div>
@@ -100,40 +92,38 @@
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"16px"}}>
             <div>
               <label className={labelClass}>First Name *</label>
-              <input className={inputClass} value={data.firstName} onChange={e => onChange("firstName", e.target.value)} placeholder="Jane" />
+              <input className={inputClass} value={data.firstName||""} onChange={e=>onChange("firstName",e.target.value)} placeholder="Jane" />
               {errors.firstName && <p className={errorClass}>{errors.firstName}</p>}
             </div>
             <div>
               <label className={labelClass}>Last Name *</label>
-              <input className={inputClass} value={data.lastName} onChange={e => onChange("lastName", e.target.value)} placeholder="Doe" />
+              <input className={inputClass} value={data.lastName||""} onChange={e=>onChange("lastName",e.target.value)} placeholder="Doe" />
               {errors.lastName && <p className={errorClass}>{errors.lastName}</p>}
             </div>
           </div>
           <div>
             <label className={labelClass}>Preferred Email *</label>
-            <input className={inputClass} type="email" value={data.email} onChange={e => onChange("email", e.target.value)} placeholder="jane@gmail.com" />
+            <input className={inputClass} type="email" value={data.email||""} onChange={e=>onChange("email",e.target.value)} placeholder="jane@gmail.com" />
             <p className={hintClass}>This will be the primary email we use to communicate with you, separate from your CCNY email address.</p>
             {errors.email && <p className={errorClass}>{errors.email}</p>}
           </div>
           <div>
             <label className={labelClass}>Phone Number *</label>
-            <input className={inputClass} type="tel" value={data.phone||""} onChange={e => onChange("phone", e.target.value)} placeholder="(555) 000-0000" />
+            <input className={inputClass} type="tel" value={data.phone||""} onChange={e=>onChange("phone",e.target.value)} placeholder="(555) 000-0000" />
             {errors.phone && <p className={errorClass}>{errors.phone}</p>}
           </div>
           <div>
             <label className={labelClass}>Which pronouns do you use? *</label>
-            <select className={inputClass} value={data.pronouns} onChange={e => onChange("pronouns", e.target.value)}>
+            <select className={inputClass} value={data.pronouns||""} onChange={e=>onChange("pronouns",e.target.value)}>
               <option value="">Select...</option>
               <option>She/Her</option><option>He/Him</option><option>They/Them</option><option>Other</option><option>Prefer not to say</option>
             </select>
-            {data.pronouns === "Other" && (
-              <input className={inputClass} style={{marginTop:"8px"}} value={data.pronounsOther||""} onChange={e => onChange("pronounsOther", e.target.value)} placeholder="Please specify..." />
-            )}
+            {data.pronouns==="Other" && <input className={inputClass} style={{marginTop:"8px"}} value={data.pronounsOther||""} onChange={e=>onChange("pronounsOther",e.target.value)} placeholder="Please specify..." />}
             {errors.pronouns && <p className={errorClass}>{errors.pronouns}</p>}
           </div>
           <div>
             <label className={labelClass}>What language(s) do you speak?</label>
-            <input className={inputClass} value={data.languages} onChange={e => onChange("languages", e.target.value)} placeholder="e.g. English, Spanish, Mandarin" />
+            <input className={inputClass} value={data.languages||""} onChange={e=>onChange("languages",e.target.value)} placeholder="e.g. English, Spanish, Mandarin" />
           </div>
         </div>
       );
@@ -147,13 +137,13 @@
             <p style={{fontSize:"12px",color:"#6B7280",marginBottom:"12px"}}>Please provide the contact details of someone we may reach out to on your behalf if necessary. This individual will <em>not</em> be contacted regarding academic performance or progress in the MPA program.</p>
             <div style={{display:"flex",flexDirection:"column",gap:"12px"}}>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"12px"}}>
-                <div><label className={labelClass}>First Name *</label><input className={inputClass} value={data?.ec1FirstName||""} onChange={e => onChange("ec1FirstName", e.target.value)} />{errors.ec1FirstName && <p className={errorClass}>{errors.ec1FirstName}</p>}</div>
-                <div><label className={labelClass}>Last Name *</label><input className={inputClass} value={data?.ec1LastName||""} onChange={e => onChange("ec1LastName", e.target.value)} />{errors.ec1LastName && <p className={errorClass}>{errors.ec1LastName}</p>}</div>
+                <div><label className={labelClass}>First Name *</label><input className={inputClass} value={data.ec1FirstName||""} onChange={e=>onChange("ec1FirstName",e.target.value)} />{errors.ec1FirstName&&<p className={errorClass}>{errors.ec1FirstName}</p>}</div>
+                <div><label className={labelClass}>Last Name *</label><input className={inputClass} value={data.ec1LastName||""} onChange={e=>onChange("ec1LastName",e.target.value)} />{errors.ec1LastName&&<p className={errorClass}>{errors.ec1LastName}</p>}</div>
               </div>
-              <div><label className={labelClass}>Relationship to Student *</label><input className={inputClass} value={data?.ec1Relationship||""} onChange={e => onChange("ec1Relationship", e.target.value)} placeholder="e.g. Parent, Spouse, Friend" />{errors.ec1Relationship && <p className={errorClass}>{errors.ec1Relationship}</p>}</div>
+              <div><label className={labelClass}>Relationship to Student *</label><input className={inputClass} value={data.ec1Relationship||""} onChange={e=>onChange("ec1Relationship",e.target.value)} placeholder="e.g. Parent, Spouse, Friend" />{errors.ec1Relationship&&<p className={errorClass}>{errors.ec1Relationship}</p>}</div>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"12px"}}>
-                <div><label className={labelClass}>Email Address *</label><input className={inputClass} type="email" value={data?.ec1Email||""} onChange={e => onChange("ec1Email", e.target.value)} />{errors.ec1Email && <p className={errorClass}>{errors.ec1Email}</p>}</div>
-                <div><label className={labelClass}>Phone Number *</label><input className={inputClass} type="tel" value={data?.ec1Phone||""} onChange={e => onChange("ec1Phone", e.target.value)} />{errors.ec1Phone && <p className={errorClass}>{errors.ec1Phone}</p>}</div>
+                <div><label className={labelClass}>Email Address *</label><input className={inputClass} type="email" value={data.ec1Email||""} onChange={e=>onChange("ec1Email",e.target.value)} />{errors.ec1Email&&<p className={errorClass}>{errors.ec1Email}</p>}</div>
+                <div><label className={labelClass}>Phone Number *</label><input className={inputClass} type="tel" value={data.ec1Phone||""} onChange={e=>onChange("ec1Phone",e.target.value)} />{errors.ec1Phone&&<p className={errorClass}>{errors.ec1Phone}</p>}</div>
               </div>
             </div>
           </div>
@@ -162,13 +152,13 @@
             <p style={{fontSize:"12px",color:"#6B7280",marginBottom:"12px"}}>Please provide the contact details of someone we may reach out to on your behalf if necessary. This individual will <em>not</em> be contacted regarding academic performance or progress in the MPA program.</p>
             <div style={{display:"flex",flexDirection:"column",gap:"12px"}}>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"12px"}}>
-                <div><label className={labelClass}>First Name</label><input className={inputClass} value={data?.ec2FirstName||""} onChange={e => onChange("ec2FirstName", e.target.value)} /></div>
-                <div><label className={labelClass}>Last Name</label><input className={inputClass} value={data?.ec2LastName||""} onChange={e => onChange("ec2LastName", e.target.value)} /></div>
+                <div><label className={labelClass}>First Name</label><input className={inputClass} value={data.ec2FirstName||""} onChange={e=>onChange("ec2FirstName",e.target.value)} /></div>
+                <div><label className={labelClass}>Last Name</label><input className={inputClass} value={data.ec2LastName||""} onChange={e=>onChange("ec2LastName",e.target.value)} /></div>
               </div>
-              <div><label className={labelClass}>Relationship to Student</label><input className={inputClass} value={data?.ec2Relationship||""} onChange={e => onChange("ec2Relationship", e.target.value)} placeholder="e.g. Parent, Spouse, Friend" /></div>
+              <div><label className={labelClass}>Relationship to Student</label><input className={inputClass} value={data.ec2Relationship||""} onChange={e=>onChange("ec2Relationship",e.target.value)} placeholder="e.g. Parent, Spouse, Friend" /></div>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"12px"}}>
-                <div><label className={labelClass}>Email Address</label><input className={inputClass} type="email" value={data?.ec2Email||""} onChange={e => onChange("ec2Email", e.target.value)} /></div>
-                <div><label className={labelClass}>Phone Number</label><input className={inputClass} type="tel" value={data?.ec2Phone||""} onChange={e => onChange("ec2Phone", e.target.value)} /></div>
+                <div><label className={labelClass}>Email Address</label><input className={inputClass} type="email" value={data.ec2Email||""} onChange={e=>onChange("ec2Email",e.target.value)} /></div>
+                <div><label className={labelClass}>Phone Number</label><input className={inputClass} type="tel" value={data.ec2Phone||""} onChange={e=>onChange("ec2Phone",e.target.value)} /></div>
               </div>
             </div>
           </div>
@@ -181,49 +171,48 @@
         <div style={{display:"flex",flexDirection:"column",gap:"16px"}}>
           <div>
             <label className={labelClass}>Issue area that you most identify with, feel passionate about, and/or know the most about *</label>
-            <input className={inputClass} value={data.issueArea} onChange={e => onChange("issueArea", e.target.value)} placeholder="e.g. Housing, Climate, Education..." />
-            {errors.issueArea && <p className={errorClass}>{errors.issueArea}</p>}
+            <input className={inputClass} value={data.issueArea||""} onChange={e=>onChange("issueArea",e.target.value)} placeholder="e.g. Housing, Climate, Education..." />
+            {errors.issueArea&&<p className={errorClass}>{errors.issueArea}</p>}
           </div>
           <div>
             <label className={labelClass}>What is your current work? *</label>
-            <input className={inputClass} value={data.currentWork} onChange={e => onChange("currentWork", e.target.value)} placeholder="Role and organization" />
-            {errors.currentWork && <p className={errorClass}>{errors.currentWork}</p>}
+            <input className={inputClass} value={data.currentWork||""} onChange={e=>onChange("currentWork",e.target.value)} placeholder="Role and organization" />
+            {errors.currentWork&&<p className={errorClass}>{errors.currentWork}</p>}
           </div>
           <div>
             <label className={labelClass}>Years of professional experience in public service / social change *</label>
-            <select className={inputClass} value={data.yearsExp} onChange={e => onChange("yearsExp", e.target.value)}>
+            <select className={inputClass} value={data.yearsExp||""} onChange={e=>onChange("yearsExp",e.target.value)}>
               <option value="">Select</option>
-              {["< 3 years","3 to 6 years","6 to 9 years","> 10 years"].map(o => <option key={o}>{o}</option>)}
+              {["< 3 years","3 to 6 years","6 to 9 years","> 10 years"].map(o=><option key={o}>{o}</option>)}
             </select>
-            {errors.yearsExp && <p className={errorClass}>{errors.yearsExp}</p>}
+            {errors.yearsExp&&<p className={errorClass}>{errors.yearsExp}</p>}
           </div>
           <div>
             <label className={labelClass}>Years of experience managing people *</label>
-            <select className={inputClass} value={data.yearsManaging} onChange={e => onChange("yearsManaging", e.target.value)}>
+            <select className={inputClass} value={data.yearsManaging||""} onChange={e=>onChange("yearsManaging",e.target.value)}>
               <option value="">Select</option>
-              {["0","< 3 years","3 to 6 years","6 to 9 years","> 10 years"].map(o => <option key={o}>{o}</option>)}
+              {["0","< 3 years","3 to 6 years","6 to 9 years","> 10 years"].map(o=><option key={o}>{o}</option>)}
             </select>
-            {errors.yearsManaging && <p className={errorClass}>{errors.yearsManaging}</p>}
+            {errors.yearsManaging&&<p className={errorClass}>{errors.yearsManaging}</p>}
           </div>
           <div>
             <label className={labelClass}>Personal Bio (150–200 words, written in third person) *</label>
-            <textarea className={inputClass} rows={5} value={data.bio} onChange={e => onChange("bio", e.target.value)}
-              placeholder="Summarize your current roles and projects, personal and professional background, values and career goals, and hobbies/interesting facts about you." />
-            <p className={hintClass}>{data.bio ? data.bio.trim().split(/\s+/).length : 0} words (target: 150–200)</p>
-            {errors.bio && <p className={errorClass}>{errors.bio}</p>}
+            <textarea className={inputClass} rows={5} value={data.bio||""} onChange={e=>onChange("bio",e.target.value)} placeholder="Summarize your current roles and projects, personal and professional background, values and career goals, and hobbies/interesting facts about you." />
+            <p className={hintClass}>{data.bio?data.bio.trim().split(/\s+/).length:0} words (target: 150–200)</p>
+            {errors.bio&&<p className={errorClass}>{errors.bio}</p>}
           </div>
         </div>
       );
     }
 
-    function SelfAssessStep({ data, onChange, errors = {} }) {
+    function SelfAssessStep({ data, onChange, errors }) {
       const competencies = [
-        { key: "resume", label: "Professional Identity — resume, pitching yourself, and overall professional identity" },
-        { key: "communication", label: "Communication — sharing information, presenting ideas, and influencing audiences" },
-        { key: "resources", label: "Resource Management — managing an organizations resources to achieve priorities" },
-        { key: "data", label: "Data & Analysis — organizing, interpreting, and evaluating data for actionable insights" },
-        { key: "stakeholders", label: "Stakeholder Management — managing diverse stakeholder interactions toward collective goals" },
-        { key: "leadership", label: "Inclusive Leadership — leading adaptively, culturally competently, and values-aligned" },
+        {key:"resume", label:"Professional Identity — resume, pitching yourself, and overall professional identity"},
+        {key:"communication", label:"Communication — sharing information, presenting ideas, and influencing audiences"},
+        {key:"resources", label:"Resource Management — managing an organizations resources to achieve priorities"},
+        {key:"dataSkill", label:"Data & Analysis — organizing, interpreting, and evaluating data for actionable insights"},
+        {key:"stakeholders", label:"Stakeholder Management — managing diverse stakeholder interactions toward collective goals"},
+        {key:"leadership", label:"Inclusive Leadership — leading adaptively, culturally competently, and values-aligned"},
       ];
       return (
         <div>
@@ -231,15 +220,15 @@
           {competencies.map(c => (
             <div key={c.key} style={{marginBottom:"16px"}}>
               <p style={{fontSize:"14px",color:"#374151",marginBottom:"8px"}}>{c.label} *</p>
-              <div style={{display:"flex",flexDirection:"column",gap:"4px"}}>
+              <div style={{display:"flex",flexDirection:"column",gap:"6px"}}>
                 {comfortOptions.map(n => (
                   <label key={n} style={{display:"flex",alignItems:"center",gap:"8px",fontSize:"14px",cursor:"pointer"}}>
-                    <input type="radio" name={c.key} value={n} checked={data[c.key]===n} onChange={() => onChange(c.key, n)} style={{accentColor:"#9E3039"}} />
+                    <input type="radio" name={c.key} value={n} checked={data[c.key]===n} onChange={()=>onChange(c.key,n)} style={{accentColor:"#9E3039"}} />
                     {n}
                   </label>
                 ))}
               </div>
-              {errors[c.key] && <p className={errorClass}>{errors[c.key]}</p>}
+              {errors[c.key]&&<p className={errorClass}>{errors[c.key]}</p>}
             </div>
           ))}
         </div>
@@ -251,26 +240,25 @@
         <div style={{display:"flex",flexDirection:"column",gap:"16px"}}>
           <div>
             <label className={labelClass}>How clear do you feel about your career path? *</label>
-            <div style={{display:"flex",flexDirection:"column",gap:"4px",marginTop:"4px"}}>
-              {["1 - Not at all clear","2 - Slightly clear","3 - Moderately clear","4 - Very clear","5 - Extremely clear"].map(n => (
+            <div style={{display:"flex",flexDirection:"column",gap:"6px",marginTop:"6px"}}>
+              {["1 - Not at all clear","2 - Slightly clear","3 - Moderately clear","4 - Very clear","5 - Extremely clear"].map(n=>(
                 <label key={n} style={{display:"flex",alignItems:"center",gap:"8px",fontSize:"14px",cursor:"pointer"}}>
-                  <input type="radio" name="careerClarity" value={n} checked={data.careerClarity===n} onChange={() => onChange("careerClarity", n)} style={{accentColor:"#9E3039"}} />
+                  <input type="radio" name="careerClarity" value={n} checked={data.careerClarity===n} onChange={()=>onChange("careerClarity",n)} style={{accentColor:"#9E3039"}} />
                   {n}
                 </label>
               ))}
             </div>
-            {errors.careerClarity && <p className={errorClass}>{errors.careerClarity}</p>}
+            {errors.careerClarity&&<p className={errorClass}>{errors.careerClarity}</p>}
           </div>
           <div>
             <label className={labelClass}>After graduation, where do you envision yourself working? *</label>
-            <textarea className={inputClass} rows={3} value={data.postGrad} onChange={e => onChange("postGrad", e.target.value)}
-              placeholder="Please name your field of interest, type of organization, and desired role. This may be your current work, or it may be a transition to a new field, organization, or role." />
-            {errors.postGrad && <p className={errorClass}>{errors.postGrad}</p>}
+            <textarea className={inputClass} rows={3} value={data.postGrad||""} onChange={e=>onChange("postGrad",e.target.value)} placeholder="Please name your field of interest, type of organization, and desired role. This may be your current work, or it may be a transition to a new field, organization, or role." />
+            {errors.postGrad&&<p className={errorClass}>{errors.postGrad}</p>}
           </div>
           <div>
             <label className={labelClass}>List the top three areas of professional growth you want to focus on while in the MPA Program *</label>
-            <textarea className={inputClass} rows={3} value={data.growthAreas} onChange={e => onChange("growthAreas", e.target.value)} placeholder="e.g. skills, knowledge, or other capacities" />
-            {errors.growthAreas && <p className={errorClass}>{errors.growthAreas}</p>}
+            <textarea className={inputClass} rows={3} value={data.growthAreas||""} onChange={e=>onChange("growthAreas",e.target.value)} placeholder="e.g. skills, knowledge, or other capacities" />
+            {errors.growthAreas&&<p className={errorClass}>{errors.growthAreas}</p>}
           </div>
         </div>
       );
@@ -280,19 +268,15 @@
       const sizes = ["xS","S","M","L","XL"];
       const dietary = ["None","Vegetarian","Vegan","Gluten-free","Halal","Kosher","Nut allergy","Diary-Free","Other"];
       const toggleDietary = item => {
-        const curr = data.dietary || [];
-        onChange("dietary", curr.includes(item) ? curr.filter(d => d !== item) : [...curr, item]);
+        const curr = data.dietary||[];
+        onChange("dietary", curr.includes(item)?curr.filter(d=>d!==item):[...curr,item]);
       };
       const openWidget = () => {
-        const widget = window.cloudinary.createUploadWidget(
-          { cloudName:"dd6ithavb", uploadPreset:"mpa_headshots", sources:["local","camera"], multiple:false, cropping:true, croppingAspectRatio:1, resourceType:"image", clientAllowedFormats:["jpg","jpeg","png"], maxFileSize:5000000 },
-          (error, result) => {
-            if (!error && result && result.event === "success") {
-              onHeadshotUpload(result.info.secure_url, result.info.original_filename);
-            }
-          }
+        const w = window.cloudinary.createUploadWidget(
+          {cloudName:"dd6ithavb",uploadPreset:"mpa_headshots",sources:["local","camera"],multiple:false,cropping:true,croppingAspectRatio:1,resourceType:"image",clientAllowedFormats:["jpg","jpeg","png"],maxFileSize:5000000},
+          (error,result) => { if(!error&&result&&result.event==="success") onHeadshotUpload(result.info.secure_url,result.info.original_filename); }
         );
-        widget.open();
+        w.open();
       };
       return (
         <div style={{display:"flex",flexDirection:"column",gap:"20px"}}>
@@ -300,13 +284,13 @@
             <label className={labelClass}>Upload a recent headshot</label>
             <p style={{fontSize:"12px",color:"#9CA3AF",marginBottom:"8px"}}>Please upload a JPG or PNG file, max 5MB.</p>
             <div onClick={openWidget} style={{border:"2px dashed",borderRadius:"8px",padding:"24px",textAlign:"center",cursor:"pointer",borderColor:data.headshotUrl?"#9E3039":"#D1D5DB"}}>
-              {data.headshotUrl ? (
+              {data.headshotUrl?(
                 <div>
                   <img src={data.headshotUrl} alt="Headshot" style={{width:"80px",height:"80px",borderRadius:"50%",objectFit:"cover",margin:"0 auto 8px"}} />
                   <p style={{color:"#9E3039",fontSize:"13px",fontWeight:"600"}}>✅ {data.headshotName}</p>
                   <p style={{color:"#9CA3AF",fontSize:"12px"}}>Click to change</p>
                 </div>
-              ) : (
+              ):(
                 <div>
                   <p style={{fontSize:"14px",color:"#9CA3AF"}}>📷 Click to upload your headshot</p>
                   <p style={{fontSize:"12px",color:"#D1D5DB",marginTop:"4px"}}>JPG or PNG, max 5MB</p>
@@ -316,52 +300,49 @@
           </div>
           <div>
             <label className={labelClass}>What do you like to do for fun when you're not working or studying?</label>
-            <input className={inputClass} value={data.fun||""} onChange={e => onChange("fun", e.target.value)} placeholder="Hiking, cooking, reading..." />
+            <input className={inputClass} value={data.fun||""} onChange={e=>onChange("fun",e.target.value)} placeholder="Hiking, cooking, reading..." />
           </div>
           <div>
             <label className={labelClass}>How did you hear about the MPA Program? *</label>
-            <select className={inputClass} value={data.heardFrom||""} onChange={e => onChange("heardFrom", e.target.value)}>
+            <select className={inputClass} value={data.heardFrom||""} onChange={e=>onChange("heardFrom",e.target.value)}>
               <option value="">Select...</option>
-              {["Internet Search","Google Search","CCNY Admissions Office","Word of Mouth","Powell School Open House","I am/was an undergraduate at City College","Referral","I am/was an undergraduate at another CUNY College (Not CCNY)","Other"].map(o => <option key={o}>{o}</option>)}
+              {["Internet Search","Google Search","CCNY Admissions Office","Word of Mouth","Colin Powell School Open House","I am/was an undergraduate at City College","Referral","I am/was an undergraduate at another CUNY College (Not CCNY)","Other"].map(o=><option key={o}>{o}</option>)}
             </select>
-            {data.heardFrom === "Other" && (
-              <input className={inputClass} style={{marginTop:"8px"}} value={data.heardFromOther||""} onChange={e => onChange("heardFromOther", e.target.value)} placeholder="Please specify..." />
-            )}
-            {errors.heardFrom && <p className={errorClass}>{errors.heardFrom}</p>}
+            {data.heardFrom==="Word of Mouth"&&<input className={inputClass} style={{marginTop:"8px"}} value={data.heardFromWordOfMouth||""} onChange={e=>onChange("heardFromWordOfMouth",e.target.value)} placeholder="Please name the person who referred you..." />}
+            {data.heardFrom==="Other"&&<input className={inputClass} style={{marginTop:"8px"}} value={data.heardFromOther||""} onChange={e=>onChange("heardFromOther",e.target.value)} placeholder="Please specify..." />}
+            {errors.heardFrom&&<p className={errorClass}>{errors.heardFrom}</p>}
           </div>
           <div>
             <label className={labelClass}>T-Shirt Size *</label>
             <div style={{display:"flex",flexWrap:"wrap",gap:"8px",marginTop:"8px"}}>
-              {sizes.map(s => (
-                <button key={s} type="button" onClick={() => onChange("tshirt", s)}
+              {sizes.map(s=>(
+                <button key={s} type="button" onClick={()=>onChange("tshirt",s)}
                   style={{padding:"4px 12px",borderRadius:"9999px",border:data.tshirt===s?"none":"1px solid #D1D5DB",background:data.tshirt===s?"#9E3039":"white",color:data.tshirt===s?"white":"#4B5563",cursor:"pointer",fontSize:"14px"}}>
                   {s}
                 </button>
               ))}
             </div>
-            {errors.tshirt && <p className={errorClass}>{errors.tshirt}</p>}
+            {errors.tshirt&&<p className={errorClass}>{errors.tshirt}</p>}
           </div>
           <div>
             <label className={labelClass}>Dietary Restrictions / Preferences *</label>
             <div style={{display:"flex",flexWrap:"wrap",gap:"8px",marginTop:"8px"}}>
-              {dietary.map(d => (
-                <button key={d} type="button" onClick={() => toggleDietary(d)}
+              {dietary.map(d=>(
+                <button key={d} type="button" onClick={()=>toggleDietary(d)}
                   style={{padding:"4px 12px",borderRadius:"9999px",border:(data.dietary||[]).includes(d)?"none":"1px solid #D1D5DB",background:(data.dietary||[]).includes(d)?"#9E3039":"white",color:(data.dietary||[]).includes(d)?"white":"#4B5563",cursor:"pointer",fontSize:"14px"}}>
                   {d}
                 </button>
               ))}
             </div>
-            {(data.dietary||[]).includes("Other") && (
-              <input className={inputClass} style={{marginTop:"8px"}} value={data.dietaryOther||""} onChange={e => onChange("dietaryOther", e.target.value)} placeholder="Please specify your dietary restriction..." />
-            )}
-            {errors.dietary && <p className={errorClass}>{errors.dietary}</p>}
+            {(data.dietary||[]).includes("Other")&&<input className={inputClass} style={{marginTop:"8px"}} value={data.dietaryOther||""} onChange={e=>onChange("dietaryOther",e.target.value)} placeholder="Please specify..." />}
+            {errors.dietary&&<p className={errorClass}>{errors.dietary}</p>}
           </div>
           <div>
             <label className={labelClass}>Media Release *</label>
             <p style={{fontSize:"12px",color:"#9CA3AF",marginBottom:"8px"}}>The MPA Program may photograph and record students for use in program materials, the program website, and social media.</p>
-            <RadioGroup name="media" options={["Yes, I agree","No, I don't agree"]} value={data.mediaRelease} onChange={v => onChange("mediaRelease", v)} />
+            <RadioGroup name="media" options={["Yes, I agree","No, I don't agree"]} value={data.mediaRelease||"Yes, I agree"} onChange={v=>onChange("mediaRelease",v)} />
             <p style={{fontSize:"12px",color:"#9CA3AF",marginTop:"8px"}}>You can update your preference at any time by contacting us at <a href="mailto:mpa@ccny.cuny.edu" style={{color:"#9E3039"}}>mpa@ccny.cuny.edu</a>.</p>
-            {errors.mediaRelease && <p className={errorClass}>{errors.mediaRelease}</p>}
+            {errors.mediaRelease&&<p className={errorClass}>{errors.mediaRelease}</p>}
           </div>
         </div>
       );
@@ -372,78 +353,75 @@
       const [submitted, setSubmitted] = useState(false);
       const [errors, setErrors] = useState({});
       const [form, setForm] = useState({
-        contact: { firstName:"",lastName:"",email:"",phone:"",pronouns:"",pronounsOther:"",languages:"" },
-        emergency: { ec1FirstName:"",ec1LastName:"",ec1Relationship:"",ec1Email:"",ec1Phone:"",ec2FirstName:"",ec2LastName:"",ec2Relationship:"",ec2Email:"",ec2Phone:"" },
-        background: { issueArea:"",currentWork:"",yearsExp:"",yearsManaging:"",bio:"" },
-        selfassess: { resume:"",communication:"",resources:"",data:"",stakeholders:"",leadership:"" },
-        goals: { careerClarity:"",postGrad:"",growthAreas:"" },
-        logistics: { headshotUrl:"",headshotName:"",fun:"",tshirt:"",dietary:[],mediaRelease:"Yes, I agree",heardFrom:"",heardFromOther:"",dietaryOther:"" },
+        contact:    {firstName:"",lastName:"",email:"",phone:"",pronouns:"",pronounsOther:"",languages:""},
+        emergency:  {ec1FirstName:"",ec1LastName:"",ec1Relationship:"",ec1Email:"",ec1Phone:"",ec2FirstName:"",ec2LastName:"",ec2Relationship:"",ec2Email:"",ec2Phone:""},
+        background: {issueArea:"",currentWork:"",yearsExp:"",yearsManaging:"",bio:""},
+        selfassess: {resume:"",communication:"",resources:"",dataSkill:"",stakeholders:"",leadership:""},
+        goals:      {careerClarity:"",postGrad:"",growthAreas:""},
+        logistics:  {headshotUrl:"",headshotName:"",fun:"",tshirt:"",dietary:[],mediaRelease:"Yes, I agree",heardFrom:"",heardFromOther:"",heardFromWordOfMouth:"",dietaryOther:""},
       });
 
-      const keys = ["intro","contact","emergency","background","selfassess","goals","logistics"];
-      const currentKey = keys[step];
-
-      const update = (field, value) => {
-        setForm(f => ({ ...f, [currentKey]: { ...f[currentKey], [field]: value } }));
-        setErrors(e => ({ ...e, [field]: undefined }));
+      const updateSection = (section, field, value) => {
+        setForm(f => ({...f, [section]: {...f[section], [field]: value}}));
+        setErrors(e => ({...e, [field]: undefined}));
       };
 
       const handleNext = () => {
         if (step === 0) { setStep(1); return; }
-        const errs = validateStep(currentKey, form[currentKey] || {});
+        const errs = validate(step, form);
         if (Object.keys(errs).length > 0) { setErrors(errs); return; }
         setErrors({});
         setStep(s => s + 1);
       };
 
       const handleSubmit = async () => {
-        const errs = validateStep(currentKey, form[currentKey] || {});
+        const errs = validate(step, form);
         if (Object.keys(errs).length > 0) { setErrors(errs); return; }
+        const p = form;
         const payload = {
-          "First Name": form.contact.firstName,
-          "Last Name": form.contact.lastName,
-          "Phone Number": form.contact.phone,
-          "Which pronouns do you use?": form.contact.pronouns === "Other" ? form.contact.pronounsOther : form.contact.pronouns,
-          "Preferred Email (please note, a Gmail address is strongly encouraged to access the MPA Hub and other functionalities)": form.contact.email,
-          "What language(s) do you speak? Please list them here.": form.contact.languages,
-          "EC1 First Name": form.emergency.ec1FirstName,
-          "EC1 Last Name": form.emergency.ec1LastName,
-          "EC1 Relationship": form.emergency.ec1Relationship,
-          "EC1 Email": form.emergency.ec1Email,
-          "EC1 Phone": form.emergency.ec1Phone,
-          "EC2 First Name": form.emergency.ec2FirstName,
-          "EC2 Last Name": form.emergency.ec2LastName,
-          "EC2 Relationship": form.emergency.ec2Relationship,
-          "EC2 Email": form.emergency.ec2Email,
-          "EC2 Phone": form.emergency.ec2Phone,
-          "What is the one issue area that you most identify with, feel passionate about, and/or know the most about?": form.background.issueArea,
-          "What is your current work (role and organization)?": form.background.currentWork,
-          "How many years of professional experience in public service/social change do you have?": form.background.yearsExp,
-          "How many years of experience do you have with managing people?": form.background.yearsManaging,
-          "Please submit a personal bio of 150-200 words written in the third person...": form.background.bio,
-          "How comfortable are you with your resume, your ability to pitch yourself, and your overall professional identity?": Number(form.selfassess.resume.charAt(0)),
-          "How comfortable are you to effectively share information, present ideas, and influence audiences?": Number(form.selfassess.communication.charAt(0)),
-          "How comfortable are you to manage an organizations resources to achieve priorities and objectives?": Number(form.selfassess.resources.charAt(0)),
-          "How comfortable are you to organize, interpret, and evaluate data to transform information into actionable insights?": Number(form.selfassess.data.charAt(0)),
-          "How comfortable are you to effectively manage interactions with a diverse array of stakeholders to support a collective goal?": Number(form.selfassess.stakeholders.charAt(0)),
-          "How comfortable are you as an inclusive, adaptive, and culturally competent leader who can effectively align your values and actions?": Number(form.selfassess.leadership.charAt(0)),
-          "How clear do you feel about your career path?": Number(form.goals.careerClarity.charAt(0)),
-          "After graduation, where do you envision yourself working?": form.goals.postGrad,
-          "What are the top three areas of professional growth you want to focus on while in the MPA Program?": form.goals.growthAreas,
-          "Headshot URL": form.logistics.headshotUrl || "",
-          "Fun": form.logistics.fun,
-          "How did you hear about the MPA Program?": form.logistics.heardFrom,
-          "T-Shirt Size": form.logistics.tshirt,
-          "Dietary Restrictions": form.logistics.dietary || [],
-          "Media Release": form.logistics.mediaRelease,
+          "First Name": p.contact.firstName,
+          "Last Name": p.contact.lastName,
+          "Phone Number": p.contact.phone,
+          "Which pronouns do you use?": p.contact.pronouns==="Other"?p.contact.pronounsOther:p.contact.pronouns,
+          "Preferred Email (please note, a Gmail address is strongly encouraged to access the MPA Hub and other functionalities)": p.contact.email,
+          "What language(s) do you speak? Please list them here.": p.contact.languages,
+          "EC1 First Name": p.emergency.ec1FirstName,
+          "EC1 Last Name": p.emergency.ec1LastName,
+          "EC1 Relationship": p.emergency.ec1Relationship,
+          "EC1 Email": p.emergency.ec1Email,
+          "EC1 Phone": p.emergency.ec1Phone,
+          "EC2 First Name": p.emergency.ec2FirstName,
+          "EC2 Last Name": p.emergency.ec2LastName,
+          "EC2 Relationship": p.emergency.ec2Relationship,
+          "EC2 Email": p.emergency.ec2Email,
+          "EC2 Phone": p.emergency.ec2Phone,
+          "What is the one issue area that you most identify with, feel passionate about, and/or know the most about?": p.background.issueArea,
+          "What is your current work (role and organization)?": p.background.currentWork,
+          "How many years of professional experience in public service/social change do you have?": p.background.yearsExp,
+          "How many years of experience do you have with managing people?": p.background.yearsManaging,
+          "Please submit a personal bio of 150-200 words written in the third person...": p.background.bio,
+          "How comfortable are you with your resume, your ability to pitch yourself, and your overall professional identity?": Number(p.selfassess.resume.charAt(0)),
+          "How comfortable are you to effectively share information, present ideas, and influence audiences?": Number(p.selfassess.communication.charAt(0)),
+          "How comfortable are you to manage an organizations resources to achieve priorities and objectives?": Number(p.selfassess.resources.charAt(0)),
+          "How comfortable are you to organize, interpret, and evaluate data to transform information into actionable insights?": Number(p.selfassess.dataSkill.charAt(0)),
+          "How comfortable are you to effectively manage interactions with a diverse array of stakeholders to support a collective goal?": Number(p.selfassess.stakeholders.charAt(0)),
+          "How comfortable are you as an inclusive, adaptive, and culturally competent leader who can effectively align your values and actions?": Number(p.selfassess.leadership.charAt(0)),
+          "How clear do you feel about your career path?": Number(p.goals.careerClarity.charAt(0)),
+          "After graduation, where do you envision yourself working?": p.goals.postGrad,
+          "What are the top three areas of professional growth you want to focus on while in the MPA Program?": p.goals.growthAreas,
+          "Headshot URL": p.logistics.headshotUrl||"",
+          "Fun": p.logistics.fun,
+          "How did you hear about the MPA Program?": p.logistics.heardFrom,
+          "Word of Mouth - Referral Name": p.logistics.heardFromWordOfMouth||"",
+          "T-Shirt Size": p.logistics.tshirt,
+          "Dietary Restrictions": p.logistics.dietary||[],
+          "Media Release": p.logistics.mediaRelease,
         };
-        try {
-          await fetch(WEBHOOK_URL, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload) });
-        } catch(e) { console.error(e); }
+        try { await fetch(WEBHOOK_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)}); } catch(e){console.error(e);}
         setSubmitted(true);
       };
 
-      const progress = (step / (steps.length - 1)) * 100;
+      const progress = (step/(STEPS.length-1))*100;
 
       if (submitted) {
         return (
@@ -460,8 +438,8 @@
                   <p style={{fontSize:"12px",color:"#9E3039",margin:0}}>For any questions reach out to us at <strong>mpa@ccny.cuny.edu</strong></p>
                 </div>
                 <div style={{display:"flex",alignItems:"center",gap:"16px",flexWrap:"wrap",paddingTop:"12px",borderTop:"1px solid #F3F4F6"}}>
-                  <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774556594/Untitled_qvjdmr.png" alt="MPA at CCNY Logo" style={{height:"40px",objectFit:"contain"}} />
-                  <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774551962/The_MHC_Logo_xrqoy8.png" alt="The Moynihan Center Logo" style={{height:"40px",objectFit:"contain"}} />
+                  <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774556594/Untitled_qvjdmr.png" alt="MPA Logo" style={{height:"40px",objectFit:"contain"}} />
+                  <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774551962/The_MHC_Logo_xrqoy8.png" alt="Moynihan Center" style={{height:"40px",objectFit:"contain"}} />
                 </div>
               </div>
             </div>
@@ -470,24 +448,24 @@
       }
 
       return (
-        <div style={{minHeight:"100vh",display:"flex",alignItems:"flex-start",justifyContent:"center",padding:"0"}}>
-          <div style={{background:"white",width:"100%",maxWidth:"100%",overflow:"hidden"}}>
+        <div style={{minHeight:"100vh",display:"flex",alignItems:"flex-start",justifyContent:"center"}}>
+          <div style={{background:"white",width:"100%",overflow:"hidden"}}>
             <div style={{background:"#9E3039",padding:"24px"}}>
               <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774556914/MPA-type-icon_yith5n.png" alt="MPA Logo" style={{height:"40px",objectFit:"contain",marginBottom:"12px",background:"white",padding:"6px 12px",borderRadius:"6px"}} />
               <h1 style={{color:"white",fontSize:"22px",fontWeight:"700",margin:"0 0 4px 0"}}>Getting to Know You Survey</h1>
-              <p style={{color:"#f5c6c8",fontSize:"12px",margin:"0"}}>Step {step+1} of {steps.length} — {steps[step].label}</p>
+              <p style={{color:"#f5c6c8",fontSize:"12px",margin:"0"}}>Step {step+1} of {STEPS.length} — {STEPS[step]}</p>
             </div>
 
             <div style={{padding:"8px 16px",background:"#fff5f5",borderBottom:"1px solid #fecaca"}}>
-              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"6px"}}>
+              <div style={{display:"flex",justifyContent:"space-between",marginBottom:"6px"}}>
                 <span style={{color:"#9E3039",fontSize:"12px",fontWeight:"500"}}>
-                  {step===0 && "👋 Let's get started!"}
-                  {step===1 && "You're just getting started — 5 sections to go!"}
-                  {step===2 && "Great progress! You're making your way through."}
-                  {step===3 && "Halfway there! Just 3 more sections to go."}
-                  {step===4 && "Almost done — only 2 sections left!"}
-                  {step===5 && "One more section after this!"}
-                  {step===6 && "🎉 Last section! You're almost finished."}
+                  {step===0&&"👋 Let's get started!"}
+                  {step===1&&"You're just getting started — 5 sections to go!"}
+                  {step===2&&"Great progress! You're making your way through."}
+                  {step===3&&"Halfway there! Just 3 more sections to go."}
+                  {step===4&&"Almost done — only 2 sections left!"}
+                  {step===5&&"One more section after this!"}
+                  {step===6&&"🎉 Last section! You're almost finished."}
                 </span>
                 <span style={{color:"#9E3039",fontSize:"12px",fontWeight:"700"}}>{Math.round(progress)}%</span>
               </div>
@@ -496,14 +474,15 @@
               </div>
             </div>
 
-            <div style={{display:"flex",borderBottom:"1px solid #F3F4F6"}}>
-              {steps.map((s,i) => (
-                <button key={s.id} onClick={() => i < step && setStep(i)}
-                  style={{flex:1,padding:"8px 4px",fontSize:"11px",fontWeight:"500",border:"none",background:"none",
+            <div style={{display:"flex",borderBottom:"1px solid #F3F4F6",overflowX:"auto"}}>
+              {STEPS.map((s,i) => (
+                <button key={i} onClick={()=>i<step&&setStep(i)}
+                  style={{flex:"1 0 auto",padding:"8px 4px",fontSize:"11px",fontWeight:"500",border:"none",background:"none",
                     cursor:i<step?"pointer":"default",
                     color:i===step?"#9E3039":i<step?"#9CA3AF":"#D1D5DB",
-                    borderBottom:i===step?"2px solid #9E3039":"2px solid transparent"}}>
-                  {s.label}
+                    borderBottom:i===step?"2px solid #9E3039":"2px solid transparent",
+                    whiteSpace:"nowrap"}}>
+                  {s}
                 </button>
               ))}
             </div>
@@ -522,33 +501,30 @@
                   <p style={{fontSize:"15px",color:"#374151",fontWeight:"600"}}>Thank you!</p>
                 </div>
               )}
-              {step===1 && <ContactStep data={form.contact} onChange={update} errors={errors} />}
-              {step===2 && <EmergencyStep data={form.emergency} onChange={update} errors={errors} />}
-              {step===3 && <BackgroundStep data={form.background} onChange={update} errors={errors} />}
-              {step===4 && <SelfAssessStep data={form.selfassess} onChange={update} errors={errors} />}
-              {step===5 && <GoalsStep data={form.goals} onChange={update} errors={errors} />}
-              {step===6 && <LogisticsStep data={form.logistics} onChange={update} errors={errors}
-                onHeadshotUpload={(url, name) => setForm(f => ({...f, logistics: {...f.logistics, headshotUrl: url, headshotName: name}}))} />}
+              {step===1 && <ContactStep data={form.contact} onChange={(f,v)=>updateSection("contact",f,v)} errors={errors} />}
+              {step===2 && <EmergencyStep data={form.emergency} onChange={(f,v)=>updateSection("emergency",f,v)} errors={errors} />}
+              {step===3 && <BackgroundStep data={form.background} onChange={(f,v)=>updateSection("background",f,v)} errors={errors} />}
+              {step===4 && <SelfAssessStep data={form.selfassess} onChange={(f,v)=>updateSection("selfassess",f,v)} errors={errors} />}
+              {step===5 && <GoalsStep data={form.goals} onChange={(f,v)=>updateSection("goals",f,v)} errors={errors} />}
+              {step===6 && <LogisticsStep data={form.logistics} onChange={(f,v)=>updateSection("logistics",f,v)} errors={errors} onHeadshotUpload={(url,name)=>setForm(f=>({...f,logistics:{...f.logistics,headshotUrl:url,headshotName:name}}))} />}
             </div>
 
             <div style={{padding:"16px 24px",display:"flex",alignItems:"center",gap:"24px",borderTop:"1px solid #F3F4F6",background:"#f9f9f9"}}>
-              <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774556594/Untitled_qvjdmr.png" alt="MPA at CCNY Logo" style={{height:"48px",objectFit:"contain"}} />
-              <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774551962/The_MHC_Logo_xrqoy8.png" alt="The Moynihan Center Logo" style={{height:"48px",objectFit:"contain"}} />
+              <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774556594/Untitled_qvjdmr.png" alt="MPA Logo" style={{height:"48px",objectFit:"contain"}} />
+              <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774551962/The_MHC_Logo_xrqoy8.png" alt="Moynihan Center" style={{height:"48px",objectFit:"contain"}} />
             </div>
 
             <div style={{padding:"16px 24px",display:"flex",justifyContent:"space-between",alignItems:"center",borderTop:"1px solid #F3F4F6"}}>
-              <button onClick={() => setStep(s=>s-1)} disabled={step===0}
+              <button onClick={()=>setStep(s=>s-1)} disabled={step===0}
                 style={{fontSize:"14px",color:"#9CA3AF",background:"none",border:"none",cursor:step===0?"default":"pointer",opacity:step===0?0:1}}>
                 ← Back
               </button>
-              {step < steps.length-1 ? (
-                <button onClick={handleNext}
-                  style={{background:"#9E3039",color:"white",fontSize:"14px",fontWeight:"600",padding:"8px 24px",borderRadius:"8px",border:"none",cursor:"pointer"}}>
+              {step<STEPS.length-1?(
+                <button onClick={handleNext} style={{background:"#9E3039",color:"white",fontSize:"14px",fontWeight:"600",padding:"8px 24px",borderRadius:"8px",border:"none",cursor:"pointer"}}>
                   Continue →
                 </button>
-              ) : (
-                <button onClick={handleSubmit}
-                  style={{background:"#9E3039",color:"white",fontSize:"14px",fontWeight:"600",padding:"8px 24px",borderRadius:"8px",border:"none",cursor:"pointer"}}>
+              ):(
+                <button onClick={handleSubmit} style={{background:"#9E3039",color:"white",fontSize:"14px",fontWeight:"600",padding:"8px 24px",borderRadius:"8px",border:"none",cursor:"pointer"}}>
                   Submit ✓
                 </button>
               )}
