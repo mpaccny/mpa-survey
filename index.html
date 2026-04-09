@@ -66,6 +66,7 @@
       }
       if (stepIndex === 6) {
         if (!form.logistics.heardFrom) e.heardFrom = "Required";
+        if (!form.logistics.headshotUrl) e.headshotUrl = "Required";
         if (!form.logistics.tshirt) e.tshirt = "Required";
         if (!form.logistics.dietary || form.logistics.dietary.length === 0) e.dietary = "Required";
         if (!form.logistics.mediaRelease) e.mediaRelease = "Required";
@@ -281,7 +282,7 @@
       return (
         <div style={{display:"flex",flexDirection:"column",gap:"20px"}}>
           <div>
-            <label className={labelClass}>Upload a recent headshot</label>
+            <label className={labelClass}>Upload a recent headshot *</label>
             <p style={{fontSize:"12px",color:"#9CA3AF",marginBottom:"8px"}}>Please upload a JPG or PNG file, max 5MB.</p>
             <div onClick={openWidget} style={{border:"2px dashed",borderRadius:"8px",padding:"24px",textAlign:"center",cursor:"pointer",borderColor:data.headshotUrl?"#9E3039":"#D1D5DB"}}>
               {data.headshotUrl?(
@@ -297,6 +298,7 @@
                 </div>
               )}
             </div>
+            {errors.headshotUrl && <p className={errorClass}>{errors.headshotUrl}</p>}
           </div>
           <div>
             <label className={labelClass}>What do you like to do for fun when you're not working or studying?</label>
@@ -415,6 +417,7 @@
           "Word of Mouth - Referral Name": p.logistics.heardFromWordOfMouth||"",
           "T-Shirt Size": p.logistics.tshirt,
           "Dietary Restrictions": p.logistics.dietary||[],
+          "Dietary Restrictions - Other": p.logistics.dietaryOther||"",
           "Media Release": p.logistics.mediaRelease,
         };
         try { await fetch(WEBHOOK_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)}); } catch(e){console.error(e);}
