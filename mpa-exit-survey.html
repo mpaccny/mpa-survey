@@ -16,19 +16,19 @@
   <div id="root"></div>
   <script type="text/babel">
     const { useState } = React;
-
+ 
     const WEBHOOK_URL = "https://hook.us2.make.com/exonkwtc6tsenilwle6af2n6s6i94cuo";
-
+ 
     const steps = [
       { id: "experience", label: "Overall Experience" },
       { id: "feedback", label: "Program Feedback" },
       { id: "recommendations", label: "Recommendations" },
       { id: "open", label: "Open Feedback" },
     ];
-
+ 
     const inputClass = "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-400";
     const labelClass = "block text-sm font-medium text-gray-700 mb-1";
-
+ 
     function StarRating({ value, onChange }) {
       const [hovered, setHovered] = React.useState(0);
       const labels = ["", "Poor", "Fair", "Good", "Very Good", "Excellent"];
@@ -49,7 +49,7 @@
         </div>
       );
     }
-
+ 
     function PillSelect({ options, value, onChange }) {
       return (
         <div className="flex flex-wrap gap-2 mt-1">
@@ -62,7 +62,7 @@
         </div>
       );
     }
-
+ 
     function NPSRow({ value, onChange }) {
       return (
         <div>
@@ -78,7 +78,7 @@
         </div>
       );
     }
-
+ 
     function ExperienceStep({ data, onChange }) {
       return (
         <div className="space-y-5">
@@ -97,7 +97,7 @@
         </div>
       );
     }
-
+ 
     function FeedbackStep({ data, onChange }) {
       return (
         <div className="space-y-5">
@@ -120,7 +120,7 @@
         </div>
       );
     }
-
+ 
     function RecommendationsStep({ data, onChange }) {
       return (
         <div className="space-y-5">
@@ -147,7 +147,7 @@
         </div>
       );
     }
-
+ 
     function OpenFeedbackStep({ data, onChange }) {
       return (
         <div className="space-y-5">
@@ -158,14 +158,14 @@
         </div>
       );
     }
-
+ 
     function ExitSurvey() {
       const [step, setStep] = useState(0);
       const [submitted, setSubmitted] = useState(false);
       const [formData, setFormData] = useState({});
-
+ 
       const update = (key, value) => setFormData((prev) => ({ ...prev, [key]: value }));
-
+ 
       const handleNext = async () => {
         if (step < steps.length - 1) {
           setStep(step + 1);
@@ -194,7 +194,7 @@
           setSubmitted(true);
         }
       };
-
+ 
       if (submitted) {
         return (
           <div style={{minHeight:"100vh", background:"#F9FAFB", display:"flex", alignItems:"center", justifyContent:"center", padding:"24px"}}>
@@ -218,7 +218,7 @@
           </div>
         );
       }
-
+ 
       return (
         <div style={{minHeight:"100vh", background:"#F9FAFB"}}>
           <div style={{background:"white", maxWidth:"860px", margin:"0 auto", minHeight:"100vh", boxShadow:"0 0 40px rgba(0,0,0,0.06)"}}>
@@ -229,7 +229,7 @@
             </div>
             <div style={{display:"flex", borderBottom:"1px solid #F3F4F6"}}>
               {steps.map((s, i) => (
-                <div key={i} style={{flex:1, padding:"10px 6px", textAlign:"center", fontSize:"12px"}}
+                <div key={i} style={{flex:1, padding:"12px 8px", textAlign:"center", fontSize:"13px", whiteSpace:"nowrap"}}
                   style={{ color: i === step ? "#9E3039" : i < step ? "#6B7280" : "#D1D5DB", borderBottom: i === step ? "2px solid #9E3039" : "2px solid transparent", fontWeight: i === step ? "600" : "400" }}>
                   {s.label}
                 </div>
@@ -260,8 +260,9 @@
         </div>
       );
     }
-
+ 
     ReactDOM.render(<ExitSurvey />, document.getElementById("root"));
   </script>
 </body>
 </html>
+ 
