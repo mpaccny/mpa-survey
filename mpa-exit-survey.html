@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Graduating Students' Exit Survey – MPA at CCNY</title>
+  <title>MPA Graduating Students' Exit Survey</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
@@ -16,19 +16,19 @@
   <div id="root"></div>
   <script type="text/babel">
     const { useState } = React;
- 
+
     const WEBHOOK_URL = "https://hook.us2.make.com/exonkwtc6tsenilwle6af2n6s6i94cuo";
- 
+
     const steps = [
-      { id: "experience", label: "Overall Experience" },
-      { id: "feedback", label: "Program Feedback" },
+      { id: "experience", label: "Experience" },
+      { id: "feedback", label: "Feedback" },
       { id: "recommendations", label: "Recommendations" },
       { id: "open", label: "Open Feedback" },
     ];
- 
+
     const inputClass = "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-400";
     const labelClass = "block text-sm font-medium text-gray-700 mb-1";
- 
+
     function StarRating({ value, onChange }) {
       const [hovered, setHovered] = React.useState(0);
       const labels = ["", "Poor", "Fair", "Good", "Very Good", "Excellent"];
@@ -49,7 +49,7 @@
         </div>
       );
     }
- 
+
     function PillSelect({ options, value, onChange }) {
       return (
         <div className="flex flex-wrap gap-2 mt-1">
@@ -62,7 +62,7 @@
         </div>
       );
     }
- 
+
     function NPSRow({ value, onChange }) {
       return (
         <div>
@@ -78,7 +78,7 @@
         </div>
       );
     }
- 
+
     function ExperienceStep({ data, onChange }) {
       return (
         <div className="space-y-5">
@@ -97,7 +97,7 @@
         </div>
       );
     }
- 
+
     function FeedbackStep({ data, onChange }) {
       return (
         <div className="space-y-5">
@@ -120,7 +120,7 @@
         </div>
       );
     }
- 
+
     function RecommendationsStep({ data, onChange }) {
       return (
         <div className="space-y-5">
@@ -147,7 +147,7 @@
         </div>
       );
     }
- 
+
     function OpenFeedbackStep({ data, onChange }) {
       return (
         <div className="space-y-5">
@@ -158,14 +158,14 @@
         </div>
       );
     }
- 
+
     function ExitSurvey() {
       const [step, setStep] = useState(0);
       const [submitted, setSubmitted] = useState(false);
       const [formData, setFormData] = useState({});
- 
+
       const update = (key, value) => setFormData((prev) => ({ ...prev, [key]: value }));
- 
+
       const handleNext = async () => {
         if (step < steps.length - 1) {
           setStep(step + 1);
@@ -194,14 +194,14 @@
           setSubmitted(true);
         }
       };
- 
+
       if (submitted) {
         return (
           <div style={{minHeight:"100vh", background:"#F9FAFB", display:"flex", alignItems:"center", justifyContent:"center", padding:"24px"}}>
             <div style={{background:"white", maxWidth:"560px", width:"100%", borderRadius:"16px", overflow:"hidden", boxShadow:"0 0 40px rgba(0,0,0,0.06)"}}>
               <div style={{background:"#9E3039", padding:"28px 40px"}}>
                 <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774556192/MPA-type-icon_i48cxj.jpg" alt="MPA Logo" style={{ height: "40px", objectFit: "contain", marginBottom: "12px", display: "block" }} />
-                <h1 style={{ color: "white", fontSize: "20px", fontWeight: "700", margin: 0 }}>Exit Survey</h1>
+                <h1 style={{ color: "white", fontSize: "20px", fontWeight: "700", margin: 0 }}>Graduating Students' Exit Survey</h1>
               </div>
               <div className="p-10 text-center">
                 <div style={{ width: "56px", height: "56px", borderRadius: "50%", background: "rgba(158,48,57,0.1)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
@@ -218,18 +218,18 @@
           </div>
         );
       }
- 
+
       return (
         <div style={{minHeight:"100vh", background:"#F9FAFB"}}>
           <div style={{background:"white", maxWidth:"860px", margin:"0 auto", minHeight:"100vh", boxShadow:"0 0 40px rgba(0,0,0,0.06)"}}>
             <div style={{background:"#9E3039", padding:"28px 40px"}}>
               <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774556192/MPA-type-icon_i48cxj.jpg" alt="MPA Logo" style={{ height: "40px", objectFit: "contain", marginBottom: "12px", display: "block" }} />
-              <h1 style={{ color: "white", fontSize: "20px", fontWeight: "700", margin: "0 0 4px 0" }}>Exit Survey</h1>
+              <h1 style={{ color: "white", fontSize: "20px", fontWeight: "700", margin: "0 0 4px 0" }}>Graduating Students' Exit Survey</h1>
               <p style={{ color: "#f5c6c8", fontSize: "12px", margin: 0 }}>Step {step + 1} of {steps.length} — {steps[step].label}</p>
             </div>
-            <div style={{display:"flex", borderBottom:"1px solid #F3F4F6"}}>
+            <div style={{display:"flex", borderBottom:"1px solid #F3F4F6", overflowX:"auto"}}>
               {steps.map((s, i) => (
-                <div key={i} style={{flex:1, padding:"12px 8px", textAlign:"center", fontSize:"13px", whiteSpace:"nowrap"}}
+                <div key={i} style={{flex:1, padding:"12px 16px", textAlign:"center", fontSize:"13px", whiteSpace:"nowrap", minWidth:"0"}}
                   style={{ color: i === step ? "#9E3039" : i < step ? "#6B7280" : "#D1D5DB", borderBottom: i === step ? "2px solid #9E3039" : "2px solid transparent", fontWeight: i === step ? "600" : "400" }}>
                   {s.label}
                 </div>
@@ -260,9 +260,8 @@
         </div>
       );
     }
- 
+
     ReactDOM.render(<ExitSurvey />, document.getElementById("root"));
   </script>
 </body>
 </html>
- 
