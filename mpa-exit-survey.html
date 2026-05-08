@@ -141,8 +141,8 @@
             <NPSRow value={data.nps} onChange={(v) => onChange("nps", v)} />
           </div>
           <div>
-            <label className={labelClass}>What would you tell a prospective MPA student?</label>
-            <textarea className={inputClass} style={{ minHeight: "80px", resize: "vertical" }} value={data.advice || ""} onChange={(e) => onChange("advice", e.target.value)} placeholder="Share any advice, encouragement, or honest words for future students..." />
+            <label className={labelClass}>How has the MPA program helped you advance your career goals?</label>
+            <textarea className={inputClass} style={{ minHeight: "80px", resize: "vertical" }} value={data.advice || ""} onChange={(e) => onChange("advice", e.target.value)} placeholder="e.g. Helped me transition into a new role, expanded my professional network, built leadership skills..." />
           </div>
         </div>
       );
@@ -186,7 +186,7 @@
                 "What are your plans after graduation?": formData.plans || null,
                 "Did the MPA program help you advance your career goals?": formData.careerImpact || null,
                 "How likely are you to recommend this program to others?": formData.nps || null,
-                "What would you tell a prospective MPA student?": formData.advice || null,
+                "How has the MPA program helped you advance your career goals?": formData.advice || null,
                 "Is there anything else you'd like to share about your experience in the MPA program?": formData.openFeedback || null,
               })
             });
