@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Graduating Students' Exit Survey – MPA at CCNY</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet" />
+  <style>
+    body { background: #F9FAFB; min-height: 100vh; margin: 0; font-family: system-ui, sans-serif; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState } = React;
+
+    const WEBHOOK_URL = "https://hook.us2.make.com/exonkwtc6tsenilwle6af2n6s6i94cuo";
+
+    const steps = [
+      { id: "experience", label: "Overall Experience" },
+      { id: "feedback", label: "Program Feedback" },
+      { id: "recommendations", label: "Recommendations" },
+      { id: "open", label: "Open Feedback" },
+    ];
+
+    const inputClass = "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-400";
+    const labelClass = "block text-sm font-medium text-gray-700 mb-1";
+
+    function StarRating({ value, onChange }) {
+      const [hovered, setHovered] = React.useState(0);
+      const labels = ["", "Poor", "Fair", "Good", "Very Good", "Excellent"];
+      return (
+        <div>
+          <div className="flex gap-1 mt-1">
+            {[1, 2, 3, 4, 5].map((n) => (
+              <span
+                key={n}
+                onMouseEnter={() => setHovered(n)}
+                onMouseLeave={() => setHovered(0)}
+                onClick={() => onChange(n)}
+                style={{ fontSize: "26px", cursor: "pointer", color: n <= (hovered || value) ? "#D4A017" : "#D1D5DB", transition: "color 0.1s", lineHeight: 1 }}
+              >★</span>
+            ))}
+          </div>
+          {(hovered || value) > 0 && <p className="text-xs text-gray-400 mt-1">{labels[hovered || value]}</p>}
+        </div>
+      );
+    }
+
+    function PillSelect({ options, value, onChange }) {
+      return (
+        <div className="flex flex-wrap gap-2 mt-1">
+          {options.map((opt) => (
+            <button key={opt} type="button" onClick={() => onChange(opt === value ? null : opt)}
+              style={{ padding: "5px 14px", borderRadius: "9999px", border: value === opt ? "none" : "1px solid #D1D5DB", background: value === opt ? "#9E3039" : "white", color: value === opt ? "white" : "#374151", fontSize: "13px", cursor: "pointer", transition: "all 0.15s" }}>
+              {opt}
+            </button>
+          ))}
+        </div>
+      );
+    }
+
+    function NPSRow({ value, onChange }) {
+      return (
+        <div>
+          <div className="flex flex-wrap gap-1 mt-1">
+            {[1,2,3,4,5,6,7,8,9,10].map((n) => (
+              <button key={n} type="button" onClick={() => onChange(n)}
+                style={{ width: "36px", height: "36px", borderRadius: "8px", border: value === n ? "none" : "1px solid #D1D5DB", background: value === n ? "#9E3039" : "white", color: value === n ? "white" : "#374151", fontSize: "13px", fontWeight: value === n ? "600" : "400", cursor: "pointer" }}>
+                {n}
+              </button>
+            ))}
+          </div>
+          <p className="text-xs text-gray-400 mt-1">1 = Not at all likely &nbsp;·&nbsp; 10 = Extremely likely</p>
+        </div>
+      );
+    }
+
+    function ExperienceStep({ data, onChange }) {
+      return (
+        <div className="space-y-5">
+          <div>
+            <label className={labelClass}>Overall, how satisfied are you with the MPA program?</label>
+            <StarRating value={data.overallRating || 0} onChange={(v) => onChange("overallRating", v)} />
+          </div>
+          <div>
+            <label className={labelClass}>What was the most valuable part of the program?</label>
+            <PillSelect options={["Curriculum & coursework", "Faculty & instruction", "Networking", "Capstone", "Career development", "Cohort community"]} value={data.mostValuable} onChange={(v) => onChange("mostValuable", v)} />
+          </div>
+          <div>
+            <label className={labelClass}>What was your biggest challenge during the program?</label>
+            <textarea className={inputClass} style={{ minHeight: "72px", resize: "vertical" }} value={data.challenge || ""} onChange={(e) => onChange("challenge", e.target.value)} placeholder="e.g. Balancing work and coursework, limited elective options..." />
+          </div>
+        </div>
+      );
+    }
+
+    function FeedbackStep({ data, onChange }) {
+      return (
+        <div className="space-y-5">
+          <div>
+            <label className={labelClass}>Quality of core coursework</label>
+            <StarRating value={data.courseworkRating || 0} onChange={(v) => onChange("courseworkRating", v)} />
+          </div>
+          <div>
+            <label className={labelClass}>Faculty accessibility &amp; support</label>
+            <StarRating value={data.facultyRating || 0} onChange={(v) => onChange("facultyRating", v)} />
+          </div>
+          <div>
+            <label className={labelClass}>Academic advising</label>
+            <StarRating value={data.advisingRating || 0} onChange={(v) => onChange("advisingRating", v)} />
+          </div>
+          <div>
+            <label className={labelClass}>What is one thing you would change or improve about the program?</label>
+            <textarea className={inputClass} style={{ minHeight: "72px", resize: "vertical" }} value={data.improvement || ""} onChange={(e) => onChange("improvement", e.target.value)} placeholder="e.g. More elective options, stronger career center, updated materials..." />
+          </div>
+        </div>
+      );
+    }
+
+    function RecommendationsStep({ data, onChange }) {
+      return (
+        <div className="space-y-5">
+          <div>
+            <label className={labelClass}>What are your plans after graduation?</label>
+            <select className={inputClass} value={data.plans || ""} onChange={(e) => onChange("plans", e.target.value)}
+              style={{ appearance: "none", backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E\")", backgroundRepeat: "no-repeat", backgroundPosition: "right 12px center", paddingRight: "32px" }}>
+              <option value="">Select...</option>
+              {["Continuing in my current role", "Seeking a new role in public sector", "Seeking a new role in nonprofit sector", "Seeking a new role in private sector", "Pursuing further education", "Starting my own organization / consulting", "Still exploring options"].map((o) => <option key={o}>{o}</option>)}
+            </select>
+          </div>
+          <div>
+            <label className={labelClass}>Did the MPA program help you advance your career goals?</label>
+            <PillSelect options={["Yes, significantly", "Somewhat", "Not yet, but I expect it will", "Not really"]} value={data.careerImpact} onChange={(v) => onChange("careerImpact", v)} />
+          </div>
+          <div>
+            <label className={labelClass}>How likely are you to recommend this program to others?</label>
+            <NPSRow value={data.nps} onChange={(v) => onChange("nps", v)} />
+          </div>
+          <div>
+            <label className={labelClass}>What would you tell a prospective MPA student?</label>
+            <textarea className={inputClass} style={{ minHeight: "80px", resize: "vertical" }} value={data.advice || ""} onChange={(e) => onChange("advice", e.target.value)} placeholder="Share any advice, encouragement, or honest words for future students..." />
+          </div>
+        </div>
+      );
+    }
+
+    function OpenFeedbackStep({ data, onChange }) {
+      return (
+        <div className="space-y-5">
+          <div>
+            <label className={labelClass}>Is there anything else you'd like to share about your experience in the MPA program?</label>
+            <textarea className={inputClass} style={{ minHeight: "160px", resize: "vertical" }} value={data.openFeedback || ""} onChange={(e) => onChange("openFeedback", e.target.value)} placeholder="Share any additional thoughts, experiences, or feedback..." />
+          </div>
+        </div>
+      );
+    }
+
+    function ExitSurvey() {
+      const [step, setStep] = useState(0);
+      const [submitted, setSubmitted] = useState(false);
+      const [formData, setFormData] = useState({});
+
+      const update = (key, value) => setFormData((prev) => ({ ...prev, [key]: value }));
+
+      const handleNext = async () => {
+        if (step < steps.length - 1) {
+          setStep(step + 1);
+        } else {
+          try {
+            await fetch(WEBHOOK_URL, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                "Submitted At": new Date().toISOString(),
+                "Overall, how satisfied are you with the MPA program?": formData.overallRating || null,
+                "What was the most valuable part of the program?": formData.mostValuable || null,
+                "What was your biggest challenge during the program?": formData.challenge || null,
+                "Quality of core coursework": formData.courseworkRating || null,
+                "Faculty accessibility & support": formData.facultyRating || null,
+                "Academic advising": formData.advisingRating || null,
+                "What is one thing you would change or improve about the program?": formData.improvement || null,
+                "What are your plans after graduation?": formData.plans || null,
+                "Did the MPA program help you advance your career goals?": formData.careerImpact || null,
+                "How likely are you to recommend this program to others?": formData.nps || null,
+                "What would you tell a prospective MPA student?": formData.advice || null,
+                "Is there anything else you'd like to share about your experience in the MPA program?": formData.openFeedback || null,
+              })
+            });
+          } catch (e) { console.error("Webhook error:", e); }
+          setSubmitted(true);
+        }
+      };
+
+      if (submitted) {
+        return (
+          <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl shadow-sm max-w-lg w-full overflow-hidden border border-gray-100">
+              <div style={{ background: "#9E3039", padding: "24px" }}>
+                <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774556192/MPA-type-icon_i48cxj.jpg" alt="MPA Logo" style={{ height: "40px", objectFit: "contain", marginBottom: "12px", display: "block" }} />
+                <h1 style={{ color: "white", fontSize: "20px", fontWeight: "700", margin: 0 }}>Exit Survey</h1>
+              </div>
+              <div className="p-10 text-center">
+                <div style={{ width: "56px", height: "56px", borderRadius: "50%", background: "rgba(158,48,57,0.1)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#9E3039" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                </div>
+                <h2 className="text-lg font-semibold text-gray-800 mb-2">Thank you for your feedback!</h2>
+                <p className="text-sm text-gray-500">Your responses help us improve the MPA program for future students.<br />Congratulations on your graduation — we wish you all the best!</p>
+              </div>
+              <div className="px-6 pb-4 pt-3 flex items-center gap-6 border-t border-gray-100" style={{ background: "#f9f9f9" }}>
+                <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774551957/CPS_MPA_logo_2025_5_ewsqfd.jpg" alt="MPA at CCNY Logo" style={{ height: "48px", objectFit: "contain" }} />
+                <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774551962/The_MHC_Logo_xrqoy8.png" alt="The Moynihan Center Logo" style={{ height: "48px", objectFit: "contain" }} />
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      return (
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-sm max-w-lg w-full overflow-hidden border border-gray-100">
+            <div style={{ background: "#9E3039", padding: "24px" }}>
+              <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774556192/MPA-type-icon_i48cxj.jpg" alt="MPA Logo" style={{ height: "40px", objectFit: "contain", marginBottom: "12px", display: "block" }} />
+              <h1 style={{ color: "white", fontSize: "20px", fontWeight: "700", margin: "0 0 4px 0" }}>Exit Survey</h1>
+              <p style={{ color: "#f5c6c8", fontSize: "12px", margin: 0 }}>Step {step + 1} of {steps.length} — {steps[step].label}</p>
+            </div>
+            <div className="flex border-b border-gray-100">
+              {steps.map((s, i) => (
+                <div key={i} className="flex-1 py-2 text-center text-xs"
+                  style={{ color: i === step ? "#9E3039" : i < step ? "#6B7280" : "#D1D5DB", borderBottom: i === step ? "2px solid #9E3039" : "2px solid transparent", fontWeight: i === step ? "600" : "400" }}>
+                  {s.label}
+                </div>
+              ))}
+            </div>
+            <div className="px-6 py-5">
+              {step === 0 && <ExperienceStep data={formData} onChange={update} />}
+              {step === 1 && <FeedbackStep data={formData} onChange={update} />}
+              {step === 2 && <RecommendationsStep data={formData} onChange={update} />}
+              {step === 3 && <OpenFeedbackStep data={formData} onChange={update} />}
+            </div>
+            <div className="flex justify-between items-center px-6 pb-5">
+              <button type="button" onClick={() => setStep(step - 1)}
+                style={{ visibility: step === 0 ? "hidden" : "visible" }}
+                className="text-sm text-gray-500 px-4 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition">
+                ← Back
+              </button>
+              <button type="button" onClick={handleNext}
+                style={{ background: "#9E3039", color: "white", padding: "8px 22px", borderRadius: "8px", fontSize: "14px", fontWeight: "600", border: "none", cursor: "pointer" }}>
+                {step === steps.length - 1 ? "Submit ✓" : "Next →"}
+              </button>
+            </div>
+            <div className="px-6 pb-4 pt-3 flex items-center gap-6 border-t border-gray-100" style={{ background: "#f9f9f9" }}>
+              <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774551957/CPS_MPA_logo_2025_5_ewsqfd.jpg" alt="MPA at CCNY Logo" style={{ height: "48px", objectFit: "contain" }} />
+              <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774551962/The_MHC_Logo_xrqoy8.png" alt="The Moynihan Center Logo" style={{ height: "48px", objectFit: "contain" }} />
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.render(<ExitSurvey />, document.getElementById("root"));
+  </script>
+</body>
+</html>
