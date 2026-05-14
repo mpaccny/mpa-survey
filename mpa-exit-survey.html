@@ -23,6 +23,7 @@
       { id: "experience", label: "Experience" },
       { id: "feedback", label: "Feedback" },
       { id: "recommendations", label: "Recommendations" },
+      { id: "competencies", label: "Competencies" },
       { id: "open", label: "Open Feedback" },
     ];
 
@@ -159,7 +160,38 @@
       );
     }
 
-    function ExitSurvey() {
+    
+    const competencies = [
+      { key: "competency_0", label: "How comfortable are you with your resume, your ability to pitch yourself, and your overall professional identity?" },
+      { key: "competency_1", label: "How comfortable are you to effectively share information, present ideas, and influence audiences?" },
+      { key: "competency_2", label: "How comfortable are you to manage an organization's resources to achieve priorities and objectives?" },
+      { key: "competency_3", label: "How comfortable are you to organize, interpret, and evaluate data to transform information into actionable insights?" },
+      { key: "competency_4", label: "How comfortable are you to effectively manage interactions with a diverse array of stakeholders to support a collective goal?" },
+      { key: "competency_5", label: "How comfortable are you as an inclusive, adaptive, and culturally competent leader who can effectively align your values and actions?" },
+    ];
+
+    function CompetenciesStep({ data, onChange }) {
+      return (
+        <div>
+          <p style={{fontSize:"14px", color:"#6B7280", marginBottom:"20px"}}>On a scale of 1 to 10, rate your current comfort level with each competency area. 1 = very uncomfortable, 10 = very comfortable.</p>
+          {competencies.map((c) => (
+            <div key={c.key} style={{marginBottom:"20px"}}>
+              <p style={{fontSize:"14px", color:"#374151", fontWeight:"500", marginBottom:"8px"}}>{c.label}</p>
+              <div style={{display:"flex", gap:"8px", flexWrap:"wrap"}}>
+                {["1","2","3","4","5","6","7","8","9","10"].map(n => (
+                  <button key={n} type="button" onClick={() => onChange(c.key, n)}
+                    style={{width:"36px", height:"36px", borderRadius:"50%", border: data[c.key]===n ? "none" : "1px solid #D1D5DB", background: data[c.key]===n ? "#9E3039" : "white", color: data[c.key]===n ? "white" : "#6B7280", cursor:"pointer", fontSize:"14px", transition:"all 0.15s"}}>
+                    {n}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+function ExitSurvey() {
       const [step, setStep] = useState(0);
       const [submitted, setSubmitted] = useState(false);
       const [formData, setFormData] = useState({});
@@ -188,6 +220,12 @@
                 "How likely are you to recommend this program to others?": formData.nps || null,
                 "How has the MPA program helped you advance your career goals?": formData.advice || null,
                 "Is there anything else you'd like to share about your experience in the MPA program?": formData.openFeedback || null,
+                "How comfortable are you with your resume, your ability to pitch yourself, and your overall professional identity?": formData.competency_0 || null,
+                "How comfortable are you to effectively share information, present ideas, and influence audiences?": formData.competency_1 || null,
+                "How comfortable are you to manage an organization's resources to achieve priorities and objectives?": formData.competency_2 || null,
+                "How comfortable are you to organize, interpret, and evaluate data to transform information into actionable insights?": formData.competency_3 || null,
+                "How comfortable are you to effectively manage interactions with a diverse array of stakeholders to support a collective goal?": formData.competency_4 || null,
+                "How comfortable are you as an inclusive, adaptive, and culturally competent leader who can effectively align your values and actions?": formData.competency_5 || null,
               })
             });
           } catch (e) { console.error("Webhook error:", e); }
@@ -239,7 +277,8 @@
               {step === 0 && <ExperienceStep data={formData} onChange={update} />}
               {step === 1 && <FeedbackStep data={formData} onChange={update} />}
               {step === 2 && <RecommendationsStep data={formData} onChange={update} />}
-              {step === 3 && <OpenFeedbackStep data={formData} onChange={update} />}
+              {step === 3 && <CompetenciesStep data={formData} onChange={update} />}
+              {step === 4 && <OpenFeedbackStep data={formData} onChange={update} />}
             </div>
             <div style={{display:"flex", justifyContent:"space-between", alignItems:"center", padding:"16px 40px 24px"}}>
               <button type="button" onClick={() => setStep(step - 1)}
