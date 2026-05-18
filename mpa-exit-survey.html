@@ -348,20 +348,19 @@ function ExitSurvey() {
               {step === 3 && <CompetenciesStep data={formData} onChange={update} />}
               {step === 4 && <RecommendationsStep data={formData} onChange={update} />}
             </div>
-            <div style={{display:"flex", justifyContent:"space-between", alignItems:"center", padding:"80px 32px 24px"}}>
-              <button type="button" onClick={() => setStep(step - 1)}
-                style={{ visibility: step === 0 ? "hidden" : "visible" }}
-                className="text-sm text-gray-500 px-4 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition">
-                ← Back
-              </button>
-              <button type="button" onClick={handleNext}
-                style={{background:"#9E3039", color:"white", padding:"10px 24px", borderRadius:"8px", fontSize:"14px", fontWeight:"600", border:"none", cursor:"pointer", position:"fixed", bottom:"24px", right:"32px", boxShadow:"0 4px 12px rgba(0,0,0,0.15)"}}>
-                {step === steps.length - 1 ? "Submit ✓" : step === 0 ? "Continue →" : "Next →"}
-              </button>
-            </div>
             <div style={{padding:"16px 24px", display:"flex", alignItems:"center", gap:"24px", background:"#f9f9f9"}}>
               <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774551957/CPS_MPA_logo_2025_5_ewsqfd.jpg" alt="MPA at CCNY Logo" style={{height:"40px", objectFit:"contain"}} />
               <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774551962/The_MHC_Logo_xrqoy8.png" alt="The Moynihan Center Logo" style={{height:"40px", objectFit:"contain"}} />
+            </div>
+            <div style={{display:"flex", justifyContent:"space-between", alignItems:"center", padding:"16px 32px 24px"}}>
+              <button type="button" onClick={() => setStep(step - 1)}
+                style={{visibility: step === 0 ? "hidden" : "visible", background:"white", border:"1px solid #E5E7EB", borderRadius:"8px", padding:"10px 20px", fontSize:"14px", cursor:"pointer", color:"#6B7280"}}>
+                ← Back
+              </button>
+              <button type="button" onClick={handleNext}
+                style={{background:"#9E3039", color:"white", padding:"10px 24px", borderRadius:"8px", fontSize:"14px", fontWeight:"600", border:"none", cursor:"pointer"}}>
+                {step === steps.length - 1 ? "Submit ✓" : step === 0 ? "Continue →" : "Next →"}
+              </button>
             </div>
           </div>
         </div>
