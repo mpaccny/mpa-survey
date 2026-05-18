@@ -263,7 +263,7 @@ function ExitSurvey() {
       if (submitted) {
         return (
           <div style={{minHeight:"100vh", background:"#F9FAFB"}}>
-            <div style={{background:"white", maxWidth:"860px", margin:"0 auto", minHeight:"100vh", boxShadow:"0 0 40px rgba(0,0,0,0.06)"}}>
+            <div style={{background:"white", maxWidth:"860px", margin:"0 auto", minHeight:"100vh", boxShadow:"0 0 40px rgba(0,0,0,0.06)", display:"flex", flexDirection:"column"}}>
               <div style={{background:"#9E3039", padding:"28px 40px"}}>
                 <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774556192/MPA-type-icon_i48cxj.jpg" alt="MPA Logo" style={{ height: "40px", objectFit: "contain", marginBottom: "12px", display: "block" }} />
                 <h1 style={{ color: "white", fontSize: "20px", fontWeight: "700", margin: 0 }}>Graduating Students' Exit Survey</h1>
@@ -283,7 +283,7 @@ function ExitSurvey() {
                   </a>
                 </div>
               </div>
-              <div style={{padding:"16px 40px", display:"flex", alignItems:"center", gap:"24px", borderTop:"1px solid #F3F4F6", background:"#f9f9f9"}}>
+              <div style={{padding:"16px 24px", display:"flex", alignItems:"center", gap:"24px", borderTop:"1px solid #F3F4F6", background:"#f9f9f9", marginTop:"auto"}}>
                 <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774551957/CPS_MPA_logo_2025_5_ewsqfd.jpg" alt="MPA at CCNY Logo" style={{ height: "48px", objectFit: "contain" }} />
                 <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774551962/The_MHC_Logo_xrqoy8.png" alt="The Moynihan Center Logo" style={{ height: "48px", objectFit: "contain" }} />
               </div>
@@ -294,7 +294,7 @@ function ExitSurvey() {
 
       return (
         <div style={{minHeight:"100vh", background:"#F9FAFB"}}>
-          <div style={{background:"white", maxWidth:"860px", margin:"0 auto", minHeight:"100vh", boxShadow:"0 0 40px rgba(0,0,0,0.06)"}}>
+          <div style={{background:"white", maxWidth:"860px", margin:"0 auto", minHeight:"100vh", boxShadow:"0 0 40px rgba(0,0,0,0.06)", display:"flex", flexDirection:"column"}}>
             <div style={{background:"#9E3039", padding:"24px 40px"}}>
               <p style={{color:"white", fontWeight:"700", fontSize:"11px", letterSpacing:"0.05em", margin:"0 0 4px 0"}}>MASTER <em style={{fontWeight:300}}>of</em> PUBLIC ADMINISTRATION</p>
               <h1 style={{color:"white", fontSize:"22px", fontWeight:"700", margin:"0 0 4px 0"}}>Graduating Students' Exit Survey</h1>
@@ -320,7 +320,7 @@ function ExitSurvey() {
                 </div>
               ))}
             </div>
-            <div style={{padding:"32px 40px"}}>
+            <div style={{padding:"32px 40px", flex:1}}>
               {step === 0 && (
               <div style={{padding:"8px 0"}}>
                 <div style={{textAlign:"center", marginBottom:"24px"}}>
