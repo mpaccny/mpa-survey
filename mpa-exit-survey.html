@@ -295,9 +295,11 @@ function ExitSurvey() {
       return (
         <div style={{minHeight:"100vh", background:"#F9FAFB"}}>
           <div style={{background:"white", maxWidth:"860px", margin:"0 auto", minHeight:"100vh", boxShadow:"0 0 40px rgba(0,0,0,0.06)", display:"flex", flexDirection:"column"}}>
-            <div style={{background:"#9E3039", padding:"24px 40px"}}>
-              <p style={{color:"white", fontWeight:"700", fontSize:"11px", letterSpacing:"0.05em", margin:"0 0 4px 0"}}>MASTER <em style={{fontWeight:300}}>of</em> PUBLIC ADMINISTRATION</p>
-              <h1 style={{color:"white", fontSize:"22px", fontWeight:"700", margin:"0 0 4px 0"}}>Graduating Students' Exit Survey</h1>
+            <div style={{background:"#9E3039", padding:"20px 32px"}}>
+              <div style={{display:"inline-block", border:"1.5px solid white", borderRadius:"4px", padding:"3px 10px", marginBottom:"8px"}}>
+                <span style={{color:"white", fontWeight:"700", fontSize:"11px", letterSpacing:"0.05em"}}>MASTER <em style={{fontWeight:300}}>of</em> PUBLIC ADMINISTRATION</span>
+              </div>
+              <h1 style={{color:"white", fontSize:"24px", fontWeight:"700", margin:"0 0 4px 0"}}>Graduating Students' Exit Survey</h1>
               <p style={{color:"#f5c6c8", fontSize:"12px", margin:"0"}}>Step {step + 1} of {steps.length} — {steps[step].label}</p>
             </div>
             <div style={{height:"18px", background:"#fecaca", position:"relative", display: step === 0 ? "none" : "block"}}>
@@ -305,17 +307,17 @@ function ExitSurvey() {
                 {step > 1 && <span style={{color:"white", fontSize:"11px", fontWeight:"600"}}>{Math.round((step / (steps.length - 1)) * 100)}%</span>}
               </div>
             </div>
-            <div style={{background:"#fff5f5", color:"#9E3039", fontSize:"12px", textAlign:"center", padding:"6px 16px", fontWeight:"500", display: step === 0 ? "none" : "block"}}>
-              {step === 1 && "⏱ About 12 minutes remaining — 4 sections to go!"}
-              {step === 2 && "⏱ About 9 minutes remaining — 3 sections to go!"}
-              {step === 3 && "⏱ About 5 minutes remaining — 2 sections to go!"}
-              {step === 4 && "🎉 Last section! You're almost finished."}
+            <div style={{background:"#fff5f5", color:"#9E3039", fontSize:"12px", padding:"6px 32px", fontWeight:"500", display: step === 0 ? "none" : "flex", justifyContent:"space-between"}}>
+              {step === 1 && <><span>⏱ About 12 minutes remaining — 4 sections to go!</span><span>{Math.round((step/(steps.length-1))*100)}%</span></>}
+              {step === 2 && <><span>⏱ About 9 minutes remaining — 3 sections to go!</span><span>{Math.round((step/(steps.length-1))*100)}%</span></>}
+              {step === 3 && <><span>⏱ About 5 minutes remaining — 2 sections to go!</span><span>{Math.round((step/(steps.length-1))*100)}%</span></>}
+              {step === 4 && <><span>🎉 Last section! You're almost finished.</span><span>{Math.round((step/(steps.length-1))*100)}%</span></>}
               
             </div>
             <div style={{display: step === 0 ? "none" : "flex", borderBottom:"1px solid #F3F4F6", padding:"0 24px", gap:"8px"}}>
               {steps.map((s, i) => (
                 <div key={i} style={{flex:1, padding:"12px 16px", textAlign:"center", fontSize:"13px", whiteSpace:"nowrap", minWidth:"0"}}
-                  style={{ color: i === step ? "#9E3039" : i < step ? "#6B7280" : "#D1D5DB", borderBottom: i === step ? "2px solid #9E3039" : "2px solid transparent", fontWeight: i === step ? "600" : "400", padding: "10px 16px", fontSize: "13px", whiteSpace: "nowrap" }}>
+                  style={{ color: i === step ? "#111827" : i < step ? "#6B7280" : "#9CA3AF", fontWeight: i === step ? "600" : "400" }}>
                   {s.label}
                 </div>
               ))}
@@ -323,8 +325,8 @@ function ExitSurvey() {
             <div style={{padding:"32px 40px", flex:1}}>
               {step === 0 && (
               <div style={{padding:"8px 0"}}>
-                <div style={{textAlign:"center", marginBottom:"24px"}}>
-                  <span style={{fontSize:"48px"}}>🎓</span>
+                <div style={{textAlign:"center", marginBottom:"20px"}}>
+                  <span style={{fontSize:"52px"}}>🎓</span>
                 </div>
                 <p style={{fontSize:"14px", color:"#374151", lineHeight:"1.7", marginBottom:"16px"}}>
                   Congratulations on completing your <strong>Master of Public Administration (MPA)</strong> at the Colin Powell School for Civic and Global Leadership! We are incredibly proud of your accomplishments.
@@ -335,6 +337,10 @@ function ExitSurvey() {
                 <p style={{fontSize:"14px", color:"#374151", lineHeight:"1.7", marginBottom:"16px"}}>
                   For any questions, reach out to us at: <a href="mailto:mpa@ccny.cuny.edu" style={{color:"#9E3039", fontWeight:"600"}}>mpa@ccny.cuny.edu</a>
                 </p>
+                <div style={{background:"#fff5f5", border:"1px solid #fecaca", borderRadius:"8px", padding:"12px 16px", marginBottom:"16px"}}>
+                  <p style={{fontSize:"13px", color:"#9E3039", margin:"0 0 4px 0", fontWeight:"600"}}>⚠️ Please note:</p>
+                  <p style={{fontSize:"13px", color:"#9E3039", margin:0}}>Once you begin the survey, please make sure to complete it in one sitting.</p>
+                </div>
                 <p style={{fontSize:"14px", color:"#374151", fontWeight:"600"}}>Thank you!</p>
               </div>
             )}
@@ -343,7 +349,7 @@ function ExitSurvey() {
               {step === 3 && <CompetenciesStep data={formData} onChange={update} />}
               {step === 4 && <RecommendationsStep data={formData} onChange={update} />}
             </div>
-            <div style={{display:"flex", justifyContent:"space-between", alignItems:"center", padding:"16px 40px 24px"}}>
+            <div style={{display:"flex", justifyContent:"space-between", alignItems:"center", padding:"16px 32px 24px", marginTop:"auto"}}>
               <button type="button" onClick={() => setStep(step - 1)}
                 style={{ visibility: step === 0 ? "hidden" : "visible" }}
                 className="text-sm text-gray-500 px-4 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition">
@@ -351,7 +357,7 @@ function ExitSurvey() {
               </button>
               <button type="button" onClick={handleNext}
                 style={{ background: "#9E3039", color: "white", padding: "8px 22px", borderRadius: "8px", fontSize: "14px", fontWeight: "600", border: "none", cursor: "pointer" }}>
-                {step === steps.length - 1 ? "Submit ✓" : "Next →"}
+                {step === steps.length - 1 ? "Submit ✓" : step === 0 ? "Continue →" : "Next →"}
               </button>
             </div>
             <div style={{padding:"16px 24px", display:"flex", alignItems:"center", gap:"24px", borderTop:"1px solid #F3F4F6", background:"#f9f9f9"}}>
