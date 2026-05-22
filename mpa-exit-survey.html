@@ -95,6 +95,27 @@
             <label className={labelClass}>What was your biggest challenge during the program?</label>
             <textarea className={inputClass} style={{ minHeight: "72px", resize: "vertical" }} value={data.challenge || ""} onChange={(e) => onChange("challenge", e.target.value)} placeholder="e.g. Balancing work and coursework, limited elective options..." />
           </div>
+          <div style={{marginTop:"28px", borderTop:"1px solid #F3F4F6", paddingTop:"20px"}}>
+            <p style={{fontSize:"12px", fontWeight:"700", textTransform:"uppercase", letterSpacing:"0.08em", color:"#9E3039", marginBottom:"16px"}}>Professional Development</p>
+            <div>
+              <p style={{fontSize:"14px", color:"#374151", fontWeight:"500", marginBottom:"8px"}}>How satisfied were you with the professional development opportunities offered by the MPA program?</p>
+              <div style={{display:"flex", gap:"8px", flexWrap:"wrap"}}>
+                {["1","2","3","4","5","6","7","8","9","10"].map(n => (
+                  <button key={n} type="button" onClick={() => onChange("pdSatisfaction", n)}
+                    style={{width:"36px", height:"36px", borderRadius:"50%", border: data.pdSatisfaction===n ? "none" : "1px solid #D1D5DB", background: data.pdSatisfaction===n ? "#9E3039" : "white", color: data.pdSatisfaction===n ? "white" : "#6B7280", cursor:"pointer", fontSize:"14px", transition:"all 0.15s"}}>
+                    {n}
+                  </button>
+                ))}
+              </div>
+              <p style={{fontSize:"11px", color:"#9CA3AF", marginTop:"4px"}}>1 = very unsatisfied, 10 = very satisfied</p>
+            </div>
+            <div style={{marginTop:"20px"}}>
+              <label style={{display:"block", fontSize:"14px", fontWeight:"500", color:"#374151", marginBottom:"8px"}}>Which professional development resources did you find most useful during the program?</label>
+              <textarea style={{width:"100%", border:"1px solid #D1D5DB", borderRadius:"8px", padding:"8px 12px", fontSize:"13px", minHeight:"80px", resize:"vertical", fontFamily:"system-ui, sans-serif", boxSizing:"border-box"}}
+                value={data.pdResources || ""} onChange={(e) => onChange("pdResources", e.target.value)}
+                placeholder="e.g. Guest speakers, networking events, career fairs, mentorship program..." />
+            </div>
+          </div>
         </div>
       );
     }
