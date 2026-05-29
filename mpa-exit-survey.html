@@ -107,6 +107,17 @@
     function ExperienceStep({ data, onChange }) {
       return (
         <div className="space-y-5">
+          <div style={{display:"flex", gap:"16px"}}>
+            <div style={{flex:1}}>
+              <label className={labelClass}>First Name</label>
+              <input type="text" className={inputClass} value={data.firstName || ""} onChange={(e) => onChange("firstName", e.target.value)} placeholder="Jane" />
+            </div>
+            <div style={{flex:1}}>
+              <label className={labelClass}>Last Name</label>
+              <input type="text" className={inputClass} value={data.lastName || ""} onChange={(e) => onChange("lastName", e.target.value)} placeholder="Doe" />
+            </div>
+          </div>
+          <hr style={{border:"none", borderTop:"1px solid #E5E7EB", margin:"4px 0"}} />
           <div>
             <label className={labelClass}>Overall, how satisfied are you with the MPA program?</label>
             <PillSelect options={["Very dissatisfied", "Dissatisfied", "Satisfied", "Very satisfied"]} value={data.overallRating} onChange={(v) => onChange("overallRating", v)} />
@@ -250,6 +261,8 @@ function ExitSurvey() {
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
                 "Submitted At": new Date().toISOString(),
+                "First Name": formData.firstName || null,
+                "Last Name": formData.lastName || null,
                 "Overall, how satisfied are you with the MPA program?": formData.overallRating || null,
                 "Which types of learning experiences did you find most valuable? (select all that apply)": formData.mostValuable || null,
                 "Was there a course or topic you wish had been offered or expanded upon?": formData.challenge || null,
@@ -283,9 +296,9 @@ function ExitSurvey() {
         return (
           <div style={{background:"#F9F9F9"}}>
             <div style={{background:"white", width:"100%", display:"flex", flexDirection:"column"}}>
-              <div style={{background:"#9E3039", padding:"28px 40px"}}>
-                <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774556192/MPA-type-icon_i48cxj.jpg" alt="MPA Logo" style={{ height: "40px", objectFit: "contain", marginBottom: "12px", display: "block" }} />
-                <h1 style={{ color: "white", fontSize: "20px", fontWeight: "700", margin: 0 }}>Graduating Students' Exit Survey</h1>
+              <div style={{background:"#9E3039", padding:"20px 32px"}}>
+                <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774556192/MPA-type-icon_i48cxj.jpg" alt="MPA Logo" style={{height:"40px", objectFit:"contain", marginBottom:"12px", background:"white", padding:"6px 12px", borderRadius:"6px", display:"inline-block"}} />
+                <h1 style={{color:"white", fontSize:"24px", fontWeight:"700", margin:"0 0 4px 0"}}>Graduating Students' Exit Survey</h1>
               </div>
               <div className="p-10 text-center">
                 <div style={{ width: "56px", height: "56px", borderRadius: "50%", background: "rgba(158,48,57,0.1)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
@@ -357,7 +370,7 @@ function ExitSurvey() {
                   <p style={{fontSize:"13px", color:"#9E3039", margin:"0 0 4px 0", fontWeight:"600"}}>⚠️ Please note:</p>
                   <p style={{fontSize:"13px", color:"#9E3039", margin:0}}>Once you begin the survey, please make sure to complete it in one sitting.</p>
                 </div>
-                <p style={{fontSize:"14px", color:"#374151", fontWeight:"600"}}>Thank you!</p>
+<p style={{fontSize:"14px", color:"#374151", fontWeight:"600"}}>Thank you!</p>
               </div>
             )}
             {step === 1 && <ExperienceStep data={formData} onChange={update} />}
