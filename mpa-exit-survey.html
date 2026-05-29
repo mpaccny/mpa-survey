@@ -84,6 +84,7 @@
     function FacultyStaffStep({ data, onChange }) {
       return (
         <div className="space-y-5">
+          <div style={{background:"#FDF2F3", borderTop:"3px solid #9E3039", padding:"12px 16px", marginBottom:"24px", marginLeft:"-24px", marginRight:"-24px"}}><p style={{fontSize:"13px", color:"#6B7280", margin:0}}>This section will ask about your experience with faculty and administrative staff throughout the program.</p></div>
           <div>
             <label className={labelClass}>How would you rate the quality of instruction across your courses?</label>
             <PillSelect options={["Poor", "Fair", "Good", "Excellent"]} value={data.courseworkRating} onChange={(v) => onChange("courseworkRating", v)} />
@@ -107,17 +108,8 @@
     function ExperienceStep({ data, onChange }) {
       return (
         <div className="space-y-5">
-          <div style={{display:"flex", gap:"16px"}}>
-            <div style={{flex:1}}>
-              <label className={labelClass}>First Name</label>
-              <input type="text" className={inputClass} value={data.firstName || ""} onChange={(e) => onChange("firstName", e.target.value)} placeholder="Jane" />
-            </div>
-            <div style={{flex:1}}>
-              <label className={labelClass}>Last Name</label>
-              <input type="text" className={inputClass} value={data.lastName || ""} onChange={(e) => onChange("lastName", e.target.value)} placeholder="Doe" />
-            </div>
-          </div>
-          <hr style={{border:"none", borderTop:"1px solid #E5E7EB", margin:"4px 0"}} />
+          <div style={{background:"#FDF2F3", borderTop:"3px solid #9E3039", padding:"12px 16px", marginBottom:"24px", marginLeft:"-24px", marginRight:"-24px"}}><p style={{fontSize:"13px", color:"#6B7280", margin:0}}>This section will ask about your overall satisfaction with the curriculum and learning environment during your time in the MPA program.</p></div>
+
           <div>
             <label className={labelClass}>Overall, how satisfied were you with the quality of coursework in the program?</label>
             <PillSelect options={["Very dissatisfied", "Dissatisfied", "Satisfied", "Very satisfied"]} value={data.overallRating} onChange={(v) => onChange("overallRating", v)} />
@@ -138,6 +130,7 @@
     function FeedbackStep({ data, onChange }) {
       return (
         <div className="space-y-5">
+          <div style={{background:"#FDF2F3", borderTop:"3px solid #9E3039", padding:"12px 16px", marginBottom:"24px", marginLeft:"-24px", marginRight:"-24px"}}><p style={{fontSize:"13px", color:"#6B7280", margin:0}}>This section will ask about how the MPA program has prepared you for your career and supported your professional growth.</p></div>
           <div>
             <label className={labelClass}>How confident do you feel applying the skills you gained in the program to your career?</label>
             <PillSelect options={["Not confident", "Somewhat confident", "Confident", "Very confident"]} value={data.careerConfidence} onChange={(v) => onChange("careerConfidence", v)} />
@@ -206,6 +199,7 @@
       return (
         <div>
           <p style={{fontSize:"12px", fontWeight:"700", textTransform:"uppercase", letterSpacing:"0.08em", color:"#9E3039", marginBottom:"12px"}}>Core Competencies</p>
+          <div style={{background:"#FDF2F3", borderTop:"3px solid #9E3039", padding:"12px 16px", marginBottom:"24px", marginLeft:"-24px", marginRight:"-24px"}}><p style={{fontSize:"13px", color:"#6B7280", margin:0}}>This section will ask you to rate your comfort level across the core competency areas developed throughout the MPA program.</p></div>
           <p style={{fontSize:"14px", color:"#6B7280", marginBottom:"20px"}}>On a scale of 1 to 10, rate your current comfort level with each competency area. 1 = very uncomfortable, 10 = very comfortable.</p>
           {competencies.map((c) => (
             <div key={c.key} style={{marginBottom:"20px"}}>
@@ -229,6 +223,8 @@
     function FinalThoughtsStep({ data, onChange }) {
       return (
         <div className="space-y-5">
+          <div style={{background:"#FDF2F3", borderTop:"3px solid #9E3039", padding:"12px 16px", marginBottom:"24px", marginLeft:"-24px", marginRight:"-24px"}}><p style={{fontSize:"13px", color:"#6B7280", margin:0}}>This section will ask for your final reflections on your overall experience in the MPA program.</p></div>
+
           <div>
             <label className={labelClass}>What is one thing the program should change, and one thing it should keep?</label>
             <textarea className={inputClass} style={{ minHeight: "160px", resize: "vertical" }}
@@ -239,6 +235,17 @@
           <div>
             <label className={labelClass}>How likely are you to recommend this program to others?</label>
             <NPSRow value={data.nps} onChange={(v) => onChange("nps", v)} />
+          </div>
+          <hr style={{border:"none", borderTop:"1px solid #E5E7EB", margin:"8px 0"}} />
+          <div style={{display:"flex", gap:"16px"}}>
+            <div style={{flex:1}}>
+              <label className={labelClass}>First Name</label>
+              <input type="text" className={inputClass} value={data.firstName || ""} onChange={(e) => onChange("firstName", e.target.value)} placeholder="Jane" />
+            </div>
+            <div style={{flex:1}}>
+              <label className={labelClass}>Last Name</label>
+              <input type="text" className={inputClass} value={data.lastName || ""} onChange={(e) => onChange("lastName", e.target.value)} placeholder="Doe" />
+            </div>
           </div>
         </div>
       );
