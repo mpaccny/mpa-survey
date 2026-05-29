@@ -21,10 +21,11 @@
 
     const steps = [
       { id: "intro", label: "Welcome" },
-      { id: "experience", label: "Experience" },
-      { id: "feedback", label: "Feedback" },
+      { id: "experience", label: "Academic Experience" },
+      { id: "facultystaff", label: "Faculty/Staff" },
       { id: "competencies", label: "Competencies" },
-      { id: "recommendations", label: "Career & Next Steps" },
+      { id: "feedback", label: "Career Readiness & PD" },
+      { id: "finalthoughts", label: "Final Thoughts" },
     ];
 
     const inputClass = "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-400";
@@ -80,42 +81,45 @@
       );
     }
 
+    function FacultyStaffStep({ data, onChange }) {
+      return (
+        <div className="space-y-5">
+          <div>
+            <label className={labelClass}>How would you rate the quality of instruction across your courses?</label>
+            <PillSelect options={["Poor", "Fair", "Good", "Excellent"]} value={data.courseworkRating} onChange={(v) => onChange("courseworkRating", v)} />
+          </div>
+          <div>
+            <label className={labelClass}>How accessible and supportive were faculty outside of class?</label>
+            <PillSelect options={["Not at all", "Somewhat", "Accessible", "Very accessible"]} value={data.facultyRating} onChange={(v) => onChange("facultyRating", v)} />
+          </div>
+          <div>
+            <label className={labelClass}>How satisfied were you with the program's administrative support throughout your studies? (registration, communications, scheduling, academic advising)</label>
+            <PillSelect options={["Very dissatisfied", "Dissatisfied", "Satisfied", "Very satisfied"]} value={data.advisingRating} onChange={(v) => onChange("advisingRating", v)} />
+          </div>
+          <div>
+            <label className={labelClass}>Do you have additional comments about your experience with program administration and support?</label>
+            <textarea className={inputClass} style={{ minHeight: "120px", resize: "vertical" }} value={data.openFeedback || ""} onChange={(e) => onChange("openFeedback", e.target.value)} placeholder="e.g. Comments about registration, advising, communications, scheduling..." />
+          </div>
+        </div>
+      );
+    }
+
     function ExperienceStep({ data, onChange }) {
       return (
         <div className="space-y-5">
           <div>
             <label className={labelClass}>Overall, how satisfied are you with the MPA program?</label>
-            <StarRating value={data.overallRating || 0} onChange={(v) => onChange("overallRating", v)} />
+            <PillSelect options={["Very dissatisfied", "Dissatisfied", "Satisfied", "Very satisfied"]} value={data.overallRating} onChange={(v) => onChange("overallRating", v)} />
           </div>
           <div>
-            <label className={labelClass}>What was the most valuable part of the program?</label>
-            <PillSelect options={["Curriculum & coursework", "Faculty & instruction", "Networking", "Capstone", "Career development", "Cohort community"]} value={data.mostValuable} onChange={(v) => onChange("mostValuable", v)} />
+            <label className={labelClass}>Which types of learning experiences did you find most valuable? (select all that apply)</label>
+            <PillSelect options={["Lectures", "Group projects", "Case studies", "Guest speakers", "Capstone project"]} value={data.mostValuable} onChange={(v) => onChange("mostValuable", v)} multi={true} />
           </div>
           <div>
-            <label className={labelClass}>What was your biggest challenge during the program?</label>
-            <textarea className={inputClass} style={{ minHeight: "72px", resize: "vertical" }} value={data.challenge || ""} onChange={(e) => onChange("challenge", e.target.value)} placeholder="e.g. Balancing work and coursework, limited elective options..." />
+            <label className={labelClass}>Was there a course or topic you wish had been offered or expanded upon?</label>
+            <textarea className={inputClass} style={{ minHeight: "72px", resize: "vertical" }} value={data.challenge || ""} onChange={(e) => onChange("challenge", e.target.value)} placeholder="e.g. Data analytics, public finance, nonprofit management..." />
           </div>
-          <div style={{marginTop:"28px", borderTop:"1px solid #F3F4F6", paddingTop:"20px"}}>
-            <p style={{fontSize:"12px", fontWeight:"700", textTransform:"uppercase", letterSpacing:"0.08em", color:"#9E3039", marginBottom:"16px"}}>Professional Development</p>
-            <div>
-              <p style={{fontSize:"14px", color:"#374151", fontWeight:"500", marginBottom:"8px"}}>How satisfied were you with the professional development opportunities offered by the MPA program?</p>
-              <div style={{display:"flex", gap:"8px", flexWrap:"wrap"}}>
-                {["1","2","3","4","5","6","7","8","9","10"].map(n => (
-                  <button key={n} type="button" onClick={() => onChange("pdSatisfaction", n)}
-                    style={{width:"36px", height:"36px", borderRadius:"50%", border: data.pdSatisfaction===n ? "none" : "1px solid #D1D5DB", background: data.pdSatisfaction===n ? "#9E3039" : "white", color: data.pdSatisfaction===n ? "white" : "#6B7280", cursor:"pointer", fontSize:"14px", transition:"all 0.15s"}}>
-                    {n}
-                  </button>
-                ))}
-              </div>
-              <p style={{fontSize:"11px", color:"#9CA3AF", marginTop:"4px"}}>1 = very unsatisfied, 10 = very satisfied</p>
-            </div>
-            <div style={{marginTop:"20px"}}>
-              <label style={{display:"block", fontSize:"14px", fontWeight:"500", color:"#374151", marginBottom:"8px"}}>Which professional development resources did you find most useful during the program?</label>
-              <textarea style={{width:"100%", border:"1px solid #D1D5DB", borderRadius:"8px", padding:"8px 12px", fontSize:"13px", minHeight:"80px", resize:"vertical", fontFamily:"system-ui, sans-serif", boxSizing:"border-box"}}
-                value={data.pdResources || ""} onChange={(e) => onChange("pdResources", e.target.value)}
-                placeholder="e.g. Guest speakers, networking events, career fairs, mentorship program..." />
-            </div>
-          </div>
+
         </div>
       );
     }
@@ -124,32 +128,25 @@
       return (
         <div className="space-y-5">
           <div>
-            <label className={labelClass}>Quality of core coursework</label>
-            <StarRating value={data.courseworkRating || 0} onChange={(v) => onChange("courseworkRating", v)} />
+            <label className={labelClass}>How confident do you feel applying the skills you gained in the program to your career?</label>
+            <PillSelect options={["Not confident", "Somewhat confident", "Confident", "Very confident"]} value={data.careerConfidence} onChange={(v) => onChange("careerConfidence", v)} />
           </div>
           <div>
-            <label className={labelClass}>Faculty accessibility &amp; support</label>
-            <StarRating value={data.facultyRating || 0} onChange={(v) => onChange("facultyRating", v)} />
+            <label className={labelClass}>How satisfied were you with the professional development opportunities offered by the MPA program?</label>
+            <div style={{display:"flex", gap:"8px", flexWrap:"wrap", marginTop:"6px"}}>
+              {["1","2","3","4","5","6","7","8","9","10"].map(n => (
+                <button key={n} type="button" onClick={() => onChange("pdSatisfaction", n)}
+                  style={{width:"36px", height:"36px", borderRadius:"50%", border: data.pdSatisfaction===n ? "none" : "1px solid #D1D5DB", background: data.pdSatisfaction===n ? "#9E3039" : "white", color: data.pdSatisfaction===n ? "white" : "#6B7280", cursor:"pointer", fontSize:"14px", transition:"all 0.15s"}}>
+                  {n}
+                </button>
+              ))}
+            </div>
+            <p style={{fontSize:"11px", color:"#9CA3AF", marginTop:"4px"}}>1 = very unsatisfied, 10 = very satisfied</p>
           </div>
           <div>
-            <label className={labelClass}>Academic advising</label>
-            <StarRating value={data.advisingRating || 0} onChange={(v) => onChange("advisingRating", v)} />
+            <label className={labelClass}>Which professional development resources did you find most useful during the program?</label>
+            <textarea className={inputClass} style={{ minHeight: "80px", resize: "vertical" }} value={data.pdResources || ""} onChange={(e) => onChange("pdResources", e.target.value)} placeholder="e.g. Guest speakers, networking events, career fairs, mentorship program..." />
           </div>
-          <div>
-            <label className={labelClass}>What is one thing you would change or improve about the program?</label>
-            <textarea className={inputClass} style={{ minHeight: "72px", resize: "vertical" }} value={data.improvement || ""} onChange={(e) => onChange("improvement", e.target.value)} placeholder="e.g. More elective options, stronger career center, updated materials..." />
-          </div>
-          <div>
-            <label className={labelClass}>Is there anything else you'd like to share about your experience in the MPA program?</label>
-            <textarea className={inputClass} style={{ minHeight: "120px", resize: "vertical" }} value={data.openFeedback || ""} onChange={(e) => onChange("openFeedback", e.target.value)} placeholder="Share any additional thoughts, experiences, or feedback..." />
-          </div>
-        </div>
-      );
-    }
-
-    function RecommendationsStep({ data, onChange }) {
-      return (
-        <div className="space-y-5">
           <div>
             <label className={labelClass}>What are your plans after graduation?</label>
             <select className={inputClass} value={data.plans || ""} onChange={(e) => onChange("plans", e.target.value)}
@@ -166,20 +163,18 @@
             <label className={labelClass}>How has the MPA program helped you advance your career goals?</label>
             <textarea className={inputClass} style={{ minHeight: "80px", resize: "vertical" }} value={data.advice || ""} onChange={(e) => onChange("advice", e.target.value)} placeholder="e.g. Helped me transition into a new role, expanded my professional network, built leadership skills..." />
           </div>
-          <div>
-            <label className={labelClass}>How likely are you to recommend this program to others?</label>
-            <NPSRow value={data.nps} onChange={(v) => onChange("nps", v)} />
-          </div>
         </div>
       );
     }
+
+
 
     function OpenFeedbackStep({ data, onChange }) {
       return (
         <div className="space-y-5">
           <div>
-            <label className={labelClass}>Is there anything else you'd like to share about your experience in the MPA program?</label>
-            <textarea className={inputClass} style={{ minHeight: "160px", resize: "vertical" }} value={data.openFeedback || ""} onChange={(e) => onChange("openFeedback", e.target.value)} placeholder="Share any additional thoughts, experiences, or feedback..." />
+            <label className={labelClass}>Do you have additional comments about your experience with program administration and support?</label>
+            <textarea className={inputClass} style={{ minHeight: "160px", resize: "vertical" }} value={data.openFeedback || ""} onChange={(e) => onChange("openFeedback", e.target.value)} placeholder="e.g. Comments about registration, advising, communications, scheduling..." />
           </div>
         </div>
       );
@@ -214,24 +209,25 @@
               </div>
             </div>
           ))}
-          <div style={{marginTop:"28px", borderTop:"1px solid #F3F4F6", paddingTop:"20px"}}>
-            <p style={{fontSize:"12px", fontWeight:"700", textTransform:"uppercase", letterSpacing:"0.08em", color:"#9E3039", marginBottom:"16px"}}>Professional Development</p>
-            <p style={{fontSize:"14px", color:"#374151", fontWeight:"500", marginBottom:"8px"}}>How satisfied were you with the professional development opportunities offered by the MPA program?</p>
-            <div style={{display:"flex", gap:"8px", flexWrap:"wrap"}}>
-              {["1","2","3","4","5","6","7","8","9","10"].map(n => (
-                <button key={n} type="button" onClick={() => onChange("pdSatisfaction", n)}
-                  style={{width:"36px", height:"36px", borderRadius:"50%", border: data.pdSatisfaction===n ? "none" : "1px solid #D1D5DB", background: data.pdSatisfaction===n ? "#9E3039" : "white", color: data.pdSatisfaction===n ? "white" : "#6B7280", cursor:"pointer", fontSize:"14px", transition:"all 0.15s"}}>
-                  {n}
-                </button>
-              ))}
-            </div>
-            <p style={{fontSize:"11px", color:"#9CA3AF", marginTop:"4px"}}>1 = very unsatisfied, 10 = very satisfied</p>
+
+        </div>
+      );
+    }
+
+
+    function FinalThoughtsStep({ data, onChange }) {
+      return (
+        <div className="space-y-5">
+          <div>
+            <label className={labelClass}>What is one thing the program should change, and one thing it should keep?</label>
+            <textarea className={inputClass} style={{ minHeight: "160px", resize: "vertical" }}
+              value={data.finalThoughts || ""}
+              onChange={(e) => onChange("finalThoughts", e.target.value)}
+              placeholder="e.g. Change: more flexible scheduling. Keep: the cohort community..." />
           </div>
-          <div style={{marginTop:"20px"}}>
-            <label style={{display:"block", fontSize:"14px", fontWeight:"500", color:"#374151", marginBottom:"8px"}}>Which professional development resources did you find most useful during the program?</label>
-            <textarea style={{width:"100%", border:"1px solid #D1D5DB", borderRadius:"8px", padding:"8px 12px", fontSize:"13px", minHeight:"80px", resize:"vertical", fontFamily:"system-ui, sans-serif", boxSizing:"border-box"}}
-              value={data.pdResources || ""} onChange={(e) => onChange("pdResources", e.target.value)}
-              placeholder="e.g. Guest speakers, networking events, career fairs, mentorship program..." />
+          <div>
+            <label className={labelClass}>How likely are you to recommend this program to others?</label>
+            <NPSRow value={data.nps} onChange={(v) => onChange("nps", v)} />
           </div>
         </div>
       );
@@ -255,17 +251,18 @@ function ExitSurvey() {
               body: JSON.stringify({
                 "Submitted At": new Date().toISOString(),
                 "Overall, how satisfied are you with the MPA program?": formData.overallRating || null,
-                "What was the most valuable part of the program?": formData.mostValuable || null,
-                "What was your biggest challenge during the program?": formData.challenge || null,
-                "Quality of core coursework": formData.courseworkRating || null,
-                "Faculty accessibility & support": formData.facultyRating || null,
-                "Academic advising": formData.advisingRating || null,
-                "What is one thing you would change or improve about the program?": formData.improvement || null,
+                "Which types of learning experiences did you find most valuable? (select all that apply)": formData.mostValuable || null,
+                "Was there a course or topic you wish had been offered or expanded upon?": formData.challenge || null,
+                "How would you rate the quality of instruction across your courses?": formData.courseworkRating || null,
+                "How accessible and supportive were faculty outside of class?": formData.facultyRating || null,
+                "How satisfied were you with the program's administrative support throughout your studies? (registration, communications, scheduling, academic advising)": formData.advisingRating || null,
                 "What are your plans after graduation?": formData.plans || null,
                 "Did the MPA program help you advance your career goals?": formData.careerImpact || null,
                 "How likely are you to recommend this program to others?": formData.nps || null,
+                "What is one thing the program should change, and one thing it should keep?": formData.finalThoughts || null,
                 "How has the MPA program helped you advance your career goals?": formData.advice || null,
-                "Is there anything else you'd like to share about your experience in the MPA program?": formData.openFeedback || null,
+                "Do you have additional comments about your experience with program administration and support?": formData.openFeedback || null,
+                "How confident do you feel applying the skills you gained in the program to your career?": formData.careerConfidence || null,
                 "How satisfied were you with the professional development opportunities offered by the MPA program?": formData.pdSatisfaction || null,
                 "Which professional development resources did you find most useful during the program?": formData.pdResources || null,
                 "How comfortable are you with your resume, your ability to pitch yourself, and your overall professional identity?": formData.competency_0 || null,
@@ -273,6 +270,7 @@ function ExitSurvey() {
                 "How comfortable are you to manage an organization's resources to achieve priorities and objectives?": formData.competency_2 || null,
                 "How comfortable are you to organize, interpret, and evaluate data to transform information into actionable insights?": formData.competency_3 || null,
                 "How comfortable are you to effectively manage interactions with a diverse array of stakeholders to support a collective goal?": formData.competency_4 || null,
+                "How comfortable are you as an inclusive, adaptive, and culturally competent leader who can effectively align your values and actions?": formData.competency_5 || null,
                 "How comfortable are you as an inclusive, adaptive, and culturally competent leader who can effectively align your values and actions?": formData.competency_5 || null,
               })
             });
@@ -327,9 +325,9 @@ function ExitSurvey() {
               </div>
             </div>
             <div style={{background:"#fff5f5", color:"#9E3039", fontSize:"12px", padding:"6px 32px", fontWeight:"500", display: step === 0 ? "none" : "flex", justifyContent:"space-between"}}>
-              {step === 1 && <><span>⏱ About 12 minutes remaining — 4 sections to go!</span><span>{Math.round((step/(steps.length-1))*100)}%</span></>}
-              {step === 2 && <><span>⏱ About 9 minutes remaining — 3 sections to go!</span><span>{Math.round((step/(steps.length-1))*100)}%</span></>}
-              {step === 3 && <><span>⏱ About 5 minutes remaining — 2 sections to go!</span><span>{Math.round((step/(steps.length-1))*100)}%</span></>}
+              {step === 1 && <><span>⏱ About 15 minutes remaining — 5 sections to go!</span><span>{Math.round((step/(steps.length-1))*100)}%</span></>}
+              {step === 2 && <><span>⏱ About 12 minutes remaining — 4 sections to go!</span><span>{Math.round((step/(steps.length-1))*100)}%</span></>}
+              {step === 3 && <><span>⏱ About 9 minutes remaining — 3 sections to go!</span><span>{Math.round((step/(steps.length-1))*100)}%</span></>}
               {step === 4 && <><span>🎉 Last section! You're almost finished.</span><span>{Math.round((step/(steps.length-1))*100)}%</span></>}
               
             </div>
@@ -363,9 +361,10 @@ function ExitSurvey() {
               </div>
             )}
             {step === 1 && <ExperienceStep data={formData} onChange={update} />}
-              {step === 2 && <FeedbackStep data={formData} onChange={update} />}
+              {step === 2 && <FacultyStaffStep data={formData} onChange={update} />}
               {step === 3 && <CompetenciesStep data={formData} onChange={update} />}
-              {step === 4 && <RecommendationsStep data={formData} onChange={update} />}
+              {step === 4 && <FeedbackStep data={formData} onChange={update} />}
+              {step === 5 && <FinalThoughtsStep data={formData} onChange={update} />}
             </div>
             <div style={{padding:"16px 24px", display:"flex", alignItems:"center", gap:"24px", background:"#f9f9f9"}}>
               <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774556594/Untitled_qvjdmr.png" alt="MPA at CCNY Logo" style={{height:"40px", objectFit:"contain"}} />
