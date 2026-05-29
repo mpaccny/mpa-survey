@@ -119,7 +119,7 @@
           </div>
           <hr style={{border:"none", borderTop:"1px solid #E5E7EB", margin:"4px 0"}} />
           <div>
-            <label className={labelClass}>Overall, how satisfied are you with the MPA program?</label>
+            <label className={labelClass}>Overall, how satisfied were you with the quality of coursework in the program?</label>
             <PillSelect options={["Very dissatisfied", "Dissatisfied", "Satisfied", "Very satisfied"]} value={data.overallRating} onChange={(v) => onChange("overallRating", v)} />
           </div>
           <div>
@@ -263,7 +263,7 @@ function ExitSurvey() {
                 "Submitted At": new Date().toISOString(),
                 "First Name": formData.firstName || null,
                 "Last Name": formData.lastName || null,
-                "Overall, how satisfied are you with the MPA program?": formData.overallRating || null,
+                "Overall, how satisfied were you with the quality of coursework in the program?": formData.overallRating || null,
                 "Which types of learning experiences did you find most valuable? (select all that apply)": formData.mostValuable || null,
                 "Was there a course or topic you wish had been offered or expanded upon?": formData.challenge || null,
                 "How would you rate the quality of instruction across your courses?": formData.courseworkRating || null,
