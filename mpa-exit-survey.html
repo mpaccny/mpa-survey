@@ -155,6 +155,7 @@
               ))}
             </div>
             <p style={{fontSize:"11px", color:"#9CA3AF", marginTop:"4px"}}>1 = very unsatisfied, 10 = very satisfied</p>
+            {errors.pdSatisfaction && <p style={{color:"#9E3039", fontSize:"11px", marginTop:"4px"}}>* This field is required</p>}
           </div>
           <div>
             <label className={labelClass}>Which professional development resources did you find most useful during the program?</label>
@@ -203,7 +204,7 @@
       { key: "competency_5", label: "How comfortable are you as an inclusive, adaptive, and culturally competent leader who can effectively align your values and actions?" },
     ];
 
-    function CompetenciesStep({ data, onChange }) {
+    function CompetenciesStep({ data, onChange, errors={} }) {
       const [pdHover, setPdHover] = React.useState(0);
       return (
         <div>
@@ -221,6 +222,7 @@
                   </button>
                 ))}
               </div>
+              {errors[c.key] && <p style={{color:"#9E3039", fontSize:"11px", marginTop:"4px"}}>* This field is required</p>}
             </div>
           ))}
 
@@ -290,7 +292,6 @@ function ExitSurvey() {
         if (!formData.competency_3) e.competency_3 = "Required";
         if (!formData.competency_4) e.competency_4 = "Required";
         if (!formData.competency_5) e.competency_5 = "Required";
-        if (!formData.careerConfidence) e.careerConfidence = "Required";
         if (!formData.pdSatisfaction) e.pdSatisfaction = "Required";
       }
       if (step === 4) {
