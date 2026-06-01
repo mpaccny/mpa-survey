@@ -308,7 +308,12 @@ function ExitSurvey() {
     };
 
   const handleNext = async () => {
-        if (step < steps.length - 1) {
+      if (step > 0) {
+        const e = validate();
+        if (Object.keys(e).length > 0) { setErrors(e); return; }
+      }
+      setErrors({});
+      if (step < steps.length - 1) {
           setStep(step + 1);
         } else {
           try {
