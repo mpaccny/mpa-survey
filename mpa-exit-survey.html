@@ -81,7 +81,7 @@
       );
     }
 
-    function FacultyStaffStep({ data, onChange }) {
+    function FacultyStaffStep({ data, onChange, errors={} }) {
       return (
         <div className="space-y-5">
           <p style={{fontSize:"12px", fontWeight:"700", textTransform:"uppercase", letterSpacing:"0.08em", color:"#9E3039", marginBottom:"12px"}}>Faculty / Staff</p>
@@ -89,14 +89,17 @@
           <div>
             <label className={labelClass}>How would you rate the quality of instruction across your courses?</label>
             <PillSelect options={["Poor", "Fair", "Good", "Excellent"]} value={data.courseworkRating} onChange={(v) => onChange("courseworkRating", v)} />
+            {errors.courseworkRating && <p style={{color:"#9E3039", fontSize:"11px", marginTop:"4px"}}>* This field is required</p>}
           </div>
           <div>
             <label className={labelClass}>How accessible and supportive were faculty outside of class?</label>
             <PillSelect options={["Not at all", "Somewhat", "Accessible", "Very accessible"]} value={data.facultyRating} onChange={(v) => onChange("facultyRating", v)} />
+            {errors.facultyRating && <p style={{color:"#9E3039", fontSize:"11px", marginTop:"4px"}}>* This field is required</p>}
           </div>
           <div>
             <label className={labelClass}>How satisfied were you with the program's administrative support throughout your studies? (registration, communications, scheduling, academic advising)</label>
             <PillSelect options={["Very dissatisfied", "Dissatisfied", "Satisfied", "Very satisfied"]} value={data.advisingRating} onChange={(v) => onChange("advisingRating", v)} />
+            {errors.advisingRating && <p style={{color:"#9E3039", fontSize:"11px", marginTop:"4px"}}>* This field is required</p>}
           </div>
           <div>
             <label className={labelClass}>Do you have additional comments about your experience with program administration and support?</label>
@@ -106,7 +109,7 @@
       );
     }
 
-    function ExperienceStep({ data, onChange }) {
+    function ExperienceStep({ data, onChange, errors={} }) {
       return (
         <div className="space-y-5">
           <p style={{fontSize:"12px", fontWeight:"700", textTransform:"uppercase", letterSpacing:"0.08em", color:"#9E3039", marginBottom:"12px"}}>Academic Experience</p>
@@ -115,10 +118,12 @@
           <div>
             <label className={labelClass}>Overall, how satisfied were you with the quality of coursework in the program?</label>
             <PillSelect options={["Very dissatisfied", "Dissatisfied", "Satisfied", "Very satisfied"]} value={data.overallRating} onChange={(v) => onChange("overallRating", v)} />
+            {errors.overallRating && <p style={{color:"#9E3039", fontSize:"11px", marginTop:"4px"}}>* This field is required</p>}
           </div>
           <div>
             <label className={labelClass}>Which types of learning experiences did you find most valuable? (select all that apply)</label>
             <PillSelect options={["Lectures", "Group projects", "Case studies", "Guest speakers", "Capstone project"]} value={data.mostValuable} onChange={(v) => onChange("mostValuable", v)} multi={true} />
+            {errors.mostValuable && <p style={{color:"#9E3039", fontSize:"11px", marginTop:"4px"}}>* This field is required</p>}
           </div>
           <div>
             <label className={labelClass}>Was there a course or topic you wish had been offered or expanded upon?</label>
@@ -129,7 +134,7 @@
       );
     }
 
-    function FeedbackStep({ data, onChange }) {
+    function FeedbackStep({ data, onChange, errors={} }) {
       return (
         <div className="space-y-5">
           <p style={{fontSize:"12px", fontWeight:"700", textTransform:"uppercase", letterSpacing:"0.08em", color:"#9E3039", marginBottom:"12px"}}>Career Readiness & Professional Development</p>
@@ -137,6 +142,7 @@
           <div>
             <label className={labelClass}>How confident do you feel applying the skills you gained in the program to your career?</label>
             <PillSelect options={["Not confident", "Somewhat confident", "Confident", "Very confident"]} value={data.careerConfidence} onChange={(v) => onChange("careerConfidence", v)} />
+            {errors.careerConfidence && <p style={{color:"#9E3039", fontSize:"11px", marginTop:"4px"}}>* This field is required</p>}
           </div>
           <div>
             <label className={labelClass}>How satisfied were you with the professional development opportunities offered by the MPA program?</label>
@@ -156,7 +162,7 @@
           </div>
           <div>
             <label className={labelClass}>What are your plans after graduation?</label>
-            <select className={inputClass} value={data.plans || ""} onChange={(e) => onChange("plans", e.target.value)}
+            <select className={inputClass} value={data.plans || ""} onChange={(e) => onChange("plans", e.target.value)} required
               style={{ appearance: "none", backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E\")", backgroundRepeat: "no-repeat", backgroundPosition: "right 12px center", paddingRight: "32px" }}>
               <option value="">Select...</option>
               {["Continuing in my current role", "Seeking a new role in public sector", "Seeking a new role in nonprofit sector", "Seeking a new role in private sector", "Pursuing further education", "Starting my own organization / consulting", "Still exploring options"].map((o) => <option key={o}>{o}</option>)}
@@ -223,7 +229,7 @@
     }
 
 
-    function FinalThoughtsStep({ data, onChange }) {
+    function FinalThoughtsStep({ data, onChange, errors={} }) {
       return (
         <div className="space-y-5">
           <p style={{fontSize:"12px", fontWeight:"700", textTransform:"uppercase", letterSpacing:"0.08em", color:"#9E3039", marginBottom:"12px"}}>Final Thoughts</p>
@@ -235,19 +241,23 @@
               value={data.finalThoughts || ""}
               onChange={(e) => onChange("finalThoughts", e.target.value)}
               placeholder="e.g. Change: more flexible scheduling. Keep: the cohort community..." />
+            {errors.finalThoughts && <p style={{color:"#9E3039", fontSize:"11px", marginTop:"4px"}}>* This field is required</p>}
           </div>
           <div>
             <label className={labelClass}>How likely are you to recommend this program to others?</label>
             <NPSRow value={data.nps} onChange={(v) => onChange("nps", v)} />
+            {errors.nps && <p style={{color:"#9E3039", fontSize:"11px", marginTop:"4px"}}>* This field is required</p>}
           </div>
           <div style={{display:"flex", gap:"16px"}}>
             <div style={{flex:1}}>
               <label className={labelClass}>First Name</label>
               <input type="text" className={inputClass} value={data.firstName || ""} onChange={(e) => onChange("firstName", e.target.value)} placeholder="Jane" />
+              {errors.firstName && <p style={{color:"#9E3039", fontSize:"11px", marginTop:"4px"}}>* This field is required</p>}
             </div>
             <div style={{flex:1}}>
               <label className={labelClass}>Last Name</label>
               <input type="text" className={inputClass} value={data.lastName || ""} onChange={(e) => onChange("lastName", e.target.value)} placeholder="Doe" />
+              {errors.lastName && <p style={{color:"#9E3039", fontSize:"11px", marginTop:"4px"}}>* This field is required</p>}
             </div>
           </div>
         </div>
@@ -258,10 +268,46 @@ function ExitSurvey() {
       const [step, setStep] = useState(0);
       const [submitted, setSubmitted] = useState(false);
       const [formData, setFormData] = useState({});
+      const [errors, setErrors] = useState({});
 
       const update = (key, value) => setFormData((prev) => ({ ...prev, [key]: value }));
 
-      const handleNext = async () => {
+      const validate = () => {
+      const e = {};
+      if (step === 1) {
+        if (!formData.overallRating) e.overallRating = "Required";
+        if (!formData.mostValuable || formData.mostValuable.length === 0) e.mostValuable = "Required";
+      }
+      if (step === 2) {
+        if (!formData.courseworkRating) e.courseworkRating = "Required";
+        if (!formData.facultyRating) e.facultyRating = "Required";
+        if (!formData.advisingRating) e.advisingRating = "Required";
+      }
+      if (step === 3) {
+        if (!formData.competency_0) e.competency_0 = "Required";
+        if (!formData.competency_1) e.competency_1 = "Required";
+        if (!formData.competency_2) e.competency_2 = "Required";
+        if (!formData.competency_3) e.competency_3 = "Required";
+        if (!formData.competency_4) e.competency_4 = "Required";
+        if (!formData.competency_5) e.competency_5 = "Required";
+        if (!formData.careerConfidence) e.careerConfidence = "Required";
+        if (!formData.pdSatisfaction) e.pdSatisfaction = "Required";
+      }
+      if (step === 4) {
+        if (!formData.careerConfidence) e.careerConfidence = "Required";
+        if (!formData.plans) e.plans = "Required";
+        if (!formData.careerImpact) e.careerImpact = "Required";
+      }
+      if (step === 5) {
+        if (!formData.finalThoughts) e.finalThoughts = "Required";
+        if (!formData.nps) e.nps = "Required";
+        if (!formData.firstName) e.firstName = "Required";
+        if (!formData.lastName) e.lastName = "Required";
+      }
+      return e;
+    };
+
+  const handleNext = async () => {
         if (step < steps.length - 1) {
           setStep(step + 1);
         } else {
@@ -383,11 +429,11 @@ function ExitSurvey() {
                 </div>
               </div>
             )}
-            {step === 1 && <ExperienceStep data={formData} onChange={update} />}
-              {step === 2 && <FacultyStaffStep data={formData} onChange={update} />}
-              {step === 3 && <CompetenciesStep data={formData} onChange={update} />}
-              {step === 4 && <FeedbackStep data={formData} onChange={update} />}
-              {step === 5 && <FinalThoughtsStep data={formData} onChange={update} />}
+            {step === 1 && <ExperienceStep data={formData} onChange={update} errors={errors} />}
+              {step === 2 && <FacultyStaffStep data={formData} onChange={update} errors={errors} />}
+              {step === 3 && <CompetenciesStep data={formData} onChange={update} errors={errors} />}
+              {step === 4 && <FeedbackStep data={formData} onChange={update} errors={errors} />}
+              {step === 5 && <FinalThoughtsStep data={formData} onChange={update} errors={errors} />}
             </div>
             <div style={{padding:"16px 24px", display:"flex", alignItems:"center", gap:"24px", background:"#f9f9f9"}}>
               <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774556594/Untitled_qvjdmr.png" alt="MPA at CCNY Logo" style={{height:"40px", objectFit:"contain"}} />
