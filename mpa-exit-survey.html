@@ -274,43 +274,40 @@ function ExitSurvey() {
 
       const update = (key, value) => setFormData((prev) => ({ ...prev, [key]: value }));
 
-      const validate = () => {
-      const e = {};
-      if (step === 1) {
-        if (!formData.overallRating) e.overallRating = "Required";
-        if (!formData.mostValuable || formData.mostValuable.length === 0) e.mostValuable = "Required";
-      }
-      if (step === 2) {
-        if (!formData.courseworkRating) e.courseworkRating = "Required";
-        if (!formData.facultyRating) e.facultyRating = "Required";
-        if (!formData.advisingRating) e.advisingRating = "Required";
-      }
-      if (step === 3) {
-        if (!formData.competency_0) e.competency_0 = "Required";
-        if (!formData.competency_1) e.competency_1 = "Required";
-        if (!formData.competency_2) e.competency_2 = "Required";
-        if (!formData.competency_3) e.competency_3 = "Required";
-        if (!formData.competency_4) e.competency_4 = "Required";
-        if (!formData.competency_5) e.competency_5 = "Required";
-        if (!formData.pdSatisfaction) e.pdSatisfaction = "Required";
-      }
-      if (step === 4) {
-        if (!formData.careerConfidence) e.careerConfidence = "Required";
-        if (!formData.plans) e.plans = "Required";
-        if (!formData.careerImpact) e.careerImpact = "Required";
-      }
-      if (step === 5) {
-        if (!formData.finalThoughts) e.finalThoughts = "Required";
-        if (!formData.nps) e.nps = "Required";
-        if (!formData.firstName) e.firstName = "Required";
-        if (!formData.lastName) e.lastName = "Required";
-      }
-      return e;
-    };
+      const validate = (currentStep, data) => {
+        const e = {};
+        if (currentStep === 1) {
+          if (!data.overallRating) e.overallRating = "Required";
+          if (!data.mostValuable || data.mostValuable.length === 0) e.mostValuable = "Required";
+        }
+        if (currentStep === 2) {
+          if (!data.courseworkRating) e.courseworkRating = "Required";
+          if (!data.facultyRating) e.facultyRating = "Required";
+          if (!data.advisingRating) e.advisingRating = "Required";
+        }
+        if (currentStep === 3) {
+          ["competency_0","competency_1","competency_2","competency_3","competency_4","competency_5"].forEach(k => {
+            if (!data[k]) e[k] = "Required";
+          });
+          if (!data.pdSatisfaction) e.pdSatisfaction = "Required";
+        }
+        if (currentStep === 4) {
+          if (!data.careerConfidence) e.careerConfidence = "Required";
+          if (!data.plans) e.plans = "Required";
+          if (!data.careerImpact) e.careerImpact = "Required";
+        }
+        if (currentStep === 5) {
+          if (!data.finalThoughts) e.finalThoughts = "Required";
+          if (!data.nps) e.nps = "Required";
+          if (!data.firstName || !data.firstName.trim()) e.firstName = "Required";
+          if (!data.lastName || !data.lastName.trim()) e.lastName = "Required";
+        }
+        return e;
+      };
 
   const handleNext = async () => {
       if (step > 0) {
-        const e = validate();
+        const e = validate(step, formData);
         if (Object.keys(e).length > 0) { setErrors(e); return; }
       }
       setErrors({});
