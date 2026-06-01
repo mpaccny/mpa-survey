@@ -289,10 +289,10 @@ function ExitSurvey() {
           ["competency_0","competency_1","competency_2","competency_3","competency_4","competency_5"].forEach(k => {
             if (!data[k]) e[k] = "Required";
           });
-          if (!data.pdSatisfaction) e.pdSatisfaction = "Required";
         }
         if (currentStep === 4) {
           if (!data.careerConfidence) e.careerConfidence = "Required";
+          if (!data.pdSatisfaction) e.pdSatisfaction = "Required";
           if (!data.plans) e.plans = "Required";
           if (!data.careerImpact) e.careerImpact = "Required";
         }
