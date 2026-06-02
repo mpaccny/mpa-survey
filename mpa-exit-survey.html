@@ -52,12 +52,21 @@
       );
     }
 
-    function PillSelect({ options, value, onChange }) {
+    function PillSelect({ options, value, onChange, multi = false }) {
+      const isSelected = (opt) => multi ? (Array.isArray(value) && value.includes(opt)) : value === opt;
+      const handleClick = (opt) => {
+        if (multi) {
+          const arr = Array.isArray(value) ? value : [];
+          onChange(arr.includes(opt) ? arr.filter(x => x !== opt) : [...arr, opt]);
+        } else {
+          onChange(opt === value ? null : opt);
+        }
+      };
       return (
         <div className="flex flex-wrap gap-2 mt-1">
           {options.map((opt) => (
-            <button key={opt} type="button" onClick={() => onChange(opt === value ? null : opt)}
-              style={{ padding: "5px 14px", borderRadius: "9999px", border: value === opt ? "none" : "1px solid #D1D5DB", background: value === opt ? "#9E3039" : "white", color: value === opt ? "white" : "#374151", fontSize: "13px", cursor: "pointer", transition: "all 0.15s" }}>
+            <button key={opt} type="button" onClick={() => handleClick(opt)}
+              style={{ padding: "5px 14px", borderRadius: "9999px", border: isSelected(opt) ? "none" : "1px solid #D1D5DB", background: isSelected(opt) ? "#9E3039" : "white", color: isSelected(opt) ? "white" : "#374151", fontSize: "13px", cursor: "pointer", transition: "all 0.15s" }}>
               {opt}
             </button>
           ))}
