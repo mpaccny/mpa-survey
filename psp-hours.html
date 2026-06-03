@@ -15,6 +15,11 @@
     .header h1 { color: white; font-size: 20px; font-weight: 600; margin-bottom: 4px; }
     .header p { color: #f5c6c8; font-size: 12px; }
     .progress-bar { height: 4px; background: #f5c6c8; }
+    .welcome { padding: 48px 40px; max-width: 860px; }
+    .welcome p { font-size: 15px; color: #374151; line-height: 1.8; margin-bottom: 16px; }
+    .welcome a { color: #9E3039; text-decoration: none; }
+    .welcome a:hover { text-decoration: underline; }
+    .note-box { background: #fdf3f3; border: 1px solid #f5c6c8; border-radius: 8px; padding: 14px 18px; margin-top: 24px; font-size: 14px; color: #7e252c; }
     .progress-fill { height: 100%; background: #9E3039; transition: width 0.4s ease; }
     .body { padding: 28px 40px; max-width: 860px; }
     .field { margin-bottom: 20px; }
@@ -60,7 +65,15 @@
     </div>
     <div class="progress-bar"><div class="progress-fill" id="prog" style="width:0%"></div></div>
 
-    <div id="form-body" class="body">
+    <div id="welcome-body" class="welcome">
+      <p>Please use this form to submit your weekly hours at the partner organization. As a reminder, PSP fellows are required to complete 300 hours of experiential learning through a summer internship at a partner organization.</p>
+      <p>For any questions, please contact us at: <a href="mailto:mpa@ccny.cuny.edu">mpa@ccny.cuny.edu</a>.</p>
+      <p>Thank you!<br>The MPA Program</p>
+
+      <button class="btn" style="margin-top:32px; width:auto; padding:10px 32px; display:inline-block;" onclick="startForm()">Continue →</button>
+    </div>
+
+    <div id="form-body" class="body" style="display:none;">
       <div class="field">
         <label>Your Full Name <span>*</span></label>
         <input type="text" id="name" placeholder="e.g. Jane Smith" oninput="updateProgress()" />
@@ -208,6 +221,12 @@
       document.getElementById('err-week').textContent = '';
       updateProgress();
       renderCalendar();
+
+    function startForm() {
+      document.getElementById('welcome-body').style.display = 'none';
+      document.getElementById('form-body').style.display = 'block';
+      document.getElementById('prog').style.width = '0%';
+    }
     }
 
     function prevMonth() {
@@ -286,7 +305,8 @@
       selectedWeek = null;
       document.getElementById('week-label').textContent = '';
       viewMonth = 5; viewYear = 2026;
-      document.getElementById('form-body').style.display = 'block';
+      document.getElementById('welcome-body').style.display = 'block';
+      document.getElementById('form-body').style.display = 'none';
       document.getElementById('success-body').style.display = 'none';
       document.getElementById('prog').style.width = '0%';
       renderCalendar();
