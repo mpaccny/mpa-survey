@@ -267,13 +267,9 @@
       const status = document.getElementById('status');
       btn.disabled = true; btn.textContent = 'Submitting…'; status.textContent = '';
 
-      const today = new Date();
-      const dateStr = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
-
       const payload = {
         fields: {
           'First & Last Name': document.getElementById('name').value.trim(),
-          'Submission Date': dateStr,
           'Week': selectedWeek.label,
           'Hours Completed': parseFloat(document.getElementById('hours').value),
           'Semester': 'Summer 2026'
@@ -281,10 +277,16 @@
       };
 
       try {
+        const formData = new FormData();
+        formData.append('First & Last Name', payload.fields['First & Last Name']);
+        formData.append('Week', payload.fields['Week']);
+        formData.append('Hours Completed', payload.fields['Hours Completed']);
+        formData.append('Semester', payload.fields['Semester']);
+
         await fetch(WEBHOOK_URL, {
           method: 'POST',
           mode: 'no-cors',
-          body: JSON.stringify(payload)
+          body: formData
         });
         document.getElementById('form-body').style.display = 'none';
         document.getElementById('success-body').style.display = 'block';
