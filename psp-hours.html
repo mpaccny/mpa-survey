@@ -300,6 +300,9 @@
     function resetForm() {
       document.getElementById('name').value = '';
       document.getElementById('hours').value = '';
+      document.getElementById('status').textContent = '';
+      document.getElementById('submit-btn').disabled = false;
+      document.getElementById('submit-btn').textContent = 'Submit Hours';
       selectedWeek = null;
       document.getElementById('week-label').textContent = '';
       viewMonth = 5; viewYear = 2026;
