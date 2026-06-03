@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PSP Fellowship — Weekly Hours | MPA Program</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f3f4f6; min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 40px 16px; }
+    .form-wrap { max-width: 560px; width: 100%; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; background: white; }
+    .header { background: #9E3039; padding: 24px 32px; }
+    .header-eyebrow { color: #f5c6c8; font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
+    .header-eyebrow em { font-style: italic; font-weight: 300; text-transform: none; }
+    .header h1 { color: white; font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+    .header p { color: #f5c6c8; font-size: 12px; }
+    .progress-bar { height: 4px; background: #f5c6c8; }
+    .progress-fill { height: 100%; background: #9E3039; transition: width 0.4s ease; }
+    .body { padding: 28px 32px; }
+    .field { margin-bottom: 20px; }
+    .field label { display: block; font-size: 13px; font-weight: 500; color: #6b7280; margin-bottom: 8px; }
+    .field label span { color: #9E3039; }
+    .field input { width: 100%; padding: 9px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; background: white; color: #111827; outline: none; font-family: inherit; }
+    .field input:focus { border-color: #9E3039; box-shadow: 0 0 0 2px rgba(158,48,57,0.12); }
+    .cal-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .cal-nav button { background: none; border: 1px solid #d1d5db; border-radius: 8px; padding: 4px 10px; cursor: pointer; color: #374151; font-size: 13px; font-family: inherit; }
+    .cal-nav button:hover { background: #f9fafb; }
+    .cal-nav span { font-size: 14px; font-weight: 500; color: #111827; }
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+    .cal-day-header { text-align: center; font-size: 11px; font-weight: 500; color: #9ca3af; padding: 4px 0; }
+    .cal-day { text-align: center; font-size: 13px; padding: 7px 4px; border-radius: 8px; cursor: default; color: #9ca3af; }
+    .cal-day.week-start { background: #9E3039; color: white; border-radius: 8px 0 0 8px; cursor: pointer; font-weight: 600; }
+    .cal-day.week-mid { background: #f5e8e9; color: #7e252c; border-radius: 0; cursor: pointer; }
+    .cal-day.week-end { background: #f5e8e9; color: #7e252c; border-radius: 0 8px 8px 0; cursor: pointer; }
+    .cal-day.selected-week-start { background: #9E3039; color: white; border-radius: 8px 0 0 8px; font-weight: 600; outline: 2px solid #7e252c; outline-offset: 1px; }
+    .cal-day.selected-week-mid { background: #c97078; color: white; border-radius: 0; }
+    .cal-day.selected-week-end { background: #c97078; color: white; border-radius: 0 8px 8px 0; outline: 2px solid #7e252c; outline-offset: 1px; }
+    .cal-day.outside { color: #d1d5db; }
+    .week-label { margin-top: 10px; font-size: 13px; color: #9E3039; font-weight: 500; min-height: 20px; }
+    .btn { display: block; width: 100%; padding: 11px; background: #9E3039; color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 8px; font-family: inherit; }
+    .btn:hover { background: #7e252c; }
+    .btn:disabled { background: #d1d5db; cursor: not-allowed; }
+    .error-msg { font-size: 12px; color: #9E3039; margin-top: 4px; }
+    .status-msg { font-size: 13px; color: #6b7280; margin-top: 8px; text-align: center; }
+    .success { text-align: center; padding: 40px 32px; }
+    .success-icon { width: 52px; height: 52px; background: #f5e8e9; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+    .success h2 { font-size: 18px; font-weight: 600; color: #111827; margin-bottom: 8px; }
+    .success p { font-size: 14px; color: #6b7280; }
+    .success .btn { width: auto; display: inline-block; padding: 9px 28px; margin-top: 24px; }
+    .footer { padding: 14px 32px; border-top: 1px solid #f3f4f6; background: #f9f9f9; display: flex; align-items: center; gap: 20px; }
+    .footer img { height: 40px; object-fit: contain; }
+  </style>
+</head>
+<body>
+  <div class="form-wrap">
+    <div class="header">
+      <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774556192/MPA-type-icon_i48cxj.jpg" alt="MPA Program Logo" style="height:48px; object-fit:contain; display:block; margin-bottom:10px;" />
+      <h1>PSP Fellowship — Weekly Hours</h1>
+      <p>Public Service Partners · Summer 2026</p>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+
+    <div id="form-body" class="body">
+      <div class="field">
+        <label>Your Full Name <span>*</span></label>
+        <input type="text" id="name" placeholder="e.g. Jane Smith" oninput="updateProgress()" />
+        <div class="error-msg" id="err-name"></div>
+      </div>
+
+      <div class="field">
+        <label>Select the week you are submitting hours for <span>*</span></label>
+        <div class="cal-nav">
+          <button onclick="prevMonth()" aria-label="Previous month"><i class="ti ti-arrow-left"></i></button>
+          <span id="cal-title"></span>
+          <button onclick="nextMonth()" aria-label="Next month"><i class="ti ti-arrow-right"></i></button>
+        </div>
+        <div class="cal-grid" id="cal-headers"></div>
+        <div class="cal-grid" id="cal-days"></div>
+        <div class="week-label" id="week-label"></div>
+        <div class="error-msg" id="err-week"></div>
+      </div>
+
+      <div class="field">
+        <label>Hours completed this week <span>*</span></label>
+        <input type="number" id="hours" min="0" max="80" step="0.5" placeholder="e.g. 25" oninput="updateProgress()" />
+        <div class="error-msg" id="err-hours"></div>
+      </div>
+
+      <button class="btn" id="submit-btn" onclick="submitForm()">Submit Hours</button>
+      <div class="status-msg" id="status"></div>
+    </div>
+
+    <div id="success-body" class="success" style="display:none">
+      <div class="success-icon">
+        <i class="ti ti-check" style="font-size:24px; color:#9E3039;"></i>
+      </div>
+      <h2>Hours Submitted!</h2>
+      <p>Your hours have been recorded. Thank you for your hard work this week.</p>
+      <button class="btn" onclick="resetForm()">Submit Another Week</button>
+    </div>
+
+    <div class="footer">
+      <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774556594/Untitled_qvjdmr.png" alt="Colin Powell School at CCNY" />
+      <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774551962/The_MHC_Logo_xrqoy8.png" alt="The Moynihan Center" />
+    </div>
+  </div>
+
+  <script>
+    const WEBHOOK_URL = 'https://hook.us2.make.com/fckusesgpn4jupu7qgfs1qxj1ofsgiyc';
+
+    const WEEKS = [
+      { start: new Date(2026,5,1),  end: new Date(2026,5,5),  label: 'June 1 to June 5, 2026' },
+      { start: new Date(2026,5,8),  end: new Date(2026,5,12), label: 'June 8 to June 12, 2026' },
+      { start: new Date(2026,5,15), end: new Date(2026,5,19), label: 'June 15 to June 19, 2026' },
+      { start: new Date(2026,5,22), end: new Date(2026,5,26), label: 'June 22 to June 26, 2026' },
+      { start: new Date(2026,5,29), end: new Date(2026,6,3),  label: 'June 29 to July 3, 2026' },
+      { start: new Date(2026,6,6),  end: new Date(2026,6,10), label: 'July 6 to July 10, 2026' },
+      { start: new Date(2026,6,13), end: new Date(2026,6,17), label: 'July 13 to July 17, 2026' },
+      { start: new Date(2026,6,20), end: new Date(2026,6,24), label: 'July 20 to July 24, 2026' },
+      { start: new Date(2026,6,27), end: new Date(2026,6,31), label: 'July 27 to July 31, 2026' },
+      { start: new Date(2026,7,3),  end: new Date(2026,7,7),  label: 'August 3 to August 7, 2026' },
+      { start: new Date(2026,7,10), end: new Date(2026,7,14), label: 'August 10 to August 14, 2026' },
+      { start: new Date(2026,7,17), end: new Date(2026,7,21), label: 'August 17 to August 21, 2026' },
+      { start: new Date(2026,7,24), end: new Date(2026,7,28), label: 'August 24 to August 28, 2026' },
+    ];
+
+    let viewYear = 2026, viewMonth = 5;
+    let selectedWeek = null;
+
+    function sameDay(a, b) {
+      return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
+    }
+
+    function getWeekForDate(d) {
+      return WEEKS.find(w => {
+        let cur = new Date(w.start);
+        while (cur <= w.end) {
+          if (sameDay(cur, d)) return true;
+          cur.setDate(cur.getDate()+1);
+        }
+        return false;
+      }) || null;
+    }
+
+    function renderCalendar() {
+      const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      document.getElementById('cal-title').textContent = months[viewMonth] + ' ' + viewYear;
+
+      const headers = document.getElementById('cal-headers');
+      headers.innerHTML = '';
+      ['Su','Mo','Tu','We','Th','Fr','Sa'].forEach(d => {
+        const el = document.createElement('div');
+        el.className = 'cal-day-header';
+        el.textContent = d;
+        headers.appendChild(el);
+      });
+
+      const grid = document.getElementById('cal-days');
+      grid.innerHTML = '';
+
+      const first = new Date(viewYear, viewMonth, 1);
+      const last = new Date(viewYear, viewMonth+1, 0);
+      const startDow = first.getDay();
+
+      for (let i = 0; i < startDow; i++) {
+        const el = document.createElement('div');
+        el.className = 'cal-day outside';
+        el.textContent = new Date(viewYear, viewMonth, -startDow+i+1).getDate();
+        grid.appendChild(el);
+      }
+
+      for (let d = 1; d <= last.getDate(); d++) {
+        const date = new Date(viewYear, viewMonth, d);
+        const week = getWeekForDate(date);
+        const el = document.createElement('div');
+        el.textContent = d;
+        const isSelected = selectedWeek && week && week.label === selectedWeek.label;
+
+        if (week) {
+          if (sameDay(date, week.start)) {
+            el.className = 'cal-day ' + (isSelected ? 'selected-week-start' : 'week-start');
+          } else if (sameDay(date, week.end)) {
+            el.className = 'cal-day ' + (isSelected ? 'selected-week-end' : 'week-end');
+          } else {
+            el.className = 'cal-day ' + (isSelected ? 'selected-week-mid' : 'week-mid');
+          }
+          el.onclick = () => selectWeek(week);
+        } else {
+          el.className = 'cal-day outside';
+        }
+        grid.appendChild(el);
+      }
+
+      const remaining = 7 - ((startDow + last.getDate()) % 7);
+      if (remaining < 7) {
+        for (let i = 1; i <= remaining; i++) {
+          const el = document.createElement('div');
+          el.className = 'cal-day outside';
+          el.textContent = i;
+          grid.appendChild(el);
+        }
+      }
+    }
+
+    function selectWeek(week) {
+      selectedWeek = week;
+      document.getElementById('week-label').textContent = week.label;
+      document.getElementById('err-week').textContent = '';
+      updateProgress();
+      renderCalendar();
+    }
+
+    function prevMonth() {
+      viewMonth--;
+      if (viewMonth < 0) { viewMonth = 11; viewYear--; }
+      renderCalendar();
+    }
+
+    function nextMonth() {
+      viewMonth++;
+      if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+      renderCalendar();
+    }
+
+    function updateProgress() {
+      let score = 0;
+      if (document.getElementById('name').value.trim()) score++;
+      if (selectedWeek) score++;
+      if (document.getElementById('hours').value) score++;
+      document.getElementById('prog').style.width = (score / 3 * 100) + '%';
+    }
+
+    function validate() {
+      let ok = true;
+      ['err-name','err-week','err-hours'].forEach(id => document.getElementById(id).textContent = '');
+      if (!document.getElementById('name').value.trim()) { document.getElementById('err-name').textContent = 'Please enter your name.'; ok = false; }
+      if (!selectedWeek) { document.getElementById('err-week').textContent = 'Please select a week from the calendar.'; ok = false; }
+      const h = parseFloat(document.getElementById('hours').value);
+      if (isNaN(h) || h <= 0) { document.getElementById('err-hours').textContent = 'Please enter a valid number of hours.'; ok = false; }
+      else if (h > 80) { document.getElementById('err-hours').textContent = 'Hours seem too high — please double check.'; ok = false; }
+      return ok;
+    }
+
+    async function submitForm() {
+      if (!validate()) return;
+      const btn = document.getElementById('submit-btn');
+      const status = document.getElementById('status');
+      btn.disabled = true; btn.textContent = 'Submitting…'; status.textContent = '';
+
+      const today = new Date();
+      const dateStr = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
+
+      const payload = {
+        fields: {
+          'First & Last Name': document.getElementById('name').value.trim(),
+          'Submission Date': dateStr,
+          'Week': selectedWeek.label,
+          'Hours Completed': parseFloat(document.getElementById('hours').value),
+          'Semester': 'Summer 2026'
+        }
+      };
+
+      try {
+        const res = await fetch(WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          document.getElementById('form-body').style.display = 'none';
+          document.getElementById('success-body').style.display = 'block';
+          document.getElementById('prog').style.width = '100%';
+        } else {
+          status.textContent = 'Something went wrong. Please try again.';
+          btn.disabled = false; btn.textContent = 'Submit Hours';
+        }
+      } catch(e) {
+        status.textContent = 'Network error. Please check your connection and try again.';
+        btn.disabled = false; btn.textContent = 'Submit Hours';
+      }
+    }
+
+    function resetForm() {
+      document.getElementById('name').value = '';
+      document.getElementById('hours').value = '';
+      selectedWeek = null;
+      document.getElementById('week-label').textContent = '';
+      viewMonth = 5; viewYear = 2026;
+      document.getElementById('form-body').style.display = 'block';
+      document.getElementById('success-body').style.display = 'none';
+      document.getElementById('prog').style.width = '0%';
+      renderCalendar();
+    }
+
+    renderCalendar();
+  </script>
+</body>
+</html>
