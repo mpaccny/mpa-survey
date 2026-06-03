@@ -281,18 +281,14 @@
       };
 
       try {
-        const res = await fetch(WEBHOOK_URL, {
+        await fetch(WEBHOOK_URL, {
           method: 'POST',
+          mode: 'no-cors',
           body: JSON.stringify(payload)
         });
-        if (res.ok) {
-          document.getElementById('form-body').style.display = 'none';
-          document.getElementById('success-body').style.display = 'block';
-          document.getElementById('prog').style.width = '100%';
-        } else {
-          status.textContent = 'Something went wrong. Please try again.';
-          btn.disabled = false; btn.textContent = 'Submit Hours';
-        }
+        document.getElementById('form-body').style.display = 'none';
+        document.getElementById('success-body').style.display = 'block';
+        document.getElementById('prog').style.width = '100%';
       } catch(e) {
         status.textContent = 'Network error. Please check your connection and try again.';
         btn.disabled = false; btn.textContent = 'Submit Hours';
