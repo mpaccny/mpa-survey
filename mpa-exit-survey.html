@@ -113,6 +113,7 @@
           <div>
             <label className={labelClass}>Do you have additional comments about your experience with program administration and support?</label>
             <textarea className={inputClass} style={{ minHeight: "120px", resize: "vertical" }} value={data.openFeedback || ""} onChange={(e) => onChange("openFeedback", e.target.value)} placeholder="e.g. Comments about registration, advising, communications, scheduling..." />
+            {errors.openFeedback && <p style={{color:"#9E3039", fontSize:"11px", marginTop:"4px"}}>* This field is required</p>}
           </div>
         </div>
       );
@@ -137,6 +138,7 @@
           <div>
             <label className={labelClass}>Was there a course or topic you wish had been offered or expanded upon?</label>
             <textarea className={inputClass} style={{ minHeight: "72px", resize: "vertical" }} value={data.challenge || ""} onChange={(e) => onChange("challenge", e.target.value)} placeholder="e.g. Data analytics, public finance, nonprofit management..." />
+            {errors.challenge && <p style={{color:"#9E3039", fontSize:"11px", marginTop:"4px"}}>* This field is required</p>}
           </div>
 
         </div>
@@ -169,6 +171,7 @@
           <div>
             <label className={labelClass}>Which professional development resources did you find most useful during the program?</label>
             <textarea className={inputClass} style={{ minHeight: "80px", resize: "vertical" }} value={data.pdResources || ""} onChange={(e) => onChange("pdResources", e.target.value)} placeholder="e.g. Guest speakers, networking events, career fairs, mentorship program..." />
+            {errors.pdResources && <p style={{color:"#9E3039", fontSize:"11px", marginTop:"4px"}}>* This field is required</p>}
           </div>
           <div>
             <label className={labelClass}>What are your plans after graduation?</label>
@@ -177,14 +180,17 @@
               <option value="">Select...</option>
               {["Continuing in my current role", "Seeking a new role in public sector", "Seeking a new role in nonprofit sector", "Seeking a new role in private sector", "Pursuing further education", "Starting my own organization / consulting", "Still exploring options"].map((o) => <option key={o}>{o}</option>)}
             </select>
+            {errors.plans && <p style={{color:"#9E3039", fontSize:"11px", marginTop:"4px"}}>* This field is required</p>}
           </div>
           <div>
             <label className={labelClass}>Did the MPA program help you advance your career goals?</label>
             <PillSelect options={["Yes, significantly", "Somewhat", "Not yet, but I expect it will", "Not really"]} value={data.careerImpact} onChange={(v) => onChange("careerImpact", v)} />
+            {errors.careerImpact && <p style={{color:"#9E3039", fontSize:"11px", marginTop:"4px"}}>* This field is required</p>}
           </div>
           <div>
             <label className={labelClass}>How has the MPA program helped you advance your career goals?</label>
             <textarea className={inputClass} style={{ minHeight: "80px", resize: "vertical" }} value={data.advice || ""} onChange={(e) => onChange("advice", e.target.value)} placeholder="e.g. Helped me transition into a new role, expanded my professional network, built leadership skills..." />
+            {errors.advice && <p style={{color:"#9E3039", fontSize:"11px", marginTop:"4px"}}>* This field is required</p>}
           </div>
         </div>
       );
@@ -198,6 +204,7 @@
           <div>
             <label className={labelClass}>Do you have additional comments about your experience with program administration and support?</label>
             <textarea className={inputClass} style={{ minHeight: "160px", resize: "vertical" }} value={data.openFeedback || ""} onChange={(e) => onChange("openFeedback", e.target.value)} placeholder="e.g. Comments about registration, advising, communications, scheduling..." />
+            {errors.openFeedback && <p style={{color:"#9E3039", fontSize:"11px", marginTop:"4px"}}>* This field is required</p>}
           </div>
         </div>
       );
@@ -283,43 +290,42 @@ function ExitSurvey() {
 
       const update = (key, value) => setFormData((prev) => ({ ...prev, [key]: value }));
 
-      const validate = (currentStep, data) => {
-        const e = {};
-        if (currentStep === 1) {
-          if (!data.overallRating) e.overallRating = "Required";
-          if (!data.mostValuable || data.mostValuable.length === 0) e.mostValuable = "Required";
+      const handleNext = async () => {
+        if (step > 0) {
+          const e = {};
+          if (step === 1) {
+            if (!formData.overallRating) e.overallRating = "Required";
+            if (!formData.mostValuable || formData.mostValuable.length === 0) e.mostValuable = "Required";
+            if (!formData.challenge || !formData.challenge.trim()) e.challenge = "Required";
+          }
+          if (step === 2) {
+            if (!formData.courseworkRating) e.courseworkRating = "Required";
+            if (!formData.facultyRating) e.facultyRating = "Required";
+            if (!formData.advisingRating) e.advisingRating = "Required";
+            if (!formData.openFeedback || !formData.openFeedback.trim()) e.openFeedback = "Required";
+          }
+          if (step === 3) {
+            ["competency_0","competency_1","competency_2","competency_3","competency_4","competency_5"].forEach(k => {
+              if (!formData[k]) e[k] = "Required";
+            });
+          }
+          if (step === 4) {
+            if (!formData.careerConfidence) e.careerConfidence = "Required";
+            if (!formData.pdSatisfaction) e.pdSatisfaction = "Required";
+            if (!formData.pdResources || !formData.pdResources.trim()) e.pdResources = "Required";
+            if (!formData.plans) e.plans = "Required";
+            if (!formData.careerImpact) e.careerImpact = "Required";
+            if (!formData.advice || !formData.advice.trim()) e.advice = "Required";
+          }
+          if (step === 5) {
+            if (!formData.finalThoughts) e.finalThoughts = "Required";
+            if (!formData.nps) e.nps = "Required";
+            if (!formData.firstName || !formData.firstName.trim()) e.firstName = "Required";
+            if (!formData.lastName || !formData.lastName.trim()) e.lastName = "Required";
+          }
+          if (Object.keys(e).length > 0) { setErrors(e); return; }
         }
-        if (currentStep === 2) {
-          if (!data.courseworkRating) e.courseworkRating = "Required";
-          if (!data.facultyRating) e.facultyRating = "Required";
-          if (!data.advisingRating) e.advisingRating = "Required";
-        }
-        if (currentStep === 3) {
-          ["competency_0","competency_1","competency_2","competency_3","competency_4","competency_5"].forEach(k => {
-            if (!data[k]) e[k] = "Required";
-          });
-        }
-        if (currentStep === 4) {
-          if (!data.careerConfidence) e.careerConfidence = "Required";
-          if (!data.pdSatisfaction) e.pdSatisfaction = "Required";
-          if (!data.plans) e.plans = "Required";
-          if (!data.careerImpact) e.careerImpact = "Required";
-        }
-        if (currentStep === 5) {
-          if (!data.finalThoughts) e.finalThoughts = "Required";
-          if (!data.nps) e.nps = "Required";
-          if (!data.firstName || !data.firstName.trim()) e.firstName = "Required";
-          if (!data.lastName || !data.lastName.trim()) e.lastName = "Required";
-        }
-        return e;
-      };
-
-  const handleNext = async () => {
-      if (step > 0) {
-        const e = validate(step, formData);
-        if (Object.keys(e).length > 0) { setErrors(e); return; }
-      }
-      setErrors({});
+        setErrors({});
       if (step < steps.length - 1) {
           setStep(step + 1);
         } else {
