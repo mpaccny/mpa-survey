@@ -171,12 +171,11 @@ const WEBHOOK_URL = "https://hook.us2.make.com/homf717hc2r48qjgk3gimcgi6j73qols"
 
 const steps = [
   "Welcome",
-  "Contact Info",
+  "Contact & Background",
   "Current Employment",
   "Career Progression",
   "Program Satisfaction",
-  "Skills & Growth",
-  "About You"
+  "Skills & Growth"
 ];
 
 let currentStep = 0;
@@ -258,13 +257,17 @@ function selectRadio(name, val, el) {
   el.closest('.options-list').querySelectorAll('.option-item').forEach(e => e.classList.remove('selected'));
   el.classList.add('selected');
   el.querySelector('input').checked = true;
-  // handle conditionals
-  const cond = document.getElementById('cond-'+name);
-  if (cond) cond.classList.toggle('visible', ['Yes','Somewhat','No'].includes(val) || true);
+  // handle Other reveal for radio buttons
+  const otherWrap = document.getElementById('other-'+name+'-wrap');
+  if (otherWrap) otherWrap.classList.toggle('visible', val === 'Other');
   // specific conditionals
   if (name === 'work_status') toggleWorkFields();
   if (name === 'work_location_type') toggleLocationFields();
   if (name === 'supervise') toggleSuperviseField();
+  if (name === 'gender') {
+    const genderWrap = document.getElementById('other-gender-wrap');
+    if (genderWrap) genderWrap.classList.toggle('visible', val === 'Other');
+  }
 }
 
 function toggleCheck(name, val, el) {
@@ -337,7 +340,7 @@ function renderStep() {
     </div>`;
 
   } else if (currentStep === 1) {
-    // CONTACT INFO
+    // CONTACT & BACKGROUND
     html = `<div class="step-body">
       <div class="section-label">Personal Contact Information</div>
       <div class="field-row">
@@ -348,6 +351,18 @@ function renderStep() {
       <div class="field"><label>Personal Email Address <span style="color:#9E3039">*</span></label>${textField('email','your@email.com','email',true)}</div>
       <div class="field"><label>Phone Number <span style="color:#9b9b9b;font-weight:400">(optional)</span></label>${textField('phone','(212) 000-0000','tel')}</div>
       <div class="field"><label>Preferred Method of Contact</label>${radio('contact_method',['Email','Phone'])}</div>
+
+      <div class="section-label">Identity & Background <span style="color:#9b9b9b;font-weight:400;font-size:11px;text-transform:none;letter-spacing:0">(optional)</span></div>
+      <div class="field"><label>What is your gender identity?</label>
+        ${radio('gender',['Woman','Man','Transgender','Non-binary/non-conforming','Prefer not to respond','Other'])}
+      </div>
+      <div class="conditional${formData['gender']==='Other'?' visible':''}" id="other-gender-wrap">
+        <div class="field"><input type="text" placeholder="Please specify" value="${formData['gender_other']||''}" oninput="formData['gender_other']=this.value"></div>
+      </div>
+      <div class="field"><label>Which racial or ethnic identity or identities best describe you? <span style="color:#9b9b9b;font-weight:400">(Check all that apply)</span></label>
+        ${checkbox('race_ethnicity',['American Indian or Alaskan Native','Asian / Pacific Islander','Black or African American','Hispanic or Latina/o','White / Caucasian','Prefer not to answer','Other'])}
+      </div>
+
       <div class="nav-row"><button class="btn btn-back" onclick="prevStep()">← Back</button><button class="btn btn-next" onclick="nextStep()">Next →</button></div>
     </div>`;
 
@@ -578,29 +593,9 @@ function renderStep() {
         ${textarea('emerging_skills','Share what you\'re seeing in your field...')}
       </div>
 
-      <div class="nav-row"><button class="btn btn-back" onclick="prevStep()">← Back</button><button class="btn btn-next" onclick="nextStep()">Next →</button></div>
+      <div class="nav-row"><button class="btn btn-back" onclick="prevStep()">← Back</button><button class="btn btn-submit" onclick="submitForm()">Submit Survey ✓</button></div>
     </div>`;
 
-  } else if (currentStep === 6) {
-    // ABOUT YOU
-    html = `<div class="step-body">
-      <div class="section-label">Demographics</div>
-      <div class="field"><label>What is your gender identity?</label>
-        ${radio('gender',['Woman','Man','Transgender','Non-binary/non-conforming','Prefer not to respond','Other'])}
-      </div>
-      <div class="conditional${formData['gender']==='Other'?' visible':''}" id="other-gender-wrap">
-        <div class="field"><input type="text" placeholder="Please specify" value="${formData['gender_other']||''}" oninput="formData['gender_other']=this.value"></div>
-      </div>
-
-      <div class="field"><label>Which racial or ethnic identity or identities best describe you? <span style="color:#9b9b9b;font-weight:400">(Check all that apply)</span></label>
-        ${checkbox('race_ethnicity',['American Indian or Alaskan Native','Asian / Pacific Islander','Black or African American','Hispanic or Latina/o','White / Caucasian','Prefer not to answer','Other'])}
-      </div>
-
-      <div class="nav-row">
-        <button class="btn btn-back" onclick="prevStep()">← Back</button>
-        <button class="btn btn-submit" onclick="submitForm()">Submit Survey ✓</button>
-      </div>
-    </div>`;
   }
 
   container.innerHTML = html;
