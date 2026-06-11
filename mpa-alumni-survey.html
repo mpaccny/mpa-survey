@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MPA Alumni Survey</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #f0f0f0;
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 32px 16px;
+  }
+  .card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    width: 100%;
+    max-width: 860px;
+    overflow: hidden;
+  }
+  /* HEADER */
+  .header {
+    background: #9E3039;
+    padding: 24px 40px 20px;
+  }
+  .header h1 { color: white; font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+  .header-sub { color: #f5c6c8; font-size: 12px; }
+  /* PROGRESS */
+  .progress-bar-bg { background: #f5c6c8; height: 5px; }
+  .progress-bar-fill { background: #9E3039; height: 5px; transition: width 0.4s ease; }
+  /* STEP TABS */
+  .step-tabs { display: flex; border-bottom: 1px solid #e5e7eb; overflow-x: auto; }
+  .step-tab {
+    flex: 1; min-width: 80px; padding: 10px 6px; font-size: 11px; font-weight: 500;
+    text-align: center; border: none; background: none; cursor: default;
+    color: #d1d5db; white-space: nowrap; border-bottom: 2px solid transparent;
+    transition: color 0.2s;
+  }
+  .step-tab.active { color: #9E3039; border-bottom-color: #9E3039; }
+  .step-tab.done { color: #9b9b9b; cursor: pointer; }
+  .step-tab.done:hover { color: #9E3039; }
+  /* BODY */
+  .step-body { padding: 32px 40px; }
+  /* WELCOME */
+  .welcome-title { font-size: 20px; font-weight: 700; color: #111; margin-bottom: 8px; }
+  .welcome-intro { font-size: 14px; color: #374151; line-height: 1.65; margin-bottom: 20px; }
+  .disclaimer-box {
+    background: #fdf3f3; border-left: 4px solid #9E3039;
+    border-radius: 0 8px 8px 0; padding: 16px 20px;
+    font-size: 13px; color: #4b2020; line-height: 1.65;
+  }
+  .disclaimer-box strong { display: block; margin-bottom: 4px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: #9E3039; }
+  /* SECTION LABEL */
+  .section-label {
+    font-size: 11px; font-weight: 700; color: #9E3039;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin: 28px 0 16px; border-bottom: 1px solid #f3e0e0; padding-bottom: 6px;
+  }
+  .section-label:first-child { margin-top: 0; }
+  /* FORM ELEMENTS */
+  .field { margin-bottom: 20px; }
+  .field label { display: block; font-size: 13px; font-weight: 600; color: #111; margin-bottom: 6px; }
+  .field .hint { font-size: 11px; color: #6b7280; margin-bottom: 6px; }
+  .field input[type=text], .field input[type=email], .field input[type=tel],
+  .field textarea, .field select {
+    width: 100%; border: 1px solid #d1d5db; border-radius: 8px;
+    padding: 9px 12px; font-size: 13px; color: #111;
+    transition: border 0.15s, box-shadow 0.15s;
+    font-family: inherit;
+  }
+  .field input:focus, .field textarea:focus, .field select:focus {
+    outline: none; border-color: #9E3039; box-shadow: 0 0 0 3px rgba(158,48,57,0.12);
+  }
+  .field textarea { resize: vertical; min-height: 90px; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 560px) { .field-row { grid-template-columns: 1fr; } }
+  /* RADIO / CHECKBOX */
+  .options-list { display: flex; flex-direction: column; gap: 8px; }
+  .option-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 14px; border: 1px solid #e5e7eb; border-radius: 8px;
+    cursor: pointer; font-size: 13px; color: #374151;
+    transition: border 0.15s, background 0.15s;
+    user-select: none;
+  }
+  .option-item:hover { border-color: #9E3039; background: #fdf3f3; }
+  .option-item.selected { border-color: #9E3039; background: #fdf3f3; color: #111; font-weight: 500; }
+  .option-item input { accent-color: #9E3039; width: 15px; height: 15px; flex-shrink: 0; }
+  /* SCALE */
+  .scale-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+  .scale-btn {
+    width: 40px; height: 40px; border-radius: 8px; border: 1px solid #d1d5db;
+    background: white; font-size: 13px; font-weight: 600; cursor: pointer;
+    color: #374151; transition: all 0.15s;
+  }
+  .scale-btn:hover { border-color: #9E3039; background: #fdf3f3; }
+  .scale-btn.selected { background: #9E3039; border-color: #9E3039; color: white; }
+  .scale-labels { display: flex; justify-content: space-between; font-size: 11px; color: #9b9b9b; margin-top: 4px; }
+  /* CONDITIONAL */
+  .conditional { display: none; margin-top: 10px; }
+  .conditional.visible { display: block; }
+  /* COMPETENCY TABLE */
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .comp-table th { background: #f9fafb; color: #374151; font-weight: 600; padding: 8px 10px; text-align: center; border-bottom: 2px solid #e5e7eb; border-right: 1px solid #e5e7eb; }
+  .comp-table th:first-child { text-align: left; min-width: 180px; }
+  .comp-table td { padding: 8px 10px; border-bottom: 1px solid #f3f4f6; border-right: 1px solid #f3f4f6; text-align: center; vertical-align: middle; }
+  .comp-table td:first-child { text-align: left; font-size: 12px; color: #374151; }
+  .comp-table tr:hover td { background: #fdf3f3; }
+  .comp-radio { accent-color: #9E3039; width: 14px; height: 14px; cursor: pointer; }
+  /* NAV BUTTONS */
+  .nav-row { display: flex; justify-content: space-between; margin-top: 32px; align-items: center; }
+  .btn {
+    padding: 10px 24px; border-radius: 8px; font-size: 13px; font-weight: 600;
+    cursor: pointer; border: none; transition: all 0.15s;
+  }
+  .btn-back { background: #f3f4f6; color: #374151; }
+  .btn-back:hover { background: #e5e7eb; }
+  .btn-next { background: #9E3039; color: white; }
+  .btn-next:hover { background: #7d2530; }
+  .btn-submit { background: #9E3039; color: white; }
+  .btn-submit:hover { background: #7d2530; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  /* FOOTER LOGOS */
+  .footer-logos {
+    padding: 16px 40px; border-top: 1px solid #f3f4f6; background: #f9f9f9;
+    display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+  }
+  .footer-logos img { height: 48px; object-fit: contain; }
+  /* SUBMITTED */
+  .submitted-screen { text-align: center; padding: 48px 40px; }
+  .submitted-icon { font-size: 48px; margin-bottom: 16px; }
+  .submitted-screen h2 { font-size: 22px; font-weight: 700; color: #111; margin-bottom: 8px; }
+  .submitted-screen p { font-size: 14px; color: #6b7280; line-height: 1.6; max-width: 400px; margin: 0 auto; }
+</style>
+</head>
+<body>
+<div class="card" id="app">
+
+  <!-- HEADER -->
+  <div class="header">
+    <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774556192/MPA-type-icon_i48cxj.jpg" alt="MPA Program Logo" style="height:40px; object-fit:contain; display:block; margin-bottom:12px; background:white; padding:6px 12px; border-radius:6px;" />
+    <h1>Alumni Survey</h1>
+    <div class="header-sub" id="step-label">Welcome</div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div>
+
+  <!-- STEP TABS -->
+  <div class="step-tabs" id="step-tabs"></div>
+
+  <!-- FORM BODY -->
+  <div id="form-container"></div>
+
+  <!-- FOOTER LOGOS -->
+  <div class="footer-logos" id="footer-logos">
+    <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774551957/CPS_MPA_logo_2025_5_ewsqfd.jpg" alt="MPA at CCNY Logo"/>
+    <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774551962/The_MHC_Logo_xrqoy8.png" alt="The Moynihan Center Logo"/>
+  </div>
+
+</div>
+
+<script>
+// ─── STATE ────────────────────────────────────────────────────────────────────
+const WEBHOOK_URL = "https://hook.us2.make.com/homf717hc2r48qjgk3gimcgi6j73qols";
+
+const steps = [
+  "Welcome",
+  "Contact Info",
+  "Current Employment",
+  "Career Progression",
+  "Program Satisfaction",
+  "Skills & Growth",
+  "About You"
+];
+
+let currentStep = 0;
+let formData = {};
+
+// ─── RENDER TABS ──────────────────────────────────────────────────────────────
+function renderTabs() {
+  const container = document.getElementById("step-tabs");
+  container.innerHTML = steps.map((s, i) => {
+    let cls = "step-tab";
+    if (i === currentStep) cls += " active";
+    else if (i < currentStep) cls += " done";
+    const onclick = i < currentStep ? `goToStep(${i})` : "";
+    return `<button class="${cls}" onclick="${onclick}">${s}</button>`;
+  }).join("");
+  document.getElementById("step-label").textContent = `Step ${currentStep + 1} of ${steps.length} — ${steps[currentStep]}`;
+  const pct = (currentStep / (steps.length - 1)) * 100;
+  document.getElementById("progress-fill").style.width = pct + "%";
+}
+
+function goToStep(i) {
+  if (i < currentStep) { currentStep = i; renderStep(); }
+}
+
+// ─── HELPERS ──────────────────────────────────────────────────────────────────
+function radio(name, options, required=false) {
+  return `<div class="options-list">${options.map(o => {
+    const val = typeof o === 'object' ? o.value : o;
+    const lbl = typeof o === 'object' ? o.label : o;
+    const checked = formData[name] === val;
+    return `<label class="option-item${checked?' selected':''}" onclick="selectRadio('${name}','${val}',this)">
+      <input type="radio" name="${name}" value="${val}" ${checked?'checked':''}> ${lbl}
+    </label>`;
+  }).join('')}</div>`;
+}
+
+function checkbox(name, options) {
+  const vals = formData[name] || [];
+  return `<div class="options-list">${options.map(o => {
+    const val = typeof o === 'object' ? o.value : o;
+    const lbl = typeof o === 'object' ? o.label : o;
+    const checked = vals.includes(val);
+    const extraField = val === 'Other' ? `<div class="conditional${checked?' visible':''}" id="other-${name}-wrap"><input type="text" placeholder="Please specify" value="${formData[name+'_other']||''}" oninput="formData['${name}_other']=this.value" style="margin-top:6px;width:100%;border:1px solid #d1d5db;border-radius:6px;padding:8px 10px;font-size:12px;"></div>` : '';
+    return `<label class="option-item${checked?' selected':''}" onclick="toggleCheck('${name}','${val}',this)">
+      <input type="checkbox" name="${name}" value="${val}" ${checked?'checked':''}> ${lbl}
+    </label>${extraField}`;
+  }).join('')}</div>`;
+}
+
+function textField(name, placeholder='', type='text', required=false) {
+  const val = formData[name] || '';
+  return `<input type="${type}" placeholder="${placeholder}" value="${val}" oninput="formData['${name}']=this.value" ${required?'required':''}>`;
+}
+
+function textarea(name, placeholder='') {
+  const val = formData[name] || '';
+  return `<textarea placeholder="${placeholder}" oninput="formData['${name}']=this.value">${val}</textarea>`;
+}
+
+function scale10(name, lowLabel='', highLabel='') {
+  const val = formData[name];
+  const btns = Array.from({length:10},(_,i)=>i+1).map(n =>
+    `<button type="button" class="scale-btn${val===n?' selected':''}" onclick="selectScale('${name}',${n},this)">${n}</button>`
+  ).join('');
+  return `<div class="scale-row">${btns}</div><div class="scale-labels"><span>${lowLabel}</span><span>${highLabel}</span></div>`;
+}
+
+function selectField(name, options, placeholder='Select…') {
+  const val = formData[name] || '';
+  return `<select onchange="formData['${name}']=this.value">
+    <option value="" disabled ${!val?'selected':''}>${placeholder}</option>
+    ${options.map(o => `<option value="${o}" ${val===o?'selected':''}>${o}</option>`).join('')}
+  </select>`;
+}
+
+// ─── EVENT HANDLERS ───────────────────────────────────────────────────────────
+function selectRadio(name, val, el) {
+  formData[name] = val;
+  el.closest('.options-list').querySelectorAll('.option-item').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  el.querySelector('input').checked = true;
+  // handle conditionals
+  const cond = document.getElementById('cond-'+name);
+  if (cond) cond.classList.toggle('visible', ['Yes','Somewhat','No'].includes(val) || true);
+  // specific conditionals
+  if (name === 'work_status') toggleWorkFields();
+  if (name === 'work_location_type') toggleLocationFields();
+  if (name === 'supervise') toggleSuperviseField();
+}
+
+function toggleCheck(name, val, el) {
+  if (!formData[name]) formData[name] = [];
+  const idx = formData[name].indexOf(val);
+  if (idx > -1) { formData[name].splice(idx,1); el.classList.remove('selected'); el.querySelector('input').checked=false; }
+  else { formData[name].push(val); el.classList.add('selected'); el.querySelector('input').checked=true; }
+  const otherWrap = document.getElementById('other-'+name+'-wrap');
+  if (otherWrap) otherWrap.classList.toggle('visible', formData[name].includes('Other'));
+}
+
+function selectScale(name, val, el) {
+  formData[name] = val;
+  el.closest('.scale-row').querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function toggleWorkFields() {
+  const status = formData['work_status'] || '';
+  const show = ['Employed full-time','Employed part-time','Self-employed'].includes(status);
+  const el = document.getElementById('employment-details');
+  if (el) el.style.display = show ? 'block' : 'none';
+}
+
+function toggleLocationFields() {
+  const type = formData['work_location_type'] || '';
+  const el = document.getElementById('loc-detail');
+  const label = document.getElementById('loc-detail-label');
+  const input = el ? el.querySelector('input') : null;
+  if (!el) return;
+  if (type === 'In-State (New York)') {
+    el.style.display = 'block';
+    if (label) label.textContent = 'City / Borough';
+    if (input) input.placeholder = 'e.g. New York City, Albany';
+  } else if (type === 'Out-of-State') {
+    el.style.display = 'block';
+    if (label) label.textContent = 'State';
+    if (input) input.placeholder = 'e.g. New Jersey, California';
+  } else if (type === 'International') {
+    el.style.display = 'block';
+    if (label) label.textContent = 'Country / Region';
+    if (input) input.placeholder = 'e.g. Kenya, European Union';
+  } else {
+    el.style.display = 'none';
+  }
+}
+
+function toggleSuperviseField() {
+  const val = formData['supervise'];
+  const el = document.getElementById('supervise-count-wrap');
+  if (el) el.style.display = val === 'Yes' ? 'block' : 'none';
+}
+
+// ─── STEPS ────────────────────────────────────────────────────────────────────
+function renderStep() {
+  renderTabs();
+  const container = document.getElementById("form-container");
+  let html = '';
+
+  if (currentStep === 0) {
+    // WELCOME
+    html = `<div class="step-body">
+      <div class="welcome-title">Welcome, MPA Alumni!</div>
+      <p class="welcome-intro">Thank you for taking the time to fill out this anonymous survey. Your responses will provide crucial information about how our program has impacted your career path, and how we can better serve our students and alumni community in the future.</p>
+      <div class="disclaimer-box">
+        <strong>Important Note</strong>
+        Survey responses will only be viewed by the MPA team. Any information shared publicly or included in reports will be presented only in aggregate form, and all personally identifiable information will be removed to protect participant confidentiality. We greatly appreciate your transparency and honest feedback, as your responses help us strengthen and improve the fellowship experience for future participants.
+      </div>
+      <div class="nav-row"><div></div><button class="btn btn-next" onclick="nextStep()">Begin Survey →</button></div>
+    </div>`;
+
+  } else if (currentStep === 1) {
+    // CONTACT INFO
+    html = `<div class="step-body">
+      <div class="section-label">Personal Contact Information</div>
+      <div class="field-row">
+        <div class="field"><label>First Name <span style="color:#9E3039">*</span></label>${textField('first_name','Jane',true)}</div>
+        <div class="field"><label>Last Name <span style="color:#9E3039">*</span></label>${textField('last_name','Doe',true)}</div>
+      </div>
+      <div class="field"><label>Preferred Name / Nickname <span style="color:#9b9b9b;font-weight:400">(optional)</span></label>${textField('preferred_name','What should we call you?')}</div>
+      <div class="field"><label>Personal Email Address <span style="color:#9E3039">*</span></label>${textField('email','your@email.com','email',true)}</div>
+      <div class="field"><label>Phone Number <span style="color:#9b9b9b;font-weight:400">(optional)</span></label>${textField('phone','(212) 000-0000','tel')}</div>
+      <div class="field"><label>Preferred Method of Contact</label>${radio('contact_method',['Email','Phone'])}</div>
+      <div class="nav-row"><button class="btn btn-back" onclick="prevStep()">← Back</button><button class="btn btn-next" onclick="nextStep()">Next →</button></div>
+    </div>`;
+
+  } else if (currentStep === 2) {
+    // CURRENT EMPLOYMENT
+    html = `<div class="step-body">
+      <div class="section-label">Current Work Status</div>
+      <div class="field"><label>Which of the following best describes your current work status?</label>
+        ${radio('work_status',['Employed full-time','Employed part-time','Self-employed','Not employed, seeking employment','Not employed, not seeking employment','Not employed, continuing education'])}
+      </div>
+
+      <div id="employment-details" style="display:${(['Employed full-time','Employed part-time','Self-employed'].includes(formData['work_status']))?'block':'none'}">
+        <div class="section-label">Current Organization</div>
+        <div class="field"><label>Which of the following best describes the type of organization or sector you currently work in?</label>
+          ${radio('org_sector',['City, county or other local government','Federal government (except military)','Government outside U.S.','Nonprofit / NGO','Private sector / Social Enterprise','State, provincial or regional government','U.S. Military','International, multilateral or bilateral organization'])}
+        </div>
+        <div class="field"><label>Organization Name</label>${textField('org_name','Name of your organization')}</div>
+        <div class="field"><label>Job Title</label>${textField('job_title','Your title')}</div>
+        <div class="field"><label>Your Role / Function</label><div class="hint">Briefly describe what you do day-to-day</div>${textarea('job_role','Describe your primary responsibilities...')}</div>
+
+        <div class="section-label">Work Location</div>
+        <div class="field"><label>Where is your workplace located?</label>
+          ${radio('work_location_type',['In-State (New York)','Out-of-State','International'])}
+        </div>
+        <div id="loc-detail" style="display:${formData['work_location_type']?'block':'none'}">
+          <div class="field"><label id="loc-detail-label">Please specify location</label>${textField('work_location_detail','e.g. New York City')}</div>
+        </div>
+
+        <div class="section-label">Issue Area & Role</div>
+        <div class="field"><label>Which of the following best describes the issue area you currently work on?</label>
+          ${radio('issue_area',['Animal Rights','Arts & Culture','Children & Youth','Civic Engagement & Community Development','Comptrolling & Anti-corruption','Criminal Justice','Economic Development & Poverty Alleviation','Education','Environment & Sustainability','Food Security & Agriculture','Gender Equality, Racial Justice, LGBTQIA+ & Human Rights','Health','International Relations & Development','Media & News Broadcasting','Public Safety & Disaster Relief','Religion & Spirituality','Science & Technology','Social Services','Urban Development, Housing, & Transportation','Other'])}
+        </div>
+        <div class="conditional${formData['issue_area']==='Other'?' visible':''}" id="other-issue_area-wrap">
+          <div class="field"><input type="text" placeholder="Please specify" value="${formData['issue_area_other']||''}" oninput="formData['issue_area_other']=this.value"></div>
+        </div>
+
+        <div class="field"><label>Which of the following best describe your current job role or roles? <span style="color:#9b9b9b;font-weight:400">(Select all that apply)</span></label>
+          ${checkbox('job_roles',['Advocacy, lobbying, or legislative work','Budgeting, finance, or contract administration','Communications, outreach, public relations','Community organizing','Consulting','Development, fundraising','Direct service provision','Executive leadership, senior management','Human resources management','Policy analysis','Program development or implementation','Program evaluation, assessment','Research, data analysis','Teaching, training','Other'])}
+        </div>
+
+        <div class="field"><label>Do you supervise or manage people? If so, how many?</label>
+          ${radio('supervise',['Yes','No'])}
+        </div>
+        <div id="supervise-count-wrap" style="display:${formData['supervise']==='Yes'?'block':'none'}">
+          <div class="field"><label>How many people do you supervise?</label>${textField('supervise_count','e.g. 3')}</div>
+        </div>
+
+        <div class="field"><label>How long have you occupied your current position?</label>${textField('time_in_role','e.g. 2 years')}</div>
+
+        <div class="field"><label>Which of the following have you had in your current place of employment? <span style="color:#9b9b9b;font-weight:400">(Select all that apply)</span></label>
+          ${checkbox('advancements',['A promotion','An increase in the number of projects/portfolios/clients/budget responsible for','An increase in your decision-making authority','An increase in the number of people you supervise','N/A'])}
+        </div>
+
+        <div class="section-label">Current Compensation</div>
+        <div class="field"><label>What is your current annual salary?</label>
+          ${radio('current_salary',['Less than $20,000','$20,001 - $35,000','$35,001 - $50,000','$50,001 - $75,000','$75,001 - $100,000','$100,001 - $125,000','$125,001 - $150,000','$150,000 or more'])}
+        </div>
+      </div>
+
+      <div class="nav-row"><button class="btn btn-back" onclick="prevStep()">← Back</button><button class="btn btn-next" onclick="nextStep()">Next →</button></div>
+    </div>`;
+
+  } else if (currentStep === 3) {
+    // CAREER PROGRESSION
+    html = `<div class="step-body">
+      <div class="section-label">Before the MPA Program</div>
+      <div class="field"><label>Immediately before beginning the MPA program, what was your employment status?</label>
+        ${radio('pre_mpa_status',['Employed full-time','Employed part-time','Self-employed','Not employed, seeking employment','Not employed, not seeking employment','Not employed, continuing education','Completing my bachelors degree'])}
+      </div>
+      <div class="field"><label>How many years of professional experience did you have at the time of your entry into the MPA program?</label>
+        ${radio('pre_mpa_experience',['0 to 3 years','4 to 6 years','7 to 9 years','10 or more years'])}
+      </div>
+      <div class="field"><label>What was your annual salary at the time of your entry into the MPA program?</label>
+        ${radio('pre_mpa_salary',['Less than $20,000','$20,001 - $35,000','$35,001 - $50,000','$50,001 - $75,000','$75,001 - $100,000','$100,001 - $125,000','$125,001 - $150,000','$150,000 or more'])}
+      </div>
+
+      <div class="section-label">After the MPA Program</div>
+      <div class="field"><label>Which of the following best describes your situation after completing your MPA education?</label>
+        ${radio('post_mpa_outcome',[
+          'I accepted a job offer/promotion by the time of graduation',
+          'I accepted a job offer/promotion within 3 months of graduation',
+          'I accepted a job offer/promotion within 4 to 6 months of graduation',
+          'I accepted a job offer/promotion within 7 to 9 months of graduation',
+          'I accepted a job offer/promotion 10 months or more after graduation',
+          'I wasn\'t seeking employment',
+          'I continued my education'
+        ])}
+      </div>
+      <div class="field"><label>Did your MPA education directly influence this outcome?</label>
+        ${radio('mpa_influence',['Yes','Somewhat','No'])}
+      </div>
+
+      <div class="field"><label>Please explain how your MPA education influenced this outcome.</label>
+        ${textarea('mpa_influence_explain','Please share more details...')}
+      </div>
+
+      <div class="field"><label>What was your annual salary in this first/new job position?</label>
+        ${radio('first_job_salary',['Less than $20,000','$20,001 - $35,000','$35,001 - $50,000','$50,001 - $75,000','$75,001 - $100,000','$100,001 - $125,000','$125,001 - $150,000','$150,000 or more'])}
+      </div>
+
+      <div class="nav-row"><button class="btn btn-back" onclick="prevStep()">← Back</button><button class="btn btn-next" onclick="nextStep()">Next →</button></div>
+    </div>`;
+
+  } else if (currentStep === 4) {
+    // PROGRAM SATISFACTION
+    html = `<div class="step-body">
+      <div class="section-label">Community & Connections</div>
+      <div class="field"><label>To what extent do you agree with the following statement: The structure of the MPA program made it easy to form meaningful connections with my classmates.</label>
+        ${radio('cohort_connections',['Strongly Agree','Agree','Neutral','Disagree','Strongly Disagree'])}
+      </div>
+      <div class="field"><label>In what ways, if any, have relationships formed during the MPA program continued after graduation? <span style="color:#9b9b9b;font-weight:400">(Select all that apply)</span></label>
+        ${checkbox('alumni_relationships',['Professional networking','Friendship/social connection','Mentorship/support','Collaboration on projects/work','Career opportunities','I have not maintained relationships','Other'])}
+      </div>
+      <div class="field"><label>Please briefly describe how the smaller class/cohort environment shaped your experience in the MPA program.</label>
+        ${textarea('cohort_experience','Share your thoughts...')}
+      </div>
+      <div class="field"><label>How connected do you currently feel to other alumni from your MPA program?</label>
+        ${radio('alumni_connection',['Extremely Connected','Very Connected','Moderately Connected','Slightly Connected','Not At All Connected'])}
+      </div>
+      <div class="field"><label>How often are you currently in contact with other MPA alumni from your cohort or program?</label>
+        ${radio('alumni_contact_freq',['Frequently','Often','Sometimes','Rarely','Never'])}
+      </div>
+
+      <div class="section-label">Overall Satisfaction</div>
+      <div class="field"><label>In your opinion, how important was your MPA degree in advancing your career?</label>
+        ${radio('degree_importance',['Very important','Important','Moderately important','Slightly important','Not important'])}
+      </div>
+      <div class="field"><label>Overall, how satisfied were you with your experience in the MPA program?</label>
+        ${radio('overall_satisfaction',['Very Satisfied','Satisfied','Neutral','Dissatisfied','Very Dissatisfied'])}
+      </div>
+      <div class="field"><label>How likely are you to recommend this MPA program to others?</label>
+        ${radio('recommend',['Very Likely','Likely','Neutral','Unlikely','Very Unlikely'])}
+      </div>
+      <div class="field"><label>Knowing what you know now, would you choose this MPA program again?</label>
+        ${radio('choose_again',['Yes','No','Maybe/Unsure'])}
+      </div>
+      <div class="field"><label>Why or why not?</label>
+        ${textarea('choose_again_why','Please share your reasoning...')}
+      </div>
+
+      <div class="section-label">Program Evaluation</div>
+      <div class="field"><label>What were the primary reasons you chose to enroll in this MPA program? <span style="color:#9b9b9b;font-weight:400">(Select all that apply)</span></label>
+        ${checkbox('enrollment_reasons',['Small class/cohort size','Program reputation','Location','Cost/financial aid','Networking opportunities','Career advancement','Faculty','Flexibility/convenience','Curriculum/course offerings','Recommendation from others','Other'])}
+      </div>
+      <div class="field"><label>In your opinion, how well did the MPA program prepare you professionally?</label>
+        ${radio('professional_prep',['Very well','Well','Moderately well','Not very well','Not at all'])}
+      </div>
+      <div class="field"><label>What specific improvements would you recommend to strengthen the MPA program?</label>
+        ${textarea('program_improvements','Share your suggestions...')}
+      </div>
+      <div class="field"><label>Which of the following do you wish had been a bigger part of your graduate education? <span style="color:#9b9b9b;font-weight:400">(Select all that apply)</span></label>
+        ${checkbox('wished_more',['Team-based assignments','Group facilitation','Writing exercises (e.g. memos, reports, proposals)','Analytics/data modeling','Design and visualization of information','Grant writing','Power analysis frameworks','Trainings in diversity, equity, and inclusion','Projects with community partners/clients','Networking opportunities','Social enterprise and social impact finance','Program and service design','Project management tools and theories','Case studies','Survey design','Other'])}
+      </div>
+
+      <div class="nav-row"><button class="btn btn-back" onclick="prevStep()">← Back</button><button class="btn btn-next" onclick="nextStep()">Next →</button></div>
+    </div>`;
+
+  } else if (currentStep === 5) {
+    // SKILLS & GROWTH
+    const comfortItems = [
+      { key:'comfort_resume', label:'How comfortable are you with your resume, your ability to pitch yourself, and your overall professional identity?' },
+      { key:'comfort_communicate', label:'How comfortable are you to effectively share information, present ideas, and influence audiences?' },
+      { key:'comfort_resources', label:'How comfortable are you to manage an organization\'s resources to achieve priorities and objectives?' },
+      { key:'comfort_data', label:'How comfortable are you to organize, interpret, and evaluate data to transform information into actionable insights?' },
+      { key:'comfort_stakeholders', label:'How comfortable are you to effectively manage interactions with a diverse array of stakeholders to support a collective goal?' },
+      { key:'comfort_leadership', label:'How comfortable are you as an inclusive, adaptive, and culturally competent leader who can effectively align your values and actions?' }
+    ];
+
+    const importanceItems = [
+      'Effective interpersonal communication',
+      'Understanding equity, diversity, and inclusion',
+      'Effective written communication',
+      'Design and visualization of information',
+      'Understanding and leveraging power',
+      'Mobilizing resources',
+      'Teamwork and coalition building',
+      'Leading people toward common goals',
+      'Self-care and establishing personal boundaries',
+      'Budgetary/financial management',
+      'Data management and quantitative analysis',
+      'Strategic program design',
+      'Program evaluation and assessment'
+    ];
+
+    const importanceLevels = ['Not Important','Slightly Important','Moderately Important','Important','Very Important'];
+
+    const comfortRows = comfortItems.map(item => {
+      const val = formData[item.key];
+      const btns = Array.from({length:10},(_,i)=>i+1).map(n =>
+        `<button type="button" class="scale-btn${val===n?' selected':''}" onclick="selectScale('${item.key}',${n},this)">${n}</button>`
+      ).join('');
+      return `<div class="field">
+        <label>${item.label}</label>
+        <div class="scale-row">${btns}</div>
+        <div class="scale-labels"><span>1 — Not Comfortable</span><span>10 — Very Comfortable</span></div>
+      </div>`;
+    }).join('');
+
+    const importanceTableRows = importanceItems.map(skill => {
+      const key = 'imp_' + skill.replace(/[^a-z0-9]/gi,'_').toLowerCase();
+      const val = formData[key] || '';
+      return `<tr>
+        <td>${skill}</td>
+        ${importanceLevels.map(lvl => `<td><input type="radio" class="comp-radio" name="${key}" value="${lvl}" ${val===lvl?'checked':''} onchange="formData['${key}']='${lvl}'"></td>`).join('')}
+      </tr>`;
+    }).join('');
+
+    html = `<div class="step-body">
+      <div class="section-label">Comfort & Confidence</div>
+      <p style="font-size:13px;color:#6b7280;margin-bottom:20px;">On a scale of 1–10, how comfortable are you with each of the following?</p>
+      ${comfortRows}
+
+      <div class="section-label">Skills Importance in Your Field</div>
+      <div class="field"><label>How important do you consider each of the following skills or competencies for success in your field of work?</label></div>
+      <p style="font-size:13px;color:#6b7280;margin-bottom:16px;">Select one response per row.</p>
+      <div style="overflow-x:auto;">
+        <table class="comp-table">
+          <thead><tr>
+            <th>Skill / Competency</th>
+            ${importanceLevels.map(l=>`<th>${l}</th>`).join('')}
+          </tr></thead>
+          <tbody>${importanceTableRows}</tbody>
+        </table>
+      </div>
+
+      <div class="section-label">Emerging Trends</div>
+      <div class="field"><label>Please list any areas of high growth in your field, including emerging knowledge, skills, and competencies that are in high demand.</label>
+        ${textarea('emerging_skills','Share what you\'re seeing in your field...')}
+      </div>
+
+      <div class="nav-row"><button class="btn btn-back" onclick="prevStep()">← Back</button><button class="btn btn-next" onclick="nextStep()">Next →</button></div>
+    </div>`;
+
+  } else if (currentStep === 6) {
+    // ABOUT YOU
+    html = `<div class="step-body">
+      <div class="section-label">Demographics</div>
+      <div class="field"><label>What is your gender identity?</label>
+        ${radio('gender',['Woman','Man','Transgender','Non-binary/non-conforming','Prefer not to respond','Other'])}
+      </div>
+      <div class="conditional${formData['gender']==='Other'?' visible':''}" id="other-gender-wrap">
+        <div class="field"><input type="text" placeholder="Please specify" value="${formData['gender_other']||''}" oninput="formData['gender_other']=this.value"></div>
+      </div>
+
+      <div class="field"><label>Which racial or ethnic identity or identities best describe you? <span style="color:#9b9b9b;font-weight:400">(Check all that apply)</span></label>
+        ${checkbox('race_ethnicity',['American Indian or Alaskan Native','Asian / Pacific Islander','Black or African American','Hispanic or Latina/o','White / Caucasian','Prefer not to answer','Other'])}
+      </div>
+
+      <div class="nav-row">
+        <button class="btn btn-back" onclick="prevStep()">← Back</button>
+        <button class="btn btn-submit" onclick="submitForm()">Submit Survey ✓</button>
+      </div>
+    </div>`;
+  }
+
+  container.innerHTML = html;
+  // Re-run toggles after render
+  toggleWorkFields();
+  toggleLocationFields();
+  toggleSuperviseField();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ─── NAVIGATION ───────────────────────────────────────────────────────────────
+function nextStep() {
+  if (currentStep < steps.length - 1) { currentStep++; renderStep(); }
+}
+function prevStep() {
+  if (currentStep > 0) { currentStep--; renderStep(); }
+}
+
+// ─── SUBMIT ───────────────────────────────────────────────────────────────────
+async function submitForm() {
+  const submitBtn = document.querySelector('.btn-submit');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Submitting…';
+
+  const payload = { ...formData, "Submitted At": new Date().toISOString() };
+
+  try {
+    await fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      mode: 'no-cors'
+    });
+  } catch(e) { console.warn('Submission error:', e); }
+
+  // Show thank you screen
+  document.getElementById('step-tabs').style.display = 'none';
+  document.getElementById('progress-fill').parentElement.style.display = 'none';
+  document.getElementById('step-label').textContent = 'Thank You!';
+  document.getElementById('form-container').innerHTML = `
+    <div class="submitted-screen">
+      <div class="submitted-icon">🎓</div>
+      <h2>Thank you for your response!</h2>
+      <p>Your feedback helps us continue strengthening the MPA program for future students and alumni. We truly appreciate you taking the time to share your experience.</p>
+    </div>`;
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+renderStep();
+</script>
+</body>
+</html>
