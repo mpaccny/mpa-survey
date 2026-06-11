@@ -343,8 +343,8 @@ function renderStep() {
     // CONTACT & BACKGROUND
     html = `<div class="step-body">
       <div class="section-label">Personal Contact Information</div>
-      <div class="field"><label>First Name <span style="color:#9E3039">*</span></label>${textField('first_name','Jane',true)}</div>
-      <div class="field"><label>Last Name <span style="color:#9E3039">*</span></label>${textField('last_name','Doe',true)}</div>
+      <div class="field"><label>First Name <span style="color:#9E3039">*</span></label><input type="text" placeholder="Jane" value="${formData['first_name']||''}" oninput="formData['first_name']=this.value" required style="width:100%;border:1px solid #d1d5db;border-radius:8px;padding:9px 12px;font-size:13px;color:#111;font-family:inherit;"></div>
+      <div class="field"><label>Last Name <span style="color:#9E3039">*</span></label><input type="text" placeholder="Doe" value="${formData['last_name']||''}" oninput="formData['last_name']=this.value" required style="width:100%;border:1px solid #d1d5db;border-radius:8px;padding:9px 12px;font-size:13px;color:#111;font-family:inherit;"></div>
       <div class="field"><label>Preferred Name / Nickname <span style="color:#9b9b9b;font-weight:400">(optional)</span></label>${textField('preferred_name','What should we call you?')}</div>
       <div class="field"><label>Personal Email Address <span style="color:#9E3039">*</span></label>${textField('email','your@email.com','email',true)}</div>
       <div class="field"><label>Phone Number <span style="color:#9b9b9b;font-weight:400">(optional)</span></label>${textField('phone','(212) 000-0000','tel')}</div>
