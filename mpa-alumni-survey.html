@@ -343,10 +343,8 @@ function renderStep() {
     // CONTACT & BACKGROUND
     html = `<div class="step-body">
       <div class="section-label">Personal Contact Information</div>
-      <div class="field-row">
-        <div class="field"><label>First Name <span style="color:#9E3039">*</span></label>${textField('first_name','Jane',true)}</div>
-        <div class="field"><label>Last Name <span style="color:#9E3039">*</span></label>${textField('last_name','Doe',true)}</div>
-      </div>
+      <div class="field"><label>First Name <span style="color:#9E3039">*</span></label>${textField('first_name','Jane',true)}</div>
+      <div class="field"><label>Last Name <span style="color:#9E3039">*</span></label>${textField('last_name','Doe',true)}</div>
       <div class="field"><label>Preferred Name / Nickname <span style="color:#9b9b9b;font-weight:400">(optional)</span></label>${textField('preferred_name','What should we call you?')}</div>
       <div class="field"><label>Personal Email Address <span style="color:#9E3039">*</span></label>${textField('email','your@email.com','email',true)}</div>
       <div class="field"><label>Phone Number <span style="color:#9b9b9b;font-weight:400">(optional)</span></label>${textField('phone','(212) 000-0000','tel')}</div>
