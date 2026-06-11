@@ -173,7 +173,7 @@ const steps = [
   "Welcome",
   "Contact & Background",
   "Current Employment",
-  "Career Progression",
+  "Career Trajectory",
   "Program Satisfaction",
   "Skills & Growth"
 ];
@@ -442,6 +442,7 @@ function renderStep() {
       <div class="section-label">After the MPA Program</div>
       <div class="field"><label>Which of the following best describes your situation after completing your MPA education?</label>
         ${radio('post_mpa_outcome',[
+          'I remained in my current role',
           'I accepted a job offer/promotion by the time of graduation',
           'I accepted a job offer/promotion within 3 months of graduation',
           'I accepted a job offer/promotion within 4 to 6 months of graduation',
@@ -510,11 +511,11 @@ function renderStep() {
       <div class="field"><label>In your opinion, how well did the MPA program prepare you professionally?</label>
         ${radio('professional_prep',['Very well','Well','Moderately well','Not very well','Not at all'])}
       </div>
-      <div class="field"><label>What specific improvements would you recommend to strengthen the MPA program?</label>
-        ${textarea('program_improvements','Share your suggestions...')}
-      </div>
       <div class="field"><label>Which of the following do you wish had been a bigger part of your graduate education? <span style="color:#9b9b9b;font-weight:400">(Select all that apply)</span></label>
         ${checkbox('wished_more',['Team-based assignments','Group facilitation','Writing exercises (e.g. memos, reports, proposals)','Analytics/data modeling','Design and visualization of information','Grant writing','Power analysis frameworks','Trainings in diversity, equity, and inclusion','Projects with community partners/clients','Networking opportunities','Social enterprise and social impact finance','Program and service design','Project management tools and theories','Case studies','Survey design','Other'])}
+      </div>
+      <div class="field"><label>What specific improvements would you recommend to strengthen the MPA program?</label>
+        ${textarea('program_improvements','Share your suggestions...')}
       </div>
 
       <div class="nav-row"><button class="btn btn-back" onclick="prevStep()">← Back</button><button class="btn btn-next" onclick="nextStep()">Next →</button></div>
@@ -571,7 +572,7 @@ function renderStep() {
     }).join('');
 
     html = `<div class="step-body">
-      <div class="section-label">Comfort & Confidence</div>
+      <div class="section-label">Core Competencies</div>
       <p style="font-size:13px;color:#6b7280;margin-bottom:20px;">On a scale of 1–10, how comfortable are you with each of the following?</p>
       ${comfortRows}
 
