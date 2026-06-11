@@ -81,6 +81,12 @@
       </div>
 
       <div class="field">
+        <label>Preferred Email Address <span>*</span></label>
+        <input type="email" id="email" placeholder="e.g. jane.smith@email.com" oninput="updateProgress()" />
+        <div class="error-msg" id="err-email"></div>
+      </div>
+
+      <div class="field">
         <label>Select the week you are submitting hours for <span>*</span></label>
         <div class="cal-nav">
           <button onclick="prevMonth()" aria-label="Previous month"><i class="ti ti-arrow-left"></i></button>
@@ -245,15 +251,19 @@
     function updateProgress() {
       let score = 0;
       if (document.getElementById('name').value.trim()) score++;
+      if (document.getElementById('email').value.trim()) score++;
       if (selectedWeek) score++;
       if (document.getElementById('hours').value) score++;
-      document.getElementById('prog').style.width = (score / 3 * 100) + '%';
+      document.getElementById('prog').style.width = (score / 4 * 100) + '%';
     }
 
     function validate() {
       let ok = true;
-      ['err-name','err-week','err-hours'].forEach(id => document.getElementById(id).textContent = '');
+      ['err-name','err-email','err-week','err-hours'].forEach(id => document.getElementById(id).textContent = '');
       if (!document.getElementById('name').value.trim()) { document.getElementById('err-name').textContent = 'Please enter your name.'; ok = false; }
+      const emailVal = document.getElementById('email').value.trim();
+      if (!emailVal) { document.getElementById('err-email').textContent = 'Please enter your email address.'; ok = false; }
+      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) { document.getElementById('err-email').textContent = 'Please enter a valid email address.'; ok = false; }
       if (!selectedWeek) { document.getElementById('err-week').textContent = 'Please select a week from the calendar.'; ok = false; }
       const h = parseFloat(document.getElementById('hours').value);
       if (isNaN(h) || h <= 0) { document.getElementById('err-hours').textContent = 'Please enter a valid number of hours.'; ok = false; }
@@ -279,6 +289,7 @@
       try {
         const formData = new FormData();
         formData.append('First & Last Name', payload.fields['First & Last Name']);
+        formData.append('Preferred Email', document.getElementById('email').value.trim());
         formData.append('Week', payload.fields['Week']);
         formData.append('Hours Completed', payload.fields['Hours Completed']);
         formData.append('Semester', payload.fields['Semester']);
@@ -299,6 +310,7 @@
 
     function resetForm() {
       document.getElementById('name').value = '';
+      document.getElementById('email').value = '';
       document.getElementById('hours').value = '';
       document.getElementById('status').textContent = '';
       document.getElementById('submit-btn').disabled = false;
