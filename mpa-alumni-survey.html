@@ -31,8 +31,8 @@
   .header h1 { color: white; font-size: 22px; font-weight: 700; margin-bottom: 4px; }
   .header-sub { color: #f5c6c8; font-size: 12px; }
   /* PROGRESS */
-  .progress-bar-bg { background: #f5c6c8; height: 5px; }
-  .progress-bar-fill { background: #9E3039; height: 5px; transition: width 0.4s ease; }
+  .progress-bar-bg { background: #fecaca; height: 18px; }
+  .progress-bar-fill { background: #9E3039; height: 18px; transition: width 0.4s ease; display:flex; align-items:center; justify-content:flex-end; }
   /* STEP TABS */
   .step-tabs { display: flex; border-bottom: 1px solid #e5e7eb; overflow-x: auto; }
   .step-tab {
@@ -149,7 +149,10 @@
   </div>
 
   <!-- PROGRESS -->
-  <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div>
+  <div id="progress-wrap">
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-fill" style="width:0%"><span id="progress-pct" style="color:white;font-size:11px;font-weight:600;padding-right:8px;display:none;"></span></div></div>
+    <div id="progress-msg" style="background:#fff5f5;color:#9E3039;font-size:12px;text-align:center;padding:6px 16px;font-weight:500;"></div>
+  </div>
 
   <!-- STEP TABS -->
   <div class="step-tabs" id="step-tabs"></div>
@@ -192,8 +195,20 @@ function renderTabs() {
     return `<button class="${cls}" onclick="${onclick}">${s}</button>`;
   }).join("");
   document.getElementById("step-label").textContent = `Step ${currentStep + 1} of ${steps.length} — ${steps[currentStep]}`;
-  const pct = (currentStep / (steps.length - 1)) * 100;
+  const pct = Math.round((currentStep / (steps.length - 1)) * 100);
   document.getElementById("progress-fill").style.width = pct + "%";
+  const pctEl = document.getElementById("progress-pct");
+  pctEl.textContent = pct + "%";
+  pctEl.style.display = pct > 15 ? "block" : "none";
+  const messages = [
+    "👋 Let's get started!",
+    "⏱ About 20 minutes remaining — 4 sections to go!",
+    "⏱ About 15 minutes remaining — 3 sections to go!",
+    "⏱ About 10 minutes remaining — 2 sections to go!",
+    "⏱ Almost there — last 2 sections!",
+    "🎉 Final section! You're almost finished."
+  ];
+  document.getElementById("progress-msg").textContent = messages[currentStep] || "";
 }
 
 function goToStep(i) {
@@ -345,7 +360,7 @@ function renderStep() {
       <div class="section-label">Personal Contact Information</div>
       <div class="field"><label>First Name <span style="color:#9E3039">*</span></label><input type="text" placeholder="Jane" value="${formData['first_name']||''}" oninput="formData['first_name']=this.value" required style="width:100%;border:1px solid #d1d5db;border-radius:8px;padding:9px 12px;font-size:13px;color:#111;font-family:inherit;"></div>
       <div class="field"><label>Last Name <span style="color:#9E3039">*</span></label><input type="text" placeholder="Doe" value="${formData['last_name']||''}" oninput="formData['last_name']=this.value" required style="width:100%;border:1px solid #d1d5db;border-radius:8px;padding:9px 12px;font-size:13px;color:#111;font-family:inherit;"></div>
-      <div class="field"><label>Preferred Name / Nickname <span style="color:#9b9b9b;font-weight:400">(optional)</span></label>${textField('preferred_name','What should we call you?')}</div>
+      <div class="field"><label>Preferred Name <span style="color:#9b9b9b;font-weight:400">(optional)</span></label>${textField('preferred_name','What should we call you?')}</div>
       <div class="field"><label>Personal Email Address <span style="color:#9E3039">*</span></label>${textField('email','your@email.com','email',true)}</div>
       <div class="field"><label>Phone Number <span style="color:#9b9b9b;font-weight:400">(optional)</span></label>${textField('phone','(212) 000-0000','tel')}</div>
       <div class="field"><label>Preferred Method of Contact</label>${radio('contact_method',['Email','Phone'])}</div>
