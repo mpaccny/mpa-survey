@@ -144,7 +144,7 @@
   <!-- HEADER -->
   <div class="header">
     <img src="https://res.cloudinary.com/dd6ithavb/image/upload/v1774556192/MPA-type-icon_i48cxj.jpg" alt="MPA Program Logo" style="height:40px; object-fit:contain; display:block; margin-bottom:12px; background:white; padding:6px 12px; border-radius:6px;" />
-    <h1>Alumni Impact Survey</h1>
+    <h1>MPA Alumni Impact Survey</h1>
     <div class="header-sub" id="step-label">Welcome</div>
   </div>
 
@@ -174,11 +174,11 @@ const WEBHOOK_URL = "https://hook.us2.make.com/homf717hc2r48qjgk3gimcgi6j73qols"
 
 const steps = [
   "Welcome",
-  "Contact & Background",
-  "Current Employment",
+  "About You",
+  "Professional Background",
+  "Skills & Growth",
   "Career Trajectory",
-  "Program Satisfaction",
-  "Skills & Growth"
+  "Program Satisfaction"
 ];
 
 let currentStep = 0;
@@ -201,11 +201,11 @@ function renderTabs() {
   pctEl.textContent = pct + "%";
   pctEl.style.display = pct > 15 ? "block" : "none";
   const messages = [
-    "👋 Let's get started!",
-    "⏱ About 20 minutes remaining — 4 sections to go!",
-    "⏱ About 15 minutes remaining — 3 sections to go!",
-    "⏱ About 10 minutes remaining — 2 sections to go!",
-    "⏱ Almost there — last 2 sections!",
+    "⏱ Estimated time to complete: approximately 15 minutes",
+    "⏱ About 12 minutes remaining — 4 sections to go",
+    "⏱ About 9 minutes remaining — 3 sections to go",
+    "⏱ About 6 minutes remaining — 2 sections to go",
+    "⏱ About 3 minutes remaining — 1 section to go",
     "🎉 Final section! You're almost finished."
   ];
   document.getElementById("progress-msg").textContent = messages[currentStep] || "";
@@ -346,10 +346,10 @@ function renderStep() {
     // WELCOME
     html = `<div class="step-body">
       <div class="welcome-title">Welcome, MPA Alumni!</div>
-      <p class="welcome-intro">The MPA Alumni Impact Survey currently collects meaningful data about alumni employment and reflections on the program. Your responses will provide crucial information about how our program has impacted your career path, and how we can better serve our students and alumni community in the future.</p>
+      <p class="welcome-intro">Thank you for taking a few minutes to complete the MPA Alumni Impact Survey. Your responses help us understand how the program has shaped your career and how we can continue to strengthen the MPA experience for current and future students. We are grateful for your time and your ongoing connection to the MPA community. For any questions, contact us at: <a href="mailto:mpa@ccny.cuny.edu" style="color:#9E3039;font-weight:600;">mpa@ccny.cuny.edu</a></p>
       <div class="disclaimer-box">
         <strong>Important Note</strong>
-        Survey responses will only be viewed by the MPA team. Any information shared publicly or included in reports will be presented only in aggregate form, and all personally identifiable information will be removed to protect participant confidentiality. We greatly appreciate your transparency and honest feedback, as your responses help us strengthen and improve the fellowship experience for future participants.
+        Survey responses will only be viewed by the MPA team. Any information shared publicly or included in reports will be presented only in aggregate form, and all personally identifiable information will be removed to protect participant confidentiality. We greatly appreciate your transparency and honest feedback, as your responses help us strengthen and improve the MPA experience for future participants.
       </div>
       <div class="nav-row"><div></div><button class="btn btn-next" onclick="nextStep()">Begin Survey →</button></div>
     </div>`;
@@ -357,15 +357,13 @@ function renderStep() {
   } else if (currentStep === 1) {
     // CONTACT & BACKGROUND
     html = `<div class="step-body">
-      <div class="section-label">Personal Contact Information</div>
+      
       <div class="field"><label>First Name <span style="color:#9E3039">*</span></label><input type="text" placeholder="Jane" value="${formData['first_name']||''}" oninput="formData['first_name']=this.value" required style="width:100%;border:1px solid #d1d5db;border-radius:8px;padding:9px 12px;font-size:13px;color:#111;font-family:inherit;"></div>
       <div class="field"><label>Last Name <span style="color:#9E3039">*</span></label><input type="text" placeholder="Doe" value="${formData['last_name']||''}" oninput="formData['last_name']=this.value" required style="width:100%;border:1px solid #d1d5db;border-radius:8px;padding:9px 12px;font-size:13px;color:#111;font-family:inherit;"></div>
-      <div class="field"><label>Preferred Name <span style="color:#9b9b9b;font-weight:400">(optional)</span></label>${textField('preferred_name','What should we call you?')}</div>
-      <div class="field"><label>Personal Email Address <span style="color:#9E3039">*</span></label>${textField('email','your@email.com','email',true)}</div>
-      <div class="field"><label>Phone Number <span style="color:#9b9b9b;font-weight:400">(optional)</span></label>${textField('phone','(212) 000-0000','tel')}</div>
-      <div class="field"><label>Preferred Method of Contact</label>${radio('contact_method',['Email','Phone'])}</div>
+      <div class="field"><label>Personal Email Address</label>${textField('email','your@email.com','email')}</div>
+      <div class="field"><label>Phone Number</label>${textField('phone','(212) 000-0000','tel')}</div>
 
-      <div class="section-label">Identity & Background <span style="color:#9b9b9b;font-weight:400;font-size:11px;text-transform:none;letter-spacing:0">(optional)</span></div>
+      
       <div class="field"><label>What is your gender identity?</label>
         ${radio('gender',['Woman','Man','Transgender','Non-binary/non-conforming','Prefer not to respond','Other'])}
       </div>
@@ -382,13 +380,13 @@ function renderStep() {
   } else if (currentStep === 2) {
     // CURRENT EMPLOYMENT
     html = `<div class="step-body">
-      <div class="section-label">Current Work Status</div>
+      
       <div class="field"><label>Which of the following best describes your current work status?</label>
         ${radio('work_status',['Employed full-time','Employed part-time','Self-employed','Not employed, seeking employment','Not employed, not seeking employment','Not employed, continuing education'])}
       </div>
 
       <div id="employment-details" style="display:${(['Employed full-time','Employed part-time','Self-employed'].includes(formData['work_status']))?'block':'none'}">
-        <div class="section-label">Current Organization</div>
+        
         <div class="field"><label>Which of the following best describes the type of organization or sector you currently work in?</label>
           ${radio('org_sector',['City, county or other local government','Federal government (except military)','Government outside U.S.','Nonprofit / NGO','Private sector / Social Enterprise','State, provincial or regional government','U.S. Military','International, multilateral or bilateral organization'])}
         </div>
@@ -396,7 +394,7 @@ function renderStep() {
         <div class="field"><label>Job Title</label>${textField('job_title','Your title')}</div>
         <div class="field"><label>Your Role / Function</label><div class="hint">Briefly describe what you do day-to-day</div>${textarea('job_role','Describe your primary responsibilities...')}</div>
 
-        <div class="section-label">Work Location</div>
+        
         <div class="field"><label>Where is your workplace located?</label>
           ${radio('work_location_type',['In-State (New York)','Out-of-State','International'])}
         </div>
@@ -404,7 +402,7 @@ function renderStep() {
           <div class="field"><label id="loc-detail-label">Please specify location</label>${textField('work_location_detail','e.g. New York City')}</div>
         </div>
 
-        <div class="section-label">Issue Area & Role</div>
+        
         <div class="field"><label>Which of the following best describes the issue area you currently work on?</label>
           ${radio('issue_area',['Animal Rights','Arts & Culture','Children & Youth','Civic Engagement & Community Development','Comptrolling & Anti-corruption','Criminal Justice','Economic Development & Poverty Alleviation','Education','Environment & Sustainability','Food Security & Agriculture','Gender Equality, Racial Justice, LGBTQIA+ & Human Rights','Health','International Relations & Development','Media & News Broadcasting','Public Safety & Disaster Relief','Religion & Spirituality','Science & Technology','Social Services','Urban Development, Housing, & Transportation','Other'])}
         </div>
@@ -429,7 +427,7 @@ function renderStep() {
           ${checkbox('advancements',['A promotion','An increase in the number of projects/portfolios/clients/budget responsible for','An increase in your decision-making authority','An increase in the number of people you supervise','N/A'])}
         </div>
 
-        <div class="section-label">Current Compensation</div>
+        
         <div class="field"><label>What is your current annual salary?</label>
           ${radio('current_salary',['Less than $20,000','$20,001 - $35,000','$35,001 - $50,000','$50,001 - $75,000','$75,001 - $100,000','$100,001 - $125,000','$125,001 - $150,000','$150,000 or more'])}
         </div>
@@ -438,10 +436,10 @@ function renderStep() {
       <div class="nav-row"><button class="btn btn-back" onclick="prevStep()">← Back</button><button class="btn btn-next" onclick="nextStep()">Next →</button></div>
     </div>`;
 
-  } else if (currentStep === 3) {
+  } else if (currentStep === 4) {
     // CAREER PROGRESSION
     html = `<div class="step-body">
-      <div class="section-label">Before the MPA Program</div>
+      
       <div class="field"><label>Immediately before beginning the MPA program, what was your employment status?</label>
         ${radio('pre_mpa_status',['Employed full-time','Employed part-time','Self-employed','Not employed, seeking employment','Not employed, not seeking employment','Not employed, continuing education','Completing my bachelors degree'])}
       </div>
@@ -452,8 +450,8 @@ function renderStep() {
         ${radio('pre_mpa_salary',['Less than $20,000','$20,001 - $35,000','$35,001 - $50,000','$50,001 - $75,000','$75,001 - $100,000','$100,001 - $125,000','$125,001 - $150,000','$150,000 or more'])}
       </div>
 
-      <div class="section-label">After the MPA Program</div>
-      <div class="field"><label>Which of the following best describes your situation after completing your MPA education?</label>
+      
+      <div class="field"><label>Which of the following best describes your situation after completing your MPA degree?</label>
         ${radio('post_mpa_outcome',[
           'I remained in my current role',
           'I accepted a job offer/promotion by the time of graduation',
@@ -465,7 +463,7 @@ function renderStep() {
           'I continued my education'
         ])}
       </div>
-      <div class="field"><label>Did your MPA education directly influence this outcome?</label>
+      <div class="field"><label>Did your MPA degree directly influence this outcome?</label>
         ${radio('mpa_influence',['Yes','Somewhat','No'])}
       </div>
 
@@ -480,10 +478,10 @@ function renderStep() {
       <div class="nav-row"><button class="btn btn-back" onclick="prevStep()">← Back</button><button class="btn btn-next" onclick="nextStep()">Next →</button></div>
     </div>`;
 
-  } else if (currentStep === 4) {
+  } else if (currentStep === 5) {
     // PROGRAM SATISFACTION
     html = `<div class="step-body">
-      <div class="section-label">Community & Connections</div>
+      
       <div class="field"><label>To what extent do you agree with the following statement: The structure of the MPA program made it easy to form meaningful connections with my classmates.</label>
         ${radio('cohort_connections',['Strongly Agree','Agree','Neutral','Disagree','Strongly Disagree'])}
       </div>
@@ -500,7 +498,7 @@ function renderStep() {
         ${radio('alumni_contact_freq',['Frequently','Often','Sometimes','Rarely','Never'])}
       </div>
 
-      <div class="section-label">Overall Satisfaction</div>
+      
       <div class="field"><label>In your opinion, how important was your MPA degree in advancing your career?</label>
         ${radio('degree_importance',['Very important','Important','Moderately important','Slightly important','Not important'])}
       </div>
@@ -517,7 +515,7 @@ function renderStep() {
         ${textarea('choose_again_why','Please share your reasoning...')}
       </div>
 
-      <div class="section-label">Program Evaluation</div>
+      
       <div class="field"><label>What were the primary reasons you chose to enroll in this MPA program? <span style="color:#9b9b9b;font-weight:400">(Select all that apply)</span></label>
         ${checkbox('enrollment_reasons',['Small class/cohort size','Program reputation','Location','Cost/financial aid','Networking opportunities','Career advancement','Faculty','Flexibility/convenience','Curriculum/course offerings','Recommendation from others','Other'])}
       </div>
@@ -531,10 +529,10 @@ function renderStep() {
         ${textarea('program_improvements','Share your suggestions...')}
       </div>
 
-      <div class="nav-row"><button class="btn btn-back" onclick="prevStep()">← Back</button><button class="btn btn-next" onclick="nextStep()">Next →</button></div>
+      <div class="nav-row"><button class="btn btn-back" onclick="prevStep()">← Back</button><button class="btn btn-submit" onclick="submitForm()">Submit Survey ✓</button></div>
     </div>`;
 
-  } else if (currentStep === 5) {
+  } else if (currentStep === 3) {
     // SKILLS & GROWTH
     const comfortItems = [
       { key:'comfort_resume', label:'How comfortable are you with your resume, your ability to pitch yourself, and your overall professional identity?' },
@@ -555,6 +553,7 @@ function renderStep() {
       'Teamwork and coalition building',
       'Leading people toward common goals',
       'Self-care and establishing personal boundaries',
+      'Project and timeline management',
       'Budgetary/financial management',
       'Data management and quantitative analysis',
       'Strategic program design',
@@ -585,11 +584,11 @@ function renderStep() {
     }).join('');
 
     html = `<div class="step-body">
-      <div class="section-label">Core Competencies</div>
+      
       <p style="font-size:13px;color:#6b7280;margin-bottom:20px;">On a scale of 1–10, how comfortable are you with each of the following?</p>
       ${comfortRows}
 
-      <div class="section-label">Skills Importance in Your Field</div>
+      
       <div class="field"><label>How important do you consider each of the following skills or competencies for success in your field of work?</label></div>
       <p style="font-size:13px;color:#6b7280;margin-bottom:16px;">Select one response per row.</p>
       <div style="overflow-x:auto;">
@@ -602,12 +601,12 @@ function renderStep() {
         </table>
       </div>
 
-      <div class="section-label">Emerging Trends</div>
+      
       <div class="field"><label>Please list any areas of high growth in your field, including emerging knowledge, skills, and competencies that are in high demand.</label>
         ${textarea('emerging_skills','Share what you\'re seeing in your field...')}
       </div>
 
-      <div class="nav-row"><button class="btn btn-back" onclick="prevStep()">← Back</button><button class="btn btn-submit" onclick="submitForm()">Submit Survey ✓</button></div>
+      <div class="nav-row"><button class="btn btn-back" onclick="prevStep()">← Back</button><button class="btn btn-next" onclick="nextStep()">Next →</button></div>
     </div>`;
 
   }
