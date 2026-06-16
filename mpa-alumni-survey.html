@@ -206,7 +206,7 @@ function renderTabs() {
     "⏱ About 9 minutes remaining — 3 sections to go",
     "⏱ About 6 minutes remaining — 2 sections to go",
     "⏱ About 3 minutes remaining — 1 section to go",
-    "🎉 Survey complete — thank you for your contribution!"
+    "🎉 Final section — you're almost done!"
   ];
   document.getElementById("progress-msg").textContent = messages[currentStep] || "";
 }
@@ -647,6 +647,7 @@ async function submitForm() {
   // Show thank you screen
   document.getElementById('step-tabs').style.display = 'none';
   document.getElementById('progress-fill').parentElement.style.display = 'none';
+  document.getElementById('progress-msg').textContent = '🎉 Survey complete — thank you for your contribution!';
   document.getElementById('step-label').textContent = 'Thank You!';
   document.getElementById('form-container').innerHTML = `
     <div class="submitted-screen">
