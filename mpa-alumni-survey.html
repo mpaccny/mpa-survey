@@ -278,7 +278,9 @@ function selectRadio(name, val, el) {
   // specific conditionals
   if (name === 'work_status') toggleWorkFields();
   if (name === 'work_location_type') toggleLocationFields();
+  if (name === 'recent_work_location_type') toggleLocationFields();
   if (name === 'supervise') toggleSuperviseField();
+  if (name === 'recent_supervise') toggleSuperviseField();
   if (name === 'gender') {
     const genderWrap = document.getElementById('other-gender-wrap');
     if (genderWrap) genderWrap.classList.toggle('visible', val === 'Other');
@@ -302,9 +304,12 @@ function selectScale(name, val, el) {
 
 function toggleWorkFields() {
   const status = formData['work_status'] || '';
-  const show = ['Employed full-time','Employed part-time','Self-employed'].includes(status);
-  const el = document.getElementById('employment-details');
-  if (el) el.style.display = show ? 'block' : 'none';
+  const employed = ['Employed full-time','Employed part-time','Self-employed'].includes(status);
+  const notEmployed = ['Not employed, seeking employment','Not employed, not seeking employment','Not employed, continuing education'].includes(status);
+  const empEl = document.getElementById('employment-details');
+  const recentEl = document.getElementById('recent-employment-details');
+  if (empEl) empEl.style.display = employed ? 'block' : 'none';
+  if (recentEl) recentEl.style.display = notEmployed ? 'block' : 'none';
 }
 
 function toggleLocationFields() {
@@ -312,21 +317,21 @@ function toggleLocationFields() {
   const el = document.getElementById('loc-detail');
   const label = document.getElementById('loc-detail-label');
   const input = el ? el.querySelector('input') : null;
-  if (!el) return;
-  if (type === 'In-State (New York)') {
-    el.style.display = 'block';
-    if (label) label.textContent = 'City / Borough';
-    if (input) input.placeholder = 'e.g. New York City, Albany';
-  } else if (type === 'Out-of-State') {
-    el.style.display = 'block';
-    if (label) label.textContent = 'State';
-    if (input) input.placeholder = 'e.g. New Jersey, California';
-  } else if (type === 'International') {
-    el.style.display = 'block';
-    if (label) label.textContent = 'Country / Region';
-    if (input) input.placeholder = 'e.g. Kenya, European Union';
-  } else {
-    el.style.display = 'none';
+  if (el) {
+    if (type === 'In-State (New York)') { el.style.display='block'; if(label) label.textContent='City / Borough'; if(input) input.placeholder='e.g. New York City, Albany'; }
+    else if (type === 'Out-of-State') { el.style.display='block'; if(label) label.textContent='State'; if(input) input.placeholder='e.g. New Jersey, California'; }
+    else if (type === 'International') { el.style.display='block'; if(label) label.textContent='Country / Region'; if(input) input.placeholder='e.g. Kenya, European Union'; }
+    else { el.style.display='none'; }
+  }
+  const recentType = formData['recent_work_location_type'] || '';
+  const recentEl = document.getElementById('recent-loc-detail');
+  const recentLabel = document.getElementById('recent-loc-detail-label');
+  const recentInput = recentEl ? recentEl.querySelector('input') : null;
+  if (recentEl) {
+    if (recentType === 'In-State (New York)') { recentEl.style.display='block'; if(recentLabel) recentLabel.textContent='City / Borough'; if(recentInput) recentInput.placeholder='e.g. New York City, Albany'; }
+    else if (recentType === 'Out-of-State') { recentEl.style.display='block'; if(recentLabel) recentLabel.textContent='State'; if(recentInput) recentInput.placeholder='e.g. New Jersey, California'; }
+    else if (recentType === 'International') { recentEl.style.display='block'; if(recentLabel) recentLabel.textContent='Country / Region'; if(recentInput) recentInput.placeholder='e.g. Kenya, European Union'; }
+    else { recentEl.style.display='none'; }
   }
 }
 
@@ -334,6 +339,9 @@ function toggleSuperviseField() {
   const val = formData['supervise'];
   const el = document.getElementById('supervise-count-wrap');
   if (el) el.style.display = val === 'Yes' ? 'block' : 'none';
+  const recentVal = formData['recent_supervise'];
+  const recentEl = document.getElementById('recent-supervise-count-wrap');
+  if (recentEl) recentEl.style.display = recentVal === 'Yes' ? 'block' : 'none';
 }
 
 // ─── STEPS ────────────────────────────────────────────────────────────────────
@@ -385,6 +393,7 @@ function renderStep() {
         ${radio('work_status',['Employed full-time','Employed part-time','Self-employed','Not employed, seeking employment','Not employed, not seeking employment','Not employed, continuing education'])}
       </div>
 
+      <!-- CURRENTLY EMPLOYED -->
       <div id="employment-details" style="display:${(['Employed full-time','Employed part-time','Self-employed'].includes(formData['work_status']))?'block':'none'}">
         
         <div class="field"><label>Which of the following best describes the type of organization or sector you currently work in?</label>
@@ -393,43 +402,75 @@ function renderStep() {
         <div class="field"><label>Organization Name</label>${textField('org_name','Name of your organization')}</div>
         <div class="field"><label>Job Title</label>${textField('job_title','Your title')}</div>
         <div class="field"><label>Your Role / Function</label><div class="hint">Briefly describe what you do day-to-day</div>${textarea('job_role','Describe your primary responsibilities...')}</div>
-
-        
         <div class="field"><label>Where is your workplace located?</label>
           ${radio('work_location_type',['In-State (New York)','Out-of-State','International'])}
         </div>
         <div id="loc-detail" style="display:${formData['work_location_type']?'block':'none'}">
           <div class="field"><label id="loc-detail-label">Please specify location</label>${textField('work_location_detail','e.g. New York City')}</div>
         </div>
-
-        
         <div class="field"><label>Which of the following best describes the issue area you currently work on?</label>
           ${radio('issue_area',['Animal Rights','Arts & Culture','Children & Youth','Civic Engagement & Community Development','Comptrolling & Anti-corruption','Criminal Justice','Economic Development & Poverty Alleviation','Education','Environment & Sustainability','Food Security & Agriculture','Gender Equality, Racial Justice, LGBTQIA+ & Human Rights','Health','International Relations & Development','Media & News Broadcasting','Public Safety & Disaster Relief','Religion & Spirituality','Science & Technology','Social Services','Urban Development, Housing, & Transportation','Other'])}
         </div>
         <div class="conditional${formData['issue_area']==='Other'?' visible':''}" id="other-issue_area-wrap">
           <div class="field"><input type="text" placeholder="Please specify" value="${formData['issue_area_other']||''}" oninput="formData['issue_area_other']=this.value"></div>
         </div>
-
-        <div class="field"><label>Which of the following best describe your current job role or roles? <span style="color:#9b9b9b;font-weight:400">(Select all that apply)</span></label>
+        <div class="field"><label>Which of the following best describes your current job role or roles? <span style="color:#9b9b9b;font-weight:400">(Select all that apply)</span></label>
           ${checkbox('job_roles',['Advocacy, lobbying, or legislative work','Budgeting, finance, or contract administration','Communications, outreach, public relations','Community organizing','Consulting','Development, fundraising','Direct service provision','Executive leadership, senior management','Human resources management','Policy analysis','Program development or implementation','Program evaluation, assessment','Research, data analysis','Teaching, training','Other'])}
         </div>
-
+        <div class="conditional${(formData['job_roles']||[]).includes('Other')?' visible':''}" id="other-job_roles-wrap">
+          <div class="field"><input type="text" placeholder="Please specify" value="${formData['job_roles_other']||''}" oninput="formData['job_roles_other']=this.value"></div>
+        </div>
         <div class="field"><label>Do you supervise or manage people? If so, how many?</label>
           ${radio('supervise',['Yes','No'])}
         </div>
         <div id="supervise-count-wrap" style="display:${formData['supervise']==='Yes'?'block':'none'}">
           <div class="field"><label>How many people do you supervise?</label>${textField('supervise_count','e.g. 3')}</div>
         </div>
-
         <div class="field"><label>How long have you occupied your current position?</label>${textField('time_in_role','e.g. 2 years')}</div>
-
         <div class="field"><label>Which of the following have you had in your current place of employment? <span style="color:#9b9b9b;font-weight:400">(Select all that apply)</span></label>
           ${checkbox('advancements',['A promotion','An increase in the number of projects/portfolios/clients/budget responsible for','An increase in your decision-making authority','An increase in the number of people you supervise','N/A'])}
         </div>
-
-        
         <div class="field"><label>What is your current annual salary?</label>
-          ${radio('current_salary',['Less than $20,000','$20,001 - $35,000','$35,001 - $50,000','$50,001 - $75,000','$75,001 - $100,000','$100,001 - $125,000','$125,001 - $150,000','$150,000 or more'])}
+          ${radio('current_salary',['Less than $20,000','$20,000 - $35,000','$35,000 - $50,000','$50,000 - $75,000','$75,000 - $100,000','$100,000 - $125,000','$125,000 - $150,000','$150,000 or more'])}
+        </div>
+      </div>
+
+      <!-- NOT CURRENTLY EMPLOYED -->
+      <div id="recent-employment-details" style="display:${(['Not employed, seeking employment','Not employed, not seeking employment','Not employed, continuing education'].includes(formData['work_status']))?'block':'none'}">
+
+        <div class="field"><label>Which of the following best describes the type of organization or sector you most recently worked in?</label>
+          ${radio('recent_org_sector',['City, county or other local government','Federal government (except military)','Government outside U.S.','Nonprofit / NGO','Private sector / Social Enterprise','State, provincial or regional government','U.S. Military','International, multilateral or bilateral organization'])}
+        </div>
+        <div class="field"><label>Most Recent Organization Name</label>${textField('recent_org_name','Name of your most recent organization')}</div>
+        <div class="field"><label>Most Recent Job Title</label>${textField('recent_job_title','Your most recent title')}</div>
+        <div class="field"><label>Most Recent Role / Function</label><div class="hint">Briefly describe what you did day-to-day</div>${textarea('recent_job_role','Describe your primary responsibilities...')}</div>
+        <div class="field"><label>Where was your workplace located?</label>
+          ${radio('recent_work_location_type',['In-State (New York)','Out-of-State','International'])}
+        </div>
+        <div id="recent-loc-detail" style="display:${formData['recent_work_location_type']?'block':'none'}">
+          <div class="field"><label id="recent-loc-detail-label">Please specify location</label>${textField('recent_work_location_detail','e.g. New York City')}</div>
+        </div>
+        <div class="field"><label>Which of the following best describes the issue area you most recently worked on?</label>
+          ${radio('recent_issue_area',['Animal Rights','Arts & Culture','Children & Youth','Civic Engagement & Community Development','Comptrolling & Anti-corruption','Criminal Justice','Economic Development & Poverty Alleviation','Education','Environment & Sustainability','Food Security & Agriculture','Gender Equality, Racial Justice, LGBTQIA+ & Human Rights','Health','International Relations & Development','Media & News Broadcasting','Public Safety & Disaster Relief','Religion & Spirituality','Science & Technology','Social Services','Urban Development, Housing, & Transportation','Other'])}
+        </div>
+        <div class="conditional${formData['recent_issue_area']==='Other'?' visible':''}" id="other-recent_issue_area-wrap">
+          <div class="field"><input type="text" placeholder="Please specify" value="${formData['recent_issue_area_other']||''}" oninput="formData['recent_issue_area_other']=this.value"></div>
+        </div>
+        <div class="field"><label>Which of the following best describes your most recent job role? <span style="color:#9b9b9b;font-weight:400">(Select all that apply)</span></label>
+          ${checkbox('recent_job_roles',['Advocacy, lobbying, or legislative work','Budgeting, finance, or contract administration','Communications, outreach, public relations','Community organizing','Consulting','Development, fundraising','Direct service provision','Executive leadership, senior management','Human resources management','Policy analysis','Program development or implementation','Program evaluation, assessment','Research, data analysis','Teaching, training','Other'])}
+        </div>
+        <div class="conditional${(formData['recent_job_roles']||[]).includes('Other')?' visible':''}" id="other-recent_job_roles-wrap">
+          <div class="field"><input type="text" placeholder="Please specify" value="${formData['recent_job_roles_other']||''}" oninput="formData['recent_job_roles_other']=this.value"></div>
+        </div>
+        <div class="field"><label>In your most recent role, did you supervise or manage people? If so, how many?</label>
+          ${radio('recent_supervise',['Yes','No'])}
+        </div>
+        <div id="recent-supervise-count-wrap" style="display:${formData['recent_supervise']==='Yes'?'block':'none'}">
+          <div class="field"><label>How many people did you supervise?</label>${textField('recent_supervise_count','e.g. 3')}</div>
+        </div>
+        <div class="field"><label>How long did you occupy your last position?</label>${textField('recent_time_in_role','e.g. 2 years')}</div>
+        <div class="field"><label>What was your most recent annual salary?</label>
+          ${radio('recent_salary',['Less than $20,000','$20,000 - $35,000','$35,000 - $50,000','$50,000 - $75,000','$75,000 - $100,000','$100,000 - $125,000','$125,000 - $150,000','$150,000 or more'])}
         </div>
       </div>
 
@@ -447,7 +488,7 @@ function renderStep() {
         ${radio('pre_mpa_experience',['0 to 3 years','4 to 6 years','7 to 9 years','10 or more years'])}
       </div>
       <div class="field"><label>What was your annual salary at the time of your entry into the MPA program?</label>
-        ${radio('pre_mpa_salary',['Less than $20,000','$20,001 - $35,000','$35,001 - $50,000','$50,001 - $75,000','$75,001 - $100,000','$100,001 - $125,000','$125,001 - $150,000','$150,000 or more'])}
+        ${radio('pre_mpa_salary',['Less than $20,000','$20,000 - $35,000','$35,000 - $50,000','$50,000 - $75,000','$75,000 - $100,000','$100,000 - $125,000','$125,000 - $150,000','$150,000 or more'])}
       </div>
 
       
@@ -471,8 +512,11 @@ function renderStep() {
         ${textarea('mpa_influence_explain','Please share more details...')}
       </div>
 
-      <div class="field"><label>What was your annual salary in this first/new job position?</label>
-        ${radio('first_job_salary',['Less than $20,000','$20,001 - $35,000','$35,001 - $50,000','$50,001 - $75,000','$75,001 - $100,000','$100,001 - $125,000','$125,001 - $150,000','$150,000 or more'])}
+      <div class="field"><label>After completing your MPA degree, which of the following most accurately describes the trajectory of your salary?</label>
+        ${radio('salary_trajectory',['My salary increased','My salary decreased','My salary stayed the same'])}
+      </div>
+      <div class="field"><label>Please briefly describe your salary change. <span style="color:#9b9b9b;font-weight:400">(optional)</span></label>
+        ${textarea('salary_trajectory_explain','e.g. I received a promotion within 6 months that came with a significant raise...')}
       </div>
 
       <div class="nav-row"><button class="btn btn-back" onclick="prevStep()">← Back</button><button class="btn btn-next" onclick="nextStep()">Next →</button></div>
