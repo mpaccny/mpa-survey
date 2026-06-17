@@ -368,17 +368,17 @@ function renderStep() {
       
       <div class="field"><label>First Name <span style="color:#9E3039">*</span></label><input type="text" placeholder="Jane" value="${formData['first_name']||''}" oninput="formData['first_name']=this.value" required style="width:100%;border:1px solid #d1d5db;border-radius:8px;padding:9px 12px;font-size:13px;color:#111;font-family:inherit;"></div>
       <div class="field"><label>Last Name <span style="color:#9E3039">*</span></label><input type="text" placeholder="Doe" value="${formData['last_name']||''}" oninput="formData['last_name']=this.value" required style="width:100%;border:1px solid #d1d5db;border-radius:8px;padding:9px 12px;font-size:13px;color:#111;font-family:inherit;"></div>
-      <div class="field"><label>Personal Email Address</label>${textField('email','your@email.com','email')}</div>
+      <div class="field"><label>Personal Email Address <span style="color:#9E3039">*</span></label>${textField('email','your@email.com','email')}</div>
       <div class="field"><label>Phone Number</label>${textField('phone','(212) 000-0000','tel')}</div>
 
       
-      <div class="field"><label>What is your gender identity?</label>
+      <div class="field"><label>What is your gender identity? <span style="color:#9E3039">*</span></label>
         ${radio('gender',['Woman','Man','Transgender','Non-binary/non-conforming','Prefer not to respond','Other'])}
       </div>
       <div class="conditional${formData['gender']==='Other'?' visible':''}" id="other-gender-wrap">
         <div class="field"><input type="text" placeholder="Please specify" value="${formData['gender_other']||''}" oninput="formData['gender_other']=this.value"></div>
       </div>
-      <div class="field"><label>Which racial or ethnic identity or identities best describe you? <span style="color:#9b9b9b;font-weight:400">(Check all that apply)</span></label>
+      <div class="field"><label>Which racial or ethnic identity or identities best describe you? <span style="color:#9E3039">*</span> <span style="color:#9b9b9b;font-weight:400">(Check all that apply)</span></label>
         ${checkbox('race_ethnicity',['American Indian or Alaskan Native','Asian / Pacific Islander','Black or African American','Hispanic or Latina/o','White / Caucasian','Prefer not to answer','Other'])}
       </div>
 
@@ -389,48 +389,48 @@ function renderStep() {
     // CURRENT EMPLOYMENT
     html = `<div class="step-body">
       
-      <div class="field"><label>Which of the following best describes your current work status?</label>
+      <div class="field"><label>Which of the following best describes your current work status? <span style="color:#9E3039">*</span></label>
         ${radio('work_status',['Employed full-time','Employed part-time','Self-employed','Not employed, seeking employment','Not employed, not seeking employment','Not employed, continuing education'])}
       </div>
 
       <!-- CURRENTLY EMPLOYED -->
       <div id="employment-details" style="display:${(['Employed full-time','Employed part-time','Self-employed'].includes(formData['work_status']))?'block':'none'}">
         
-        <div class="field"><label>Which of the following best describes the type of organization or sector you currently work in?</label>
+        <div class="field"><label>Which of the following best describes the type of organization or sector you currently work in? <span style="color:#9E3039">*</span></label>
           ${radio('org_sector',['City, county or other local government','Federal government (except military)','Government outside U.S.','Nonprofit / NGO','Private sector / Social Enterprise','State, provincial or regional government','U.S. Military','International, multilateral or bilateral organization'])}
         </div>
-        <div class="field"><label>Organization Name</label>${textField('org_name','Name of your organization')}</div>
-        <div class="field"><label>Job Title</label>${textField('job_title','Your title')}</div>
-        <div class="field"><label>Your Role / Function</label><div class="hint">Briefly describe what you do day-to-day</div>${textarea('job_role','Describe your primary responsibilities...')}</div>
-        <div class="field"><label>Where is your workplace located?</label>
+        <div class="field"><label>Organization Name <span style="color:#9E3039">*</span></label>${textField('org_name','Name of your organization')}</div>
+        <div class="field"><label>Job Title <span style="color:#9E3039">*</span></label>${textField('job_title','Your title')}</div>
+        <div class="field"><label>Your Role / Function <span style="color:#9E3039">*</span></label><div class="hint">Briefly describe what you do day-to-day</div>${textarea('job_role','Describe your primary responsibilities...')}</div>
+        <div class="field"><label>Where is your workplace located? <span style="color:#9E3039">*</span></label>
           ${radio('work_location_type',['In-State (New York)','Out-of-State','International'])}
         </div>
         <div id="loc-detail" style="display:${formData['work_location_type']?'block':'none'}">
           <div class="field"><label id="loc-detail-label">Please specify location</label>${textField('work_location_detail','e.g. New York City')}</div>
         </div>
-        <div class="field"><label>Which of the following best describes the issue area you currently work on?</label>
+        <div class="field"><label>Which of the following best describes the issue area you currently work on? <span style="color:#9E3039">*</span></label>
           ${radio('issue_area',['Animal Rights','Arts & Culture','Children & Youth','Civic Engagement & Community Development','Comptrolling & Anti-corruption','Criminal Justice','Economic Development & Poverty Alleviation','Education','Environment & Sustainability','Food Security & Agriculture','Gender Equality, Racial Justice, LGBTQIA+ & Human Rights','Health','International Relations & Development','Media & News Broadcasting','Public Safety & Disaster Relief','Religion & Spirituality','Science & Technology','Social Services','Urban Development, Housing, & Transportation','Other'])}
         </div>
         <div class="conditional${formData['issue_area']==='Other'?' visible':''}" id="other-issue_area-wrap">
           <div class="field"><input type="text" placeholder="Please specify" value="${formData['issue_area_other']||''}" oninput="formData['issue_area_other']=this.value"></div>
         </div>
-        <div class="field"><label>Which of the following best describes your current job role or roles? <span style="color:#9b9b9b;font-weight:400">(Select all that apply)</span></label>
+        <div class="field"><label>Which of the following best describes your current job role or roles? <span style="color:#9E3039">*</span> <span style="color:#9b9b9b;font-weight:400">(Select all that apply)</span></label>
           ${checkbox('job_roles',['Advocacy, lobbying, or legislative work','Budgeting, finance, or contract administration','Communications, outreach, public relations','Community organizing','Consulting','Development, fundraising','Direct service provision','Executive leadership, senior management','Human resources management','Policy analysis','Program development or implementation','Program evaluation, assessment','Research, data analysis','Teaching, training','Other'])}
         </div>
         <div class="conditional${(formData['job_roles']||[]).includes('Other')?' visible':''}" id="other-job_roles-wrap">
           <div class="field"><input type="text" placeholder="Please specify" value="${formData['job_roles_other']||''}" oninput="formData['job_roles_other']=this.value"></div>
         </div>
-        <div class="field"><label>Do you supervise or manage people? If so, how many?</label>
+        <div class="field"><label>Do you supervise or manage people? If so, how many? <span style="color:#9E3039">*</span></label>
           ${radio('supervise',['Yes','No'])}
         </div>
         <div id="supervise-count-wrap" style="display:${formData['supervise']==='Yes'?'block':'none'}">
           <div class="field"><label>How many people do you supervise?</label>${textField('supervise_count','e.g. 3')}</div>
         </div>
-        <div class="field"><label>How long have you occupied your current position?</label>${textField('time_in_role','e.g. 2 years')}</div>
+        <div class="field"><label>How long have you occupied your current position? <span style="color:#9E3039">*</span></label>${textField('time_in_role','e.g. 2 years')}</div>
         <div class="field"><label>Which of the following have you had in your current place of employment? <span style="color:#9b9b9b;font-weight:400">(Select all that apply)</span></label>
           ${checkbox('advancements',['A promotion','An increase in the number of projects/portfolios/clients/budget responsible for','An increase in your decision-making authority','An increase in the number of people you supervise','N/A'])}
         </div>
-        <div class="field"><label>What is your current annual salary?</label>
+        <div class="field"><label>What is your current annual salary? <span style="color:#9E3039">*</span></label>
           ${radio('current_salary',['Less than $20,000','$20,000 - $35,000','$35,000 - $50,000','$50,000 - $75,000','$75,000 - $100,000','$100,000 - $125,000','$125,000 - $150,000','$150,000 or more'])}
         </div>
       </div>
@@ -438,38 +438,38 @@ function renderStep() {
       <!-- NOT CURRENTLY EMPLOYED -->
       <div id="recent-employment-details" style="display:${(['Not employed, seeking employment','Not employed, not seeking employment','Not employed, continuing education'].includes(formData['work_status']))?'block':'none'}">
 
-        <div class="field"><label>Which of the following best describes the type of organization or sector you most recently worked in?</label>
+        <div class="field"><label>Which of the following best describes the type of organization or sector you most recently worked in? <span style="color:#9E3039">*</span></label>
           ${radio('recent_org_sector',['City, county or other local government','Federal government (except military)','Government outside U.S.','Nonprofit / NGO','Private sector / Social Enterprise','State, provincial or regional government','U.S. Military','International, multilateral or bilateral organization'])}
         </div>
-        <div class="field"><label>Most Recent Organization Name</label>${textField('recent_org_name','Name of your most recent organization')}</div>
-        <div class="field"><label>Most Recent Job Title</label>${textField('recent_job_title','Your most recent title')}</div>
-        <div class="field"><label>Most Recent Role / Function</label><div class="hint">Briefly describe what you did day-to-day</div>${textarea('recent_job_role','Describe your primary responsibilities...')}</div>
-        <div class="field"><label>Where was your workplace located?</label>
+        <div class="field"><label>Most Recent Organization Name <span style="color:#9E3039">*</span></label>${textField('recent_org_name','Name of your most recent organization')}</div>
+        <div class="field"><label>Most Recent Job Title <span style="color:#9E3039">*</span></label>${textField('recent_job_title','Your most recent title')}</div>
+        <div class="field"><label>Most Recent Role / Function <span style="color:#9E3039">*</span></label><div class="hint">Briefly describe what you did day-to-day</div>${textarea('recent_job_role','Describe your primary responsibilities...')}</div>
+        <div class="field"><label>Where was your workplace located? <span style="color:#9E3039">*</span></label>
           ${radio('recent_work_location_type',['In-State (New York)','Out-of-State','International'])}
         </div>
         <div id="recent-loc-detail" style="display:${formData['recent_work_location_type']?'block':'none'}">
           <div class="field"><label id="recent-loc-detail-label">Please specify location</label>${textField('recent_work_location_detail','e.g. New York City')}</div>
         </div>
-        <div class="field"><label>Which of the following best describes the issue area you most recently worked on?</label>
+        <div class="field"><label>Which of the following best describes the issue area you most recently worked on? <span style="color:#9E3039">*</span></label>
           ${radio('recent_issue_area',['Animal Rights','Arts & Culture','Children & Youth','Civic Engagement & Community Development','Comptrolling & Anti-corruption','Criminal Justice','Economic Development & Poverty Alleviation','Education','Environment & Sustainability','Food Security & Agriculture','Gender Equality, Racial Justice, LGBTQIA+ & Human Rights','Health','International Relations & Development','Media & News Broadcasting','Public Safety & Disaster Relief','Religion & Spirituality','Science & Technology','Social Services','Urban Development, Housing, & Transportation','Other'])}
         </div>
         <div class="conditional${formData['recent_issue_area']==='Other'?' visible':''}" id="other-recent_issue_area-wrap">
           <div class="field"><input type="text" placeholder="Please specify" value="${formData['recent_issue_area_other']||''}" oninput="formData['recent_issue_area_other']=this.value"></div>
         </div>
-        <div class="field"><label>Which of the following best describes your most recent job role? <span style="color:#9b9b9b;font-weight:400">(Select all that apply)</span></label>
+        <div class="field"><label>Which of the following best describes your most recent job role? <span style="color:#9E3039">*</span> <span style="color:#9b9b9b;font-weight:400">(Select all that apply)</span></label>
           ${checkbox('recent_job_roles',['Advocacy, lobbying, or legislative work','Budgeting, finance, or contract administration','Communications, outreach, public relations','Community organizing','Consulting','Development, fundraising','Direct service provision','Executive leadership, senior management','Human resources management','Policy analysis','Program development or implementation','Program evaluation, assessment','Research, data analysis','Teaching, training','Other'])}
         </div>
         <div class="conditional${(formData['recent_job_roles']||[]).includes('Other')?' visible':''}" id="other-recent_job_roles-wrap">
           <div class="field"><input type="text" placeholder="Please specify" value="${formData['recent_job_roles_other']||''}" oninput="formData['recent_job_roles_other']=this.value"></div>
         </div>
-        <div class="field"><label>In your most recent role, did you supervise or manage people? If so, how many?</label>
+        <div class="field"><label>In your most recent role, did you supervise or manage people? If so, how many? <span style="color:#9E3039">*</span></label>
           ${radio('recent_supervise',['Yes','No'])}
         </div>
         <div id="recent-supervise-count-wrap" style="display:${formData['recent_supervise']==='Yes'?'block':'none'}">
           <div class="field"><label>How many people did you supervise?</label>${textField('recent_supervise_count','e.g. 3')}</div>
         </div>
-        <div class="field"><label>How long did you occupy your last position?</label>${textField('recent_time_in_role','e.g. 2 years')}</div>
-        <div class="field"><label>In your most recent role, what was your annual salary?</label>
+        <div class="field"><label>How long did you occupy your last position? <span style="color:#9E3039">*</span></label>${textField('recent_time_in_role','e.g. 2 years')}</div>
+        <div class="field"><label>In your most recent role, what was your annual salary? <span style="color:#9E3039">*</span></label>
           ${radio('recent_salary',['Less than $20,000','$20,000 - $35,000','$35,000 - $50,000','$50,000 - $75,000','$75,000 - $100,000','$100,000 - $125,000','$125,000 - $150,000','$150,000 or more'])}
         </div>
       </div>
@@ -481,18 +481,18 @@ function renderStep() {
     // CAREER PROGRESSION
     html = `<div class="step-body">
       
-      <div class="field"><label>Immediately before beginning the MPA program, what was your employment status?</label>
+      <div class="field"><label>Immediately before beginning the MPA program, what was your employment status? <span style="color:#9E3039">*</span></label>
         ${radio('pre_mpa_status',['Employed full-time','Employed part-time','Self-employed','Not employed, seeking employment','Not employed, not seeking employment','Not employed, continuing education','Completing my bachelors degree'])}
       </div>
-      <div class="field"><label>How many years of professional experience did you have at the time of your entry into the MPA program?</label>
+      <div class="field"><label>How many years of professional experience did you have at the time of your entry into the MPA program? <span style="color:#9E3039">*</span></label>
         ${radio('pre_mpa_experience',['0 to 3 years','4 to 6 years','7 to 9 years','10 or more years'])}
       </div>
-      <div class="field"><label>What was your annual salary at the time of your entry into the MPA program?</label>
+      <div class="field"><label>What was your annual salary at the time of your entry into the MPA program? <span style="color:#9E3039">*</span></label>
         ${radio('pre_mpa_salary',['Less than $20,000','$20,000 - $35,000','$35,000 - $50,000','$50,000 - $75,000','$75,000 - $100,000','$100,000 - $125,000','$125,000 - $150,000','$150,000 or more'])}
       </div>
 
       
-      <div class="field"><label>Which of the following best describes your situation after completing your MPA degree?</label>
+      <div class="field"><label>Which of the following best describes your situation after completing your MPA degree? <span style="color:#9E3039">*</span></label>
         ${radio('post_mpa_outcome',[
           'I accepted a job offer/promotion by the time of graduation',
           'I accepted a job offer/promotion within 3 months of graduation',
@@ -504,7 +504,7 @@ function renderStep() {
           'I remained in my current role'
         ])}
       </div>
-      <div class="field"><label>Did your MPA degree directly influence this outcome?</label>
+      <div class="field"><label>Did your MPA degree directly influence this outcome? <span style="color:#9E3039">*</span></label>
         ${radio('mpa_influence',['Yes','Somewhat','No'])}
       </div>
 
@@ -512,7 +512,7 @@ function renderStep() {
         ${textarea('mpa_influence_explain','Please share more details...')}
       </div>
 
-      <div class="field"><label>After completing your MPA degree, which of the following most accurately describes the trajectory of your salary?</label>
+      <div class="field"><label>After completing your MPA degree, which of the following most accurately describes the trajectory of your salary? <span style="color:#9E3039">*</span></label>
         ${radio('salary_trajectory',['My salary increased','My salary decreased','My salary stayed the same'])}
       </div>
       <div class="field"><label>Please briefly describe your salary change. <span style="color:#9b9b9b;font-weight:400">(optional)</span></label>
@@ -526,7 +526,7 @@ function renderStep() {
     // PROGRAM SATISFACTION
     html = `<div class="step-body">
       
-      <div class="field"><label>To what extent do you agree with the following statement: The structure of the MPA program made it easy to form meaningful connections with my classmates.</label>
+      <div class="field"><label>To what extent do you agree with the following statement: The structure of the MPA program made it easy to form meaningful connections with my classmates. <span style="color:#9E3039">*</span></label>
         ${radio('cohort_connections',['Strongly Agree','Agree','Neutral','Disagree','Strongly Disagree'])}
       </div>
       <div class="field"><label>In what ways, if any, have relationships formed during the MPA program continued after graduation? <span style="color:#9b9b9b;font-weight:400">(Select all that apply)</span></label>
@@ -538,27 +538,27 @@ function renderStep() {
       <div class="field"><label>Please briefly describe how the smaller class/cohort environment shaped your experience in the MPA program.</label>
         ${textarea('cohort_experience','Share your thoughts...')}
       </div>
-      <div class="field"><label>How connected do you currently feel to other alumni from your MPA program?</label>
+      <div class="field"><label>How connected do you currently feel to other alumni from your MPA program? <span style="color:#9E3039">*</span></label>
         ${radio('alumni_connection',['Extremely Connected','Very Connected','Moderately Connected','Slightly Connected','Not At All Connected'])}
       </div>
-      <div class="field"><label>How often are you currently in contact with other MPA alumni from your cohort or program?</label>
+      <div class="field"><label>How often are you currently in contact with other MPA alumni from your cohort or program? <span style="color:#9E3039">*</span></label>
         ${radio('alumni_contact_freq',['Frequently','Often','Sometimes','Rarely','Never'])}
       </div>
 
       
-      <div class="field"><label>In your opinion, how important was your MPA degree in advancing your career?</label>
+      <div class="field"><label>In your opinion, how important was your MPA degree in advancing your career? <span style="color:#9E3039">*</span></label>
         ${radio('degree_importance',['Very important','Important','Moderately important','Slightly important','Not important'])}
       </div>
-      <div class="field"><label>Overall, how satisfied were you with your experience in the MPA program?</label>
+      <div class="field"><label>Overall, how satisfied were you with your experience in the MPA program? <span style="color:#9E3039">*</span></label>
         ${radio('overall_satisfaction',['Very Satisfied','Satisfied','Neutral','Dissatisfied','Very Dissatisfied'])}
       </div>
-      <div class="field"><label>How likely are you to recommend this MPA program to others?</label>
+      <div class="field"><label>How likely are you to recommend this MPA program to others? <span style="color:#9E3039">*</span></label>
         ${radio('recommend',['Very Likely','Likely','Neutral','Unlikely','Very Unlikely'])}
       </div>
-      <div class="field"><label>Knowing what you know now, would you choose this MPA program again?</label>
+      <div class="field"><label>Knowing what you know now, would you choose this MPA program again? <span style="color:#9E3039">*</span></label>
         ${radio('choose_again',['Yes','No','Maybe/Unsure'])}
       </div>
-      <div class="field"><label>Why or why not?</label>
+      <div class="field"><label>Why or why not? <span style="color:#9E3039">*</span></label>
         ${textarea('choose_again_why','Please share your reasoning...')}
       </div>
 
@@ -569,7 +569,7 @@ function renderStep() {
       <div class="conditional${(formData['enrollment_reasons']||[]).includes('Other')?' visible':''}" id="other-enrollment_reasons-wrap">
         <div class="field"><input type="text" placeholder="Please specify" value="${formData['enrollment_reasons_other']||''}" oninput="formData['enrollment_reasons_other']=this.value"></div>
       </div>
-      <div class="field"><label>In your opinion, how well did the MPA program prepare you professionally?</label>
+      <div class="field"><label>In your opinion, how well did the MPA program prepare you professionally? <span style="color:#9E3039">*</span></label>
         ${radio('professional_prep',['Very well','Well','Moderately well','Not very well','Not at all'])}
       </div>
       <div class="field"><label>Which of the following do you wish had been a bigger part of your graduate education? <span style="color:#9b9b9b;font-weight:400">(Select all that apply)</span></label>
@@ -635,11 +635,11 @@ function renderStep() {
 
     html = `<div class="step-body">
       
-      <p style="font-size:13px;color:#6b7280;margin-bottom:20px;">On a scale of 1–10, how comfortable are you with each of the following?</p>
+      <p style="font-size:13px;color:#6b7280;margin-bottom:20px;">On a scale of 1–10, how comfortable are you with each of the following? <span style="color:#9E3039">*</span></p>
       ${comfortRows}
 
       
-      <div class="field"><label>How important do you consider each of the following skills or competencies for success in your field of work?</label></div>
+      <div class="field"><label>How important do you consider each of the following skills or competencies for success in your field of work? <span style="color:#9E3039">*</span></label></div>
       <p style="font-size:13px;color:#6b7280;margin-bottom:16px;">Select one response per row.</p>
       <div style="overflow-x:auto;">
         <table class="comp-table">
