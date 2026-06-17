@@ -469,7 +469,7 @@ function renderStep() {
           <div class="field"><label>How many people did you supervise?</label>${textField('recent_supervise_count','e.g. 3')}</div>
         </div>
         <div class="field"><label>How long did you occupy your last position?</label>${textField('recent_time_in_role','e.g. 2 years')}</div>
-        <div class="field"><label>What was your most recent annual salary?</label>
+        <div class="field"><label>In your most recent role, what was your annual salary?</label>
           ${radio('recent_salary',['Less than $20,000','$20,000 - $35,000','$35,000 - $50,000','$50,000 - $75,000','$75,000 - $100,000','$100,000 - $125,000','$125,000 - $150,000','$150,000 or more'])}
         </div>
       </div>
@@ -494,21 +494,21 @@ function renderStep() {
       
       <div class="field"><label>Which of the following best describes your situation after completing your MPA degree?</label>
         ${radio('post_mpa_outcome',[
-          'I remained in my current role',
           'I accepted a job offer/promotion by the time of graduation',
           'I accepted a job offer/promotion within 3 months of graduation',
           'I accepted a job offer/promotion within 4 to 6 months of graduation',
           'I accepted a job offer/promotion within 7 to 9 months of graduation',
           'I accepted a job offer/promotion 10 months or more after graduation',
           'I wasn\'t seeking employment',
-          'I continued my education'
+          'I continued my education',
+          'I remained in my current role'
         ])}
       </div>
       <div class="field"><label>Did your MPA degree directly influence this outcome?</label>
         ${radio('mpa_influence',['Yes','Somewhat','No'])}
       </div>
 
-      <div class="field"><label>Please explain how your MPA education influenced this outcome.</label>
+      <div class="field"><label>Please explain how your MPA degree influenced this outcome.</label>
         ${textarea('mpa_influence_explain','Please share more details...')}
       </div>
 
@@ -531,6 +531,9 @@ function renderStep() {
       </div>
       <div class="field"><label>In what ways, if any, have relationships formed during the MPA program continued after graduation? <span style="color:#9b9b9b;font-weight:400">(Select all that apply)</span></label>
         ${checkbox('alumni_relationships',['Professional networking','Friendship/social connection','Mentorship/support','Collaboration on projects/work','Career opportunities','I have not maintained relationships','Other'])}
+      </div>
+      <div class="conditional${(formData['alumni_relationships']||[]).includes('Other')?' visible':''}" id="other-alumni_relationships-wrap">
+        <div class="field"><input type="text" placeholder="Please specify" value="${formData['alumni_relationships_other']||''}" oninput="formData['alumni_relationships_other']=this.value"></div>
       </div>
       <div class="field"><label>Please briefly describe how the smaller class/cohort environment shaped your experience in the MPA program.</label>
         ${textarea('cohort_experience','Share your thoughts...')}
@@ -562,6 +565,9 @@ function renderStep() {
       
       <div class="field"><label>What were the primary reasons you chose to enroll in this MPA program? <span style="color:#9b9b9b;font-weight:400">(Select all that apply)</span></label>
         ${checkbox('enrollment_reasons',['Small class/cohort size','Program reputation','Location','Cost/financial aid','Networking opportunities','Career advancement','Faculty','Flexibility/convenience','Curriculum/course offerings','Recommendation from others','Other'])}
+      </div>
+      <div class="conditional${(formData['enrollment_reasons']||[]).includes('Other')?' visible':''}" id="other-enrollment_reasons-wrap">
+        <div class="field"><input type="text" placeholder="Please specify" value="${formData['enrollment_reasons_other']||''}" oninput="formData['enrollment_reasons_other']=this.value"></div>
       </div>
       <div class="field"><label>In your opinion, how well did the MPA program prepare you professionally?</label>
         ${radio('professional_prep',['Very well','Well','Moderately well','Not very well','Not at all'])}
