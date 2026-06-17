@@ -369,7 +369,7 @@ function renderStep() {
       <div class="field"><label>First Name <span style="color:#9E3039">*</span></label><input type="text" placeholder="Jane" value="${formData['first_name']||''}" oninput="formData['first_name']=this.value" required style="width:100%;border:1px solid #d1d5db;border-radius:8px;padding:9px 12px;font-size:13px;color:#111;font-family:inherit;"></div>
       <div class="field"><label>Last Name <span style="color:#9E3039">*</span></label><input type="text" placeholder="Doe" value="${formData['last_name']||''}" oninput="formData['last_name']=this.value" required style="width:100%;border:1px solid #d1d5db;border-radius:8px;padding:9px 12px;font-size:13px;color:#111;font-family:inherit;"></div>
       <div class="field"><label>Personal Email Address <span style="color:#9E3039">*</span></label>${textField('email','your@email.com','email')}</div>
-      <div class="field"><label>Phone Number</label>${textField('phone','(212) 000-0000','tel')}</div>
+      <div class="field"><label>Phone Number <span style="color:#9E3039">*</span></label>${textField('phone','(212) 000-0000','tel')}</div>
 
       
       <div class="field"><label>What is your gender identity? <span style="color:#9E3039">*</span></label>
@@ -406,7 +406,7 @@ function renderStep() {
           ${radio('work_location_type',['In-State (New York)','Out-of-State','International'])}
         </div>
         <div id="loc-detail" style="display:${formData['work_location_type']?'block':'none'}">
-          <div class="field"><label id="loc-detail-label">Please specify location</label>${textField('work_location_detail','e.g. New York City')}</div>
+          <div class="field"><label id="loc-detail-label">Please specify location <span style="color:#9E3039">*</span></label>${textField('work_location_detail','e.g. New York City')}</div>
         </div>
         <div class="field"><label>Which of the following best describes the issue area you currently work on? <span style="color:#9E3039">*</span></label>
           ${radio('issue_area',['Animal Rights','Arts & Culture','Children & Youth','Civic Engagement & Community Development','Comptrolling & Anti-corruption','Criminal Justice','Economic Development & Poverty Alleviation','Education','Environment & Sustainability','Food Security & Agriculture','Gender Equality, Racial Justice, LGBTQIA+ & Human Rights','Health','International Relations & Development','Media & News Broadcasting','Public Safety & Disaster Relief','Religion & Spirituality','Science & Technology','Social Services','Urban Development, Housing, & Transportation','Other'])}
@@ -424,10 +424,10 @@ function renderStep() {
           ${radio('supervise',['Yes','No'])}
         </div>
         <div id="supervise-count-wrap" style="display:${formData['supervise']==='Yes'?'block':'none'}">
-          <div class="field"><label>How many people do you supervise?</label>${textField('supervise_count','e.g. 3')}</div>
+          <div class="field"><label>How many people do you supervise? <span style="color:#9E3039">*</span></label>${textField('supervise_count','e.g. 3')}</div>
         </div>
         <div class="field"><label>How long have you occupied your current position? <span style="color:#9E3039">*</span></label>${textField('time_in_role','e.g. 2 years')}</div>
-        <div class="field"><label>Which of the following have you had in your current place of employment? <span style="color:#9b9b9b;font-weight:400">(Select all that apply)</span></label>
+        <div class="field"><label>Which of the following have you had in your current place of employment? <span style="color:#9E3039">*</span> <span style="color:#9b9b9b;font-weight:400">(Select all that apply)</span></label>
           ${checkbox('advancements',['A promotion','An increase in the number of projects/portfolios/clients/budget responsible for','An increase in your decision-making authority','An increase in the number of people you supervise','N/A'])}
         </div>
         <div class="field"><label>What is your current annual salary? <span style="color:#9E3039">*</span></label>
@@ -448,7 +448,7 @@ function renderStep() {
           ${radio('recent_work_location_type',['In-State (New York)','Out-of-State','International'])}
         </div>
         <div id="recent-loc-detail" style="display:${formData['recent_work_location_type']?'block':'none'}">
-          <div class="field"><label id="recent-loc-detail-label">Please specify location</label>${textField('recent_work_location_detail','e.g. New York City')}</div>
+          <div class="field"><label id="recent-loc-detail-label">Please specify location <span style="color:#9E3039">*</span></label>${textField('recent_work_location_detail','e.g. New York City')}</div>
         </div>
         <div class="field"><label>Which of the following best describes the issue area you most recently worked on? <span style="color:#9E3039">*</span></label>
           ${radio('recent_issue_area',['Animal Rights','Arts & Culture','Children & Youth','Civic Engagement & Community Development','Comptrolling & Anti-corruption','Criminal Justice','Economic Development & Poverty Alleviation','Education','Environment & Sustainability','Food Security & Agriculture','Gender Equality, Racial Justice, LGBTQIA+ & Human Rights','Health','International Relations & Development','Media & News Broadcasting','Public Safety & Disaster Relief','Religion & Spirituality','Science & Technology','Social Services','Urban Development, Housing, & Transportation','Other'])}
@@ -466,7 +466,7 @@ function renderStep() {
           ${radio('recent_supervise',['Yes','No'])}
         </div>
         <div id="recent-supervise-count-wrap" style="display:${formData['recent_supervise']==='Yes'?'block':'none'}">
-          <div class="field"><label>How many people did you supervise?</label>${textField('recent_supervise_count','e.g. 3')}</div>
+          <div class="field"><label>How many people did you supervise? <span style="color:#9E3039">*</span></label>${textField('recent_supervise_count','e.g. 3')}</div>
         </div>
         <div class="field"><label>How long did you occupy your last position? <span style="color:#9E3039">*</span></label>${textField('recent_time_in_role','e.g. 2 years')}</div>
         <div class="field"><label>In your most recent role, what was your annual salary? <span style="color:#9E3039">*</span></label>
@@ -508,14 +508,14 @@ function renderStep() {
         ${radio('mpa_influence',['Yes','Somewhat','No'])}
       </div>
 
-      <div class="field"><label>Please explain how your MPA degree influenced this outcome.</label>
+      <div class="field"><label>Please explain how your MPA degree influenced this outcome. <span style="color:#9E3039">*</span></label>
         ${textarea('mpa_influence_explain','Please share more details...')}
       </div>
 
       <div class="field"><label>After completing your MPA degree, which of the following most accurately describes the trajectory of your salary? <span style="color:#9E3039">*</span></label>
         ${radio('salary_trajectory',['My salary increased','My salary decreased','My salary stayed the same'])}
       </div>
-      <div class="field"><label>Please briefly describe your salary change. <span style="color:#9b9b9b;font-weight:400">(optional)</span></label>
+      <div class="field"><label>Please briefly describe your salary change. <span style="color:#9E3039">*</span></label>
         ${textarea('salary_trajectory_explain','e.g. I received a promotion within 6 months that came with a significant raise...')}
       </div>
 
@@ -529,13 +529,13 @@ function renderStep() {
       <div class="field"><label>To what extent do you agree with the following statement: The structure of the MPA program made it easy to form meaningful connections with my classmates. <span style="color:#9E3039">*</span></label>
         ${radio('cohort_connections',['Strongly Agree','Agree','Neutral','Disagree','Strongly Disagree'])}
       </div>
-      <div class="field"><label>In what ways, if any, have relationships formed during the MPA program continued after graduation? <span style="color:#9b9b9b;font-weight:400">(Select all that apply)</span></label>
+      <div class="field"><label>In what ways, if any, have relationships formed during the MPA program continued after graduation? <span style="color:#9E3039">*</span> <span style="color:#9b9b9b;font-weight:400">(Select all that apply)</span></label>
         ${checkbox('alumni_relationships',['Professional networking','Friendship/social connection','Mentorship/support','Collaboration on projects/work','Career opportunities','I have not maintained relationships','Other'])}
       </div>
       <div class="conditional${(formData['alumni_relationships']||[]).includes('Other')?' visible':''}" id="other-alumni_relationships-wrap">
         <div class="field"><input type="text" placeholder="Please specify" value="${formData['alumni_relationships_other']||''}" oninput="formData['alumni_relationships_other']=this.value"></div>
       </div>
-      <div class="field"><label>Please briefly describe how the smaller class/cohort environment shaped your experience in the MPA program.</label>
+      <div class="field"><label>Please briefly describe how the smaller class/cohort environment shaped your experience in the MPA program. <span style="color:#9E3039">*</span></label>
         ${textarea('cohort_experience','Share your thoughts...')}
       </div>
       <div class="field"><label>How connected do you currently feel to other alumni from your MPA program? <span style="color:#9E3039">*</span></label>
@@ -563,7 +563,7 @@ function renderStep() {
       </div>
 
       
-      <div class="field"><label>What were the primary reasons you chose to enroll in this MPA program? <span style="color:#9b9b9b;font-weight:400">(Select all that apply)</span></label>
+      <div class="field"><label>What were the primary reasons you chose to enroll in this MPA program? <span style="color:#9E3039">*</span> <span style="color:#9b9b9b;font-weight:400">(Select all that apply)</span></label>
         ${checkbox('enrollment_reasons',['Small class/cohort size','Program reputation','Location','Cost/financial aid','Networking opportunities','Career advancement','Faculty','Flexibility/convenience','Curriculum/course offerings','Recommendation from others','Other'])}
       </div>
       <div class="conditional${(formData['enrollment_reasons']||[]).includes('Other')?' visible':''}" id="other-enrollment_reasons-wrap">
@@ -572,10 +572,10 @@ function renderStep() {
       <div class="field"><label>In your opinion, how well did the MPA program prepare you professionally? <span style="color:#9E3039">*</span></label>
         ${radio('professional_prep',['Very well','Well','Moderately well','Not very well','Not at all'])}
       </div>
-      <div class="field"><label>Which of the following do you wish had been a bigger part of your graduate education? <span style="color:#9b9b9b;font-weight:400">(Select all that apply)</span></label>
+      <div class="field"><label>Which of the following do you wish had been a bigger part of your graduate education? <span style="color:#9E3039">*</span> <span style="color:#9b9b9b;font-weight:400">(Select all that apply)</span></label>
         ${checkbox('wished_more',['Team-based assignments','Group facilitation','Writing exercises (e.g. memos, reports, proposals)','Analytics/data modeling','Design and visualization of information','Grant writing','Power analysis frameworks','Trainings in diversity, equity, and inclusion','Projects with community partners/clients','Networking opportunities','Social enterprise and social impact finance','Program and service design','Project management tools and theories','Case studies','Survey design','Other'])}
       </div>
-      <div class="field"><label>What specific improvements would you recommend to strengthen the MPA program?</label>
+      <div class="field"><label>What specific improvements would you recommend to strengthen the MPA program? <span style="color:#9E3039">*</span></label>
         ${textarea('program_improvements','Share your suggestions...')}
       </div>
 
@@ -652,7 +652,7 @@ function renderStep() {
       </div>
 
       
-      <div class="field"><label>Please list any areas of high growth in your field, including emerging knowledge, skills, and competencies that are in high demand.</label>
+      <div class="field"><label>Please list any areas of high growth in your field, including emerging knowledge, skills, and competencies that are in high demand. <span style="color:#9E3039">*</span></label>
         ${textarea('emerging_skills','Share what you\'re seeing in your field...')}
       </div>
 
@@ -678,8 +678,11 @@ function validateStep() {
     if (!formData['first_name']) missing.push('First Name');
     if (!formData['last_name']) missing.push('Last Name');
     if (!formData['email']) missing.push('Personal Email Address');
+    if (!formData['phone']) missing.push('Phone Number');
     if (!formData['gender']) missing.push('What is your gender identity?');
+    if (formData['gender'] === 'Other' && !formData['gender_other']) missing.push('Please specify your gender identity');
     if (!formData['race_ethnicity'] || formData['race_ethnicity'].length === 0) missing.push('Which racial or ethnic identity or identities best describe you?');
+    if ((formData['race_ethnicity']||[]).includes('Other') && !formData['race_ethnicity_other']) missing.push('Please specify your race/ethnicity');
   }
 
   if (step === 2) {
@@ -692,10 +695,15 @@ function validateStep() {
       if (!formData['job_title']) missing.push('Job Title');
       if (!formData['job_role']) missing.push('Your Role / Function');
       if (!formData['work_location_type']) missing.push('Where is your workplace located?');
+      if (formData['work_location_type'] && !formData['work_location_detail']) missing.push('Please specify location');
       if (!formData['issue_area']) missing.push('Which of the following best describes the issue area you currently work on?');
+      if (formData['issue_area'] === 'Other' && !formData['issue_area_other']) missing.push('Please specify the issue area you currently work on');
       if (!formData['job_roles'] || formData['job_roles'].length === 0) missing.push('Which of the following best describes your current job role or roles?');
+      if ((formData['job_roles']||[]).includes('Other') && !formData['job_roles_other']) missing.push('Please specify your current job role');
       if (!formData['supervise']) missing.push('Do you supervise or manage people?');
+      if (formData['supervise'] === 'Yes' && !formData['supervise_count']) missing.push('How many people do you supervise?');
       if (!formData['time_in_role']) missing.push('How long have you occupied your current position?');
+      if (!formData['advancements'] || formData['advancements'].length === 0) missing.push('Which of the following have you had in your current place of employment?');
       if (!formData['current_salary']) missing.push('What is your current annual salary?');
     }
     if (notEmployed) {
@@ -704,9 +712,13 @@ function validateStep() {
       if (!formData['recent_job_title']) missing.push('Most Recent Job Title');
       if (!formData['recent_job_role']) missing.push('Most Recent Role / Function');
       if (!formData['recent_work_location_type']) missing.push('Where was your workplace located?');
+      if (formData['recent_work_location_type'] && !formData['recent_work_location_detail']) missing.push('Please specify location');
       if (!formData['recent_issue_area']) missing.push('Which of the following best describes the issue area you most recently worked on?');
+      if (formData['recent_issue_area'] === 'Other' && !formData['recent_issue_area_other']) missing.push('Please specify the issue area you most recently worked on');
       if (!formData['recent_job_roles'] || formData['recent_job_roles'].length === 0) missing.push('Which of the following best describes your most recent job role?');
+      if ((formData['recent_job_roles']||[]).includes('Other') && !formData['recent_job_roles_other']) missing.push('Please specify your most recent job role');
       if (!formData['recent_supervise']) missing.push('In your most recent role, did you supervise or manage people?');
+      if (formData['recent_supervise'] === 'Yes' && !formData['recent_supervise_count']) missing.push('How many people did you supervise?');
       if (!formData['recent_time_in_role']) missing.push('How long did you occupy your last position?');
       if (!formData['recent_salary']) missing.push('In your most recent role, what was your annual salary?');
     }
@@ -733,6 +745,7 @@ function validateStep() {
     if (!formData['imp_data_management_and_quantitative_analysis']) missing.push('Importance — Data management and quantitative analysis');
     if (!formData['imp_strategic_program_design']) missing.push('Importance — Strategic program design');
     if (!formData['imp_program_evaluation_and_assessment']) missing.push('Importance — Program evaluation and assessment');
+    if (!formData['emerging_skills']) missing.push('Please list any areas of high growth in your field, including emerging knowledge, skills, and competencies that are in high demand.');
   }
 
   if (step === 4) {
@@ -741,11 +754,16 @@ function validateStep() {
     if (!formData['pre_mpa_salary']) missing.push('What was your annual salary at the time of your entry into the MPA program?');
     if (!formData['post_mpa_outcome']) missing.push('Which of the following best describes your situation after completing your MPA degree?');
     if (!formData['mpa_influence']) missing.push('Did your MPA degree directly influence this outcome?');
+    if (!formData['mpa_influence_explain']) missing.push('Please explain how your MPA degree influenced this outcome.');
     if (!formData['salary_trajectory']) missing.push('After completing your MPA degree, which of the following most accurately describes the trajectory of your salary?');
+    if (!formData['salary_trajectory_explain']) missing.push('Please briefly describe your salary change.');
   }
 
   if (step === 5) {
     if (!formData['cohort_connections']) missing.push('To what extent do you agree with the following statement...');
+    if (!formData['alumni_relationships'] || formData['alumni_relationships'].length === 0) missing.push('In what ways, if any, have relationships formed during the MPA program continued after graduation?');
+    if ((formData['alumni_relationships']||[]).includes('Other') && !formData['alumni_relationships_other']) missing.push('Please specify how relationships continued');
+    if (!formData['cohort_experience']) missing.push('Please briefly describe how the smaller class/cohort environment shaped your experience in the MPA program.');
     if (!formData['alumni_connection']) missing.push('How connected do you currently feel to other alumni?');
     if (!formData['alumni_contact_freq']) missing.push('How often are you currently in contact with other MPA alumni?');
     if (!formData['degree_importance']) missing.push('In your opinion, how important was your MPA degree in advancing your career?');
@@ -753,7 +771,12 @@ function validateStep() {
     if (!formData['recommend']) missing.push('How likely are you to recommend this MPA program to others?');
     if (!formData['choose_again']) missing.push('Knowing what you know now, would you choose this MPA program again?');
     if (!formData['choose_again_why']) missing.push('Why or why not?');
+    if (!formData['enrollment_reasons'] || formData['enrollment_reasons'].length === 0) missing.push('What were the primary reasons you chose to enroll in this MPA program?');
+    if ((formData['enrollment_reasons']||[]).includes('Other') && !formData['enrollment_reasons_other']) missing.push('Please specify your enrollment reasons');
     if (!formData['professional_prep']) missing.push('In your opinion, how well did the MPA program prepare you professionally?');
+    if (!formData['wished_more'] || formData['wished_more'].length === 0) missing.push('Which of the following do you wish had been a bigger part of your graduate education?');
+    if ((formData['wished_more']||[]).includes('Other') && !formData['wished_more_other']) missing.push('Please specify what you wish had been a bigger part of your education');
+    if (!formData['program_improvements']) missing.push('What specific improvements would you recommend to strengthen the MPA program?');
   }
 
   if (missing.length > 0) {
