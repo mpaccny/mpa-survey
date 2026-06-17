@@ -669,8 +669,101 @@ function renderStep() {
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
-// ─── NAVIGATION ───────────────────────────────────────────────────────────────
+// ─── VALIDATION ───────────────────────────────────────────────────────────────
+function validateStep() {
+  const step = currentStep;
+  let missing = [];
+
+  if (step === 1) {
+    if (!formData['first_name']) missing.push('First Name');
+    if (!formData['last_name']) missing.push('Last Name');
+    if (!formData['email']) missing.push('Personal Email Address');
+    if (!formData['gender']) missing.push('What is your gender identity?');
+    if (!formData['race_ethnicity'] || formData['race_ethnicity'].length === 0) missing.push('Which racial or ethnic identity or identities best describe you?');
+  }
+
+  if (step === 2) {
+    if (!formData['work_status']) missing.push('Which of the following best describes your current work status?');
+    const employed = ['Employed full-time','Employed part-time','Self-employed'].includes(formData['work_status']);
+    const notEmployed = ['Not employed, seeking employment','Not employed, not seeking employment','Not employed, continuing education'].includes(formData['work_status']);
+    if (employed) {
+      if (!formData['org_sector']) missing.push('Which of the following best describes the type of organization or sector you currently work in?');
+      if (!formData['org_name']) missing.push('Organization Name');
+      if (!formData['job_title']) missing.push('Job Title');
+      if (!formData['job_role']) missing.push('Your Role / Function');
+      if (!formData['work_location_type']) missing.push('Where is your workplace located?');
+      if (!formData['issue_area']) missing.push('Which of the following best describes the issue area you currently work on?');
+      if (!formData['job_roles'] || formData['job_roles'].length === 0) missing.push('Which of the following best describes your current job role or roles?');
+      if (!formData['supervise']) missing.push('Do you supervise or manage people?');
+      if (!formData['time_in_role']) missing.push('How long have you occupied your current position?');
+      if (!formData['current_salary']) missing.push('What is your current annual salary?');
+    }
+    if (notEmployed) {
+      if (!formData['recent_org_sector']) missing.push('Which of the following best describes the type of organization or sector you most recently worked in?');
+      if (!formData['recent_org_name']) missing.push('Most Recent Organization Name');
+      if (!formData['recent_job_title']) missing.push('Most Recent Job Title');
+      if (!formData['recent_job_role']) missing.push('Most Recent Role / Function');
+      if (!formData['recent_work_location_type']) missing.push('Where was your workplace located?');
+      if (!formData['recent_issue_area']) missing.push('Which of the following best describes the issue area you most recently worked on?');
+      if (!formData['recent_job_roles'] || formData['recent_job_roles'].length === 0) missing.push('Which of the following best describes your most recent job role?');
+      if (!formData['recent_supervise']) missing.push('In your most recent role, did you supervise or manage people?');
+      if (!formData['recent_time_in_role']) missing.push('How long did you occupy your last position?');
+      if (!formData['recent_salary']) missing.push('In your most recent role, what was your annual salary?');
+    }
+  }
+
+  if (step === 3) {
+    if (!formData['comfort_resume']) missing.push('Comfort — Professional Identity');
+    if (!formData['comfort_communicate']) missing.push('Comfort — Communication');
+    if (!formData['comfort_resources']) missing.push('Comfort — Resource Management');
+    if (!formData['comfort_data']) missing.push('Comfort — Data Analysis');
+    if (!formData['comfort_stakeholders']) missing.push('Comfort — Stakeholder Management');
+    if (!formData['comfort_leadership']) missing.push('Comfort — Leadership');
+    if (!formData['imp_effective_interpersonal_communication']) missing.push('Importance — Effective interpersonal communication');
+    if (!formData['imp_understanding_equity__diversity__and_inclusion']) missing.push('Importance — Understanding equity, diversity, and inclusion');
+    if (!formData['imp_effective_written_communication']) missing.push('Importance — Effective written communication');
+    if (!formData['imp_design_and_visualization_of_information']) missing.push('Importance — Design and visualization of information');
+    if (!formData['imp_understanding_and_leveraging_power']) missing.push('Importance — Understanding and leveraging power');
+    if (!formData['imp_mobilizing_resources']) missing.push('Importance — Mobilizing resources');
+    if (!formData['imp_teamwork_and_coalition_building']) missing.push('Importance — Teamwork and coalition building');
+    if (!formData['imp_leading_people_toward_common_goals']) missing.push('Importance — Leading people toward common goals');
+    if (!formData['imp_self_care_and_establishing_personal_boundaries']) missing.push('Importance — Self-care and establishing personal boundaries');
+    if (!formData['imp_project_and_timeline_management']) missing.push('Importance — Project and timeline management');
+    if (!formData['imp_budgetary_financial_management']) missing.push('Importance — Budgetary/financial management');
+    if (!formData['imp_data_management_and_quantitative_analysis']) missing.push('Importance — Data management and quantitative analysis');
+    if (!formData['imp_strategic_program_design']) missing.push('Importance — Strategic program design');
+    if (!formData['imp_program_evaluation_and_assessment']) missing.push('Importance — Program evaluation and assessment');
+  }
+
+  if (step === 4) {
+    if (!formData['pre_mpa_status']) missing.push('Immediately before beginning the MPA program, what was your employment status?');
+    if (!formData['pre_mpa_experience']) missing.push('How many years of professional experience did you have at the time of your entry into the MPA program?');
+    if (!formData['pre_mpa_salary']) missing.push('What was your annual salary at the time of your entry into the MPA program?');
+    if (!formData['post_mpa_outcome']) missing.push('Which of the following best describes your situation after completing your MPA degree?');
+    if (!formData['mpa_influence']) missing.push('Did your MPA degree directly influence this outcome?');
+    if (!formData['salary_trajectory']) missing.push('After completing your MPA degree, which of the following most accurately describes the trajectory of your salary?');
+  }
+
+  if (step === 5) {
+    if (!formData['cohort_connections']) missing.push('To what extent do you agree with the following statement...');
+    if (!formData['alumni_connection']) missing.push('How connected do you currently feel to other alumni?');
+    if (!formData['alumni_contact_freq']) missing.push('How often are you currently in contact with other MPA alumni?');
+    if (!formData['degree_importance']) missing.push('In your opinion, how important was your MPA degree in advancing your career?');
+    if (!formData['overall_satisfaction']) missing.push('Overall, how satisfied were you with your experience in the MPA program?');
+    if (!formData['recommend']) missing.push('How likely are you to recommend this MPA program to others?');
+    if (!formData['choose_again']) missing.push('Knowing what you know now, would you choose this MPA program again?');
+    if (!formData['choose_again_why']) missing.push('Why or why not?');
+    if (!formData['professional_prep']) missing.push('In your opinion, how well did the MPA program prepare you professionally?');
+  }
+
+  if (missing.length > 0) {
+    alert('Please answer the following required questions before continuing:\n\n• ' + missing.join('\n• '));
+    return false;
+  }
+  return true;
+}
 function nextStep() {
+  if (!validateStep()) return;
   if (currentStep < steps.length - 1) { currentStep++; renderStep(); }
 }
 function prevStep() {
@@ -679,6 +772,7 @@ function prevStep() {
 
 // ─── SUBMIT ───────────────────────────────────────────────────────────────────
 async function submitForm() {
+  if (!validateStep()) return;
   const submitBtn = document.querySelector('.btn-submit');
   submitBtn.disabled = true;
   submitBtn.textContent = 'Submitting…';
