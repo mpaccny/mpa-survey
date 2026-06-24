@@ -271,13 +271,15 @@ function selectField(name, options, placeholder='Select…') {
 // ─── EVENT HANDLERS ───────────────────────────────────────────────────────────
 function selectRadioFromEl(el) {
   const name = el.getAttribute('data-name');
-  const val = el.getAttribute('data-value');
+  const input = el.querySelector('input');
+  const val = input.value;
   selectRadio(name, val, el);
 }
 
 function toggleCheckFromEl(el) {
   const name = el.getAttribute('data-name');
-  const val = el.getAttribute('data-value');
+  const input = el.querySelector('input');
+  const val = input.value;
   toggleCheck(name, val, el);
 }
 
