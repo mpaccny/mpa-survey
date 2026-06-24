@@ -221,8 +221,9 @@ function radio(name, options, required=false) {
     const val = typeof o === 'object' ? o.value : o;
     const lbl = typeof o === 'object' ? o.label : o;
     const checked = formData[name] === val;
-    return `<label class="option-item${checked?' selected':''}" onclick="selectRadio('${name}','${val}',this)">
-      <input type="radio" name="${name}" value="${val}" ${checked?'checked':''}> ${lbl}
+    const safeVal = val.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    return `<label class="option-item${checked?' selected':''}" onclick="selectRadio('${name}','${safeVal}',this)">
+      <input type="radio" name="${name}" value="${val.replace(/"/g, '&quot;')}" ${checked?'checked':''}> ${lbl}
     </label>`;
   }).join('')}</div>`;
 }
@@ -233,9 +234,10 @@ function checkbox(name, options) {
     const val = typeof o === 'object' ? o.value : o;
     const lbl = typeof o === 'object' ? o.label : o;
     const checked = vals.includes(val);
+    const safeVal = val.replace(/'/g, "\\'").replace(/"/g, '&quot;');
     const extraField = val === 'Other' ? `<div class="conditional${checked?' visible':''}" id="other-${name}-wrap"><input type="text" placeholder="Please specify" value="${formData[name+'_other']||''}" oninput="formData['${name}_other']=this.value" style="margin-top:6px;width:100%;border:1px solid #d1d5db;border-radius:6px;padding:8px 10px;font-size:12px;"></div>` : '';
-    return `<label class="option-item${checked?' selected':''}" onclick="toggleCheck('${name}','${val}',this)">
-      <input type="checkbox" name="${name}" value="${val}" ${checked?'checked':''}> ${lbl}
+    return `<label class="option-item${checked?' selected':''}" onclick="toggleCheck('${name}','${safeVal}',this)">
+      <input type="checkbox" name="${name}" value="${val.replace(/"/g, '&quot;')}" ${checked?'checked':''}> ${lbl}
     </label>${extraField}`;
   }).join('')}</div>`;
 }
