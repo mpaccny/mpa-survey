@@ -136,6 +136,11 @@
   .submitted-icon { font-size: 48px; margin-bottom: 16px; }
   .submitted-screen h2 { font-size: 22px; font-weight: 700; color: #111; margin-bottom: 8px; }
   .submitted-screen p { font-size: 14px; color: #6b7280; line-height: 1.6; max-width: 400px; margin: 0 auto; }
+  /* CLOSED */
+  .closed-screen { text-align: center; padding: 48px 40px; }
+  .closed-icon { font-size: 48px; margin-bottom: 16px; }
+  .closed-screen h2 { font-size: 22px; font-weight: 700; color: #111; margin-bottom: 8px; }
+  .closed-screen p { font-size: 14px; color: #6b7280; line-height: 1.6; max-width: 420px; margin: 0 auto; }
 </style>
 </head>
 <body>
@@ -169,6 +174,10 @@
 </div>
 
 <script>
+// ─── SURVEY STATUS ────────────────────────────────────────────────────────────
+// Set to true to stop accepting new submissions and show a closed message.
+const SURVEY_CLOSED = true;
+
 // ─── STATE ────────────────────────────────────────────────────────────────────
 const WEBHOOK_URL = "https://hook.us2.make.com/homf717hc2r48qjgk3gimcgi6j73qols";
 
@@ -839,8 +848,25 @@ async function submitForm() {
     </div>`;
 }
 
+// ─── CLOSED STATE ─────────────────────────────────────────────────────────────
+function renderClosed() {
+  document.getElementById('step-tabs').style.display = 'none';
+  document.getElementById('progress-wrap').style.display = 'none';
+  document.getElementById('step-label').textContent = 'Survey Closed';
+  document.getElementById('form-container').innerHTML = `
+    <div class="closed-screen">
+      <div class="closed-icon">🔒</div>
+      <h2>The Alumni Survey is now closed</h2>
+      <p>We are no longer accepting new submissions for the MPA Alumni Impact Survey. Thank you to everyone who took the time to share their feedback. If you have any questions, please contact us at <a href="mailto:mpa@ccny.cuny.edu" style="color:#9E3039;font-weight:600;">mpa@ccny.cuny.edu</a>.</p>
+    </div>`;
+}
+
 // ─── INIT ─────────────────────────────────────────────────────────────────────
-renderStep();
+if (SURVEY_CLOSED) {
+  renderClosed();
+} else {
+  renderStep();
+}
 </script>
 </body>
 </html>
